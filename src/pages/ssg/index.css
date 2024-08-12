@@ -1,0 +1,20 @@
+.ssg {
+  /* .ssg-historical-sheet {
+    tbody {
+      tr:first-child {
+        th:first-child {
+          border-top-color: var(--background-color);
+          border-left-color: var(--background-color);
+          background-color: var(--background-color);
+        }
+      }
+
+      tr:not(:first-child) {
+        th {
+          text-align: left;
+        }
+      }
+    }
+  }
+  font-size: 14px; */
+}
