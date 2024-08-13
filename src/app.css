@@ -1,7 +1,11 @@
 :root {
-  --background-color: #FFFFFF;
+  --grey: #dddddd;
+  --blue: #a1caf0;
+  --pink: #ebbdbd;
+  --green: #9ad5a3;
 }
 
 body {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 20px;
 }

@@ -42,11 +42,19 @@ export const enum ForecastDataRowId {
 };
 
 export const EmptySSG: any = {
-  //TODO: convert static fields to input
-  startingYear: 2014,
-  presentStockPrice: 283,
-  presentDividend: 7.6,
+  name: '',
+  isPresentedVersion: false,
+  presentedMonth: 0,
+  stockTicker: '',
+  preparedBy: '',
+  preparedDate: 0,
+  sourceData: '',
+  sourceDate: 0,
   yearsOfData: 10,
+  currentStockPrice: 0,
+  currentStockPriceDate: 0,
+  currentDividend: 0,
+  startingYear: 2014,
 
   revenue: Array(10).fill(NaN),
   revenueGrowth: Array(9).fill(NaN),
@@ -75,30 +83,40 @@ export const EmptySSG: any = {
 
   fcRevenueGrowthDefault: Array(3).fill(NaN),
   fcRevenueGrowth: Array(3).fill(NaN),
+  fcRevenueDefault: Array(3).fill(NaN),
   fcRevenue: Array(3).fill(NaN),
 
-  fcPreTaxProfitMarginefault: Array(3).fill(NaN),
+  fcPreTaxProfitMarginDefault: Array(3).fill(NaN),
   fcPreTaxProfitMargin: Array(3).fill(NaN),
+  fcPreTaxNetIncomeDefault: Array(3).fill(NaN),
   fcPreTaxNetIncome: Array(3).fill(NaN),
 
   fcIncomeTaxRateDefault: Array(3).fill(NaN),
   fcIncomeTaxRate: Array(3).fill(NaN),
+  fcNetProfitDefault: Array(3).fill(NaN),
   fcNetProfit: Array(3).fill(NaN),
 
   fcOutstandingShareGrowthDefault: Array(3).fill(NaN),
   fcOutstandingShareGrowth: Array(3).fill(NaN),
+  fcOutstandingSharesDefault: Array(3).fill(NaN),
   fcOutstandingShares: Array(3).fill(NaN),
 
+  fcEPSDefault: Array(3).fill(NaN),
   fcEPS: Array(3).fill(NaN),
+  fcEPSGrowthDefault: Array(3).fill(NaN),
   fcEPSGrowth: Array(3).fill(NaN),
 
   fcPERatioDefault: Array(3).fill(NaN),
   fcPERatio: Array(3).fill(NaN),
 
+  fcStockPriceDefault: Array(3).fill(NaN),
   fcStockPrice: Array(3).fill(NaN),
+  fcTotalStockPriceGrowthDefault: Array(3).fill(NaN),
   fcTotalStockPriceGrowth: Array(3).fill(NaN),
+  fcAnnualStockPriceGrowthDefault: Array(3).fill(NaN),
   fcAnnualStockPriceGrowth: Array(3).fill(NaN),
   currentDividendYield: Array(3).fill(NaN),
+  fcTotalAnnualReturnDefault: Array(3).fill(NaN),
   fcTotalAnnualReturn: Array(3).fill(NaN)
 };
 

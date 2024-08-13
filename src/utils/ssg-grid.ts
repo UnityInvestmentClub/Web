@@ -10,30 +10,30 @@ export const getHistoricalDataRows = (ssg: any): Row[] => {
   return [
     historicalHeaderRow(ssg.startingYear),
     
-    row(HistoricalDataRowId.Revenue, "Revenue", ssg.revenue, OneDecimalFormat),
-    fixed(growthRow(HistoricalDataRowId.RevenueGrowth, "Revenue Growth", ssg.revenueGrowth, PercentFormat)),
+    historicalEntryRow(HistoricalDataRowId.Revenue, "Revenue", ssg.revenue, OneDecimalFormat),
+    fixedRow(HistoricalDataRowId.RevenueGrowth, "Revenue Growth", [ NaN, ...ssg.revenueGrowth ], PercentFormat),
 
-    row(HistoricalDataRowId.NetProfit, "Net Profit", ssg.netProfit, OneDecimalFormat),
-    row(HistoricalDataRowId.IncomeTaxRate, "Income Tax Rate", ssg.incomeTaxRate, PercentFormat),
-    fixed(row(HistoricalDataRowId.PreTaxNetIncome, "Pre-Tax Net Income", ssg.preTaxNetIncome, OneDecimalFormat)),
-    fixed(growthRow(HistoricalDataRowId.PreTaxIncomeGrowth, "Pre-Tax Income Growth", ssg.preTaxIncomeGrowth, PercentFormat)),
-    fixed(row(HistoricalDataRowId.PreTaxProfitMargin, "Pre-Tax Profit Margin", ssg.preTaxProfitMargin, PercentFormat)),
+    historicalEntryRow(HistoricalDataRowId.NetProfit, "Net Profit", ssg.netProfit, OneDecimalFormat),
+    historicalEntryRow(HistoricalDataRowId.IncomeTaxRate, "Income Tax Rate", ssg.incomeTaxRate, PercentFormat),
+    fixedRow(HistoricalDataRowId.PreTaxNetIncome, "Pre-Tax Net Income", ssg.preTaxNetIncome, OneDecimalFormat),
+    fixedRow(HistoricalDataRowId.PreTaxIncomeGrowth, "Pre-Tax Income Growth", [ NaN, ...ssg.preTaxIncomeGrowth ], PercentFormat),
+    fixedRow(HistoricalDataRowId.PreTaxProfitMargin, "Pre-Tax Profit Margin", ssg.preTaxProfitMargin, PercentFormat),
 
-    row(HistoricalDataRowId.EPS, "EPS", ssg.eps, TwoDecimalFormat),
-    fixed(growthRow(HistoricalDataRowId.EPSGrowth, "EPS Growth", ssg.epsGrowth, PercentFormat)),
+    historicalEntryRow(HistoricalDataRowId.EPS, "EPS", ssg.eps, TwoDecimalFormat),
+    fixedRow(HistoricalDataRowId.EPSGrowth, "EPS Growth", [ NaN, ...ssg.epsGrowth ], PercentFormat),
 
-    row(HistoricalDataRowId.HighStockPrice, "High Stock Price", ssg.highStockPrice, TwoDecimalFormat),
-    row(HistoricalDataRowId.LowStockPrice, "Low Stock Price", ssg.lowStockPrice, TwoDecimalFormat),
-    fixed(row(HistoricalDataRowId.HighPERatio, "High PE Ratio", ssg.highPERatio, OneDecimalFormat)),
-    fixed(row(HistoricalDataRowId.LowPERatio, "Low PE Ratio", ssg.lowPERatio, OneDecimalFormat)),
+    historicalEntryRow(HistoricalDataRowId.HighStockPrice, "High Stock Price", ssg.highStockPrice, TwoDecimalFormat),
+    historicalEntryRow(HistoricalDataRowId.LowStockPrice, "Low Stock Price", ssg.lowStockPrice, TwoDecimalFormat),
+    fixedRow(HistoricalDataRowId.HighPERatio, "High PE Ratio", ssg.highPERatio, OneDecimalFormat),
+    fixedRow(HistoricalDataRowId.LowPERatio, "Low PE Ratio", ssg.lowPERatio, OneDecimalFormat),
     
-    row(HistoricalDataRowId.DividendPerShare, "Dividend Per Share", ssg.dividendPerShare, TwoDecimalFormat),
-    fixed(growthRow(HistoricalDataRowId.DividendGrowth, "Dividend Growth", ssg.dividendGrowth, PercentFormat)),
-    fixed(row(HistoricalDataRowId.DividendPayout, "Dividend Payout", ssg.dividendPayout, PercentFormat)),
-    fixed(row(HistoricalDataRowId.HighYield, "High Yield", ssg.highYield, PercentFormat)),
+    historicalEntryRow(HistoricalDataRowId.DividendPerShare, "Dividend Per Share", ssg.dividendPerShare, TwoDecimalFormat),
+    fixedRow(HistoricalDataRowId.DividendGrowth, "Dividend Growth", [ NaN, ...ssg.dividendGrowth ], PercentFormat),
+    fixedRow(HistoricalDataRowId.DividendPayout, "Dividend Payout", ssg.dividendPayout, PercentFormat),
+    fixedRow(HistoricalDataRowId.HighYield, "High Yield", ssg.highYield, PercentFormat),
 
-    row(HistoricalDataRowId.OutstandingShares, "Outstanding Shares", ssg.outstandingShares, OneDecimalFormat),
-    fixed(growthRow(HistoricalDataRowId.OutstandingShareGrowth, "Outstanding Share Growth", ssg.outstandingShareGrowth, PercentFormat))
+    historicalEntryRow(HistoricalDataRowId.OutstandingShares, "Outstanding Shares", ssg.outstandingShares, OneDecimalFormat),
+    fixedRow(HistoricalDataRowId.OutstandingShareGrowth, "Outstanding Share Growth", [ NaN, ...ssg.outstandingShareGrowth ], PercentFormat)
   ];
 };
 
@@ -50,28 +50,28 @@ export const getForecastDataRows = (ssg: any): Row[] => {
   return [
     forecastHeaderRow(),
 
-    row(ForecastDataRowId.RevenueGrowth, "Revenue Growth", ssg.fcRevenueGrowth, PercentFormat),
-    fixed(row(ForecastDataRowId.Revenue, "Revenue", ssg.fcRevenue, OneDecimalFormat)),
+    forecastEntryRow(ForecastDataRowId.RevenueGrowth, "Revenue Growth", ssg.fcRevenueGrowth, PercentFormat),
+    fixedRow(ForecastDataRowId.Revenue, "Revenue", ssg.fcRevenue, OneDecimalFormat),
 
-    row(ForecastDataRowId.PreTaxProfitMargin, "Pre-Tax Profit Margin", ssg.fcPreTaxProfitMargin, PercentFormat),
-    fixed(row(ForecastDataRowId.PreTaxNetIncome, "Pre-Tax Net Income", ssg.fcPreTaxNetIncome, OneDecimalFormat)),
+    forecastEntryRow(ForecastDataRowId.PreTaxProfitMargin, "Pre-Tax Profit Margin", ssg.fcPreTaxProfitMargin, PercentFormat),
+    fixedRow(ForecastDataRowId.PreTaxNetIncome, "Pre-Tax Net Income", ssg.fcPreTaxNetIncome, OneDecimalFormat),
 
-    row(ForecastDataRowId.IncomeTaxRate, "Income Tax Rate", ssg.fcIncomeTaxRate, PercentFormat),
-    fixed(row(ForecastDataRowId.NetProfit, "Net Profit", ssg.fcNetProfit, OneDecimalFormat)),
+    forecastEntryRow(ForecastDataRowId.IncomeTaxRate, "Income Tax Rate", ssg.fcIncomeTaxRate, PercentFormat),
+    fixedRow(ForecastDataRowId.NetProfit, "Net Profit", ssg.fcNetProfit, OneDecimalFormat),
 
-    row(ForecastDataRowId.OutstandingShareGrowth, "Outstanding Share Growth", ssg.fcOutstandingShareGrowth, PercentFormat),
-    fixed(row(ForecastDataRowId.OutstandingShares, "Outstanding Shares", ssg.fcOutstandingShares, OneDecimalFormat)),
+    forecastEntryRow(ForecastDataRowId.OutstandingShareGrowth, "Outstanding Share Growth", ssg.fcOutstandingShareGrowth, PercentFormat),
+    fixedRow(ForecastDataRowId.OutstandingShares, "Outstanding Shares", ssg.fcOutstandingShares, OneDecimalFormat),
     
-    fixed(row(ForecastDataRowId.EPS, "EPS", ssg.fcEPS, TwoDecimalFormat)),
-    fixed(row(ForecastDataRowId.EPSGrowth, "EPS Growth", ssg.fcEPSGrowth, PercentFormat)),
+    fixedRow(ForecastDataRowId.EPS, "EPS", ssg.fcEPS, TwoDecimalFormat),
+    fixedRow(ForecastDataRowId.EPSGrowth, "EPS Growth", ssg.fcEPSGrowth, PercentFormat),
 
-    row(ForecastDataRowId.PERatio, "PE Ratio", ssg.fcPERatio, OneDecimalFormat),
+    forecastEntryRow(ForecastDataRowId.PERatio, "PE Ratio", ssg.fcPERatio, OneDecimalFormat),
     
-    fixed(row(ForecastDataRowId.StockPrice, "Stock Price", ssg.fcStockPrice, TwoDecimalFormat)),
-    fixed(row(ForecastDataRowId.TotalStockPriceGrowth, "Total Stock Price Growth", ssg.fcTotalStockPriceGrowth, PercentFormat)),
-    fixed(row(ForecastDataRowId.AnnualStockPriceGrowth, "Annual Stock Price Growth", ssg.fcAnnualStockPriceGrowth, PercentFormat)),
-    fixed(row(ForecastDataRowId.CurrentDividendYield, "Current Dividend Yield", ssg.currentDividendYield, PercentFormat)),
-    fixed(row(ForecastDataRowId.TotalAnnualReturn, "Total Annual Return", ssg.fcTotalAnnualReturn, PercentFormat))
+    fixedRow(ForecastDataRowId.StockPrice, "Stock Price", ssg.fcStockPrice, TwoDecimalFormat),
+    fixedRow(ForecastDataRowId.TotalStockPriceGrowth, "Total Stock Price Growth", ssg.fcTotalStockPriceGrowth, PercentFormat),
+    fixedRow(ForecastDataRowId.AnnualStockPriceGrowth, "Annual Stock Price Growth", ssg.fcAnnualStockPriceGrowth, PercentFormat),
+    fixedRow(ForecastDataRowId.CurrentDividendYield, "Current Dividend Yield", ssg.currentDividendYield, PercentFormat),
+    fixedRow(ForecastDataRowId.TotalAnnualReturn, "Total Annual Return", ssg.fcTotalAnnualReturn, PercentFormat)
   ];
 };
 
@@ -84,27 +84,63 @@ export const getForecastDataColumns = (): Column[] => {
   ];
 };
 
-const row = (id: string, title: string, dataRow: number[], format: Intl.NumberFormat): Row => {
-  var numberCells = dataRow.map((data): DefaultCellTypes => numberCell(data, format));
+export const getForecastDefaultRows = (ssg: any): Row[] => {
+  return [
+    forecastDefaultHeaderRow(),
+
+    forecastDefaultEntryRow(ForecastDataRowId.RevenueGrowth, ssg.fcRevenueGrowthDefault, PercentFormat),
+    forecastDefaultFixedRow(ForecastDataRowId.Revenue, ssg.fcRevenueDefault, OneDecimalFormat),
+
+    forecastDefaultEntryRow(ForecastDataRowId.PreTaxProfitMargin, ssg.fcPreTaxProfitMarginDefault, PercentFormat),
+    forecastDefaultFixedRow(ForecastDataRowId.PreTaxNetIncome, ssg.fcPreTaxNetIncomeDefault, OneDecimalFormat),
+
+    forecastDefaultEntryRow(ForecastDataRowId.IncomeTaxRate, ssg.fcIncomeTaxRateDefault, PercentFormat),
+    forecastDefaultFixedRow(ForecastDataRowId.NetProfit, ssg.fcNetProfitDefault, OneDecimalFormat),
+
+    forecastDefaultEntryRow(ForecastDataRowId.OutstandingShareGrowth, ssg.fcOutstandingShareGrowthDefault, PercentFormat),
+    forecastDefaultFixedRow(ForecastDataRowId.OutstandingShares, ssg.fcOutstandingSharesDefault, OneDecimalFormat),
+    
+    forecastDefaultFixedRow(ForecastDataRowId.EPS, ssg.fcEPSDefault, TwoDecimalFormat),
+    forecastDefaultFixedRow(ForecastDataRowId.EPSGrowth, ssg.fcEPSGrowthDefault, PercentFormat),
+
+    forecastDefaultEntryRow(ForecastDataRowId.PERatio, ssg.fcPERatioDefault, OneDecimalFormat),
+    
+    forecastDefaultFixedRow(ForecastDataRowId.StockPrice, ssg.fcStockPriceDefault, TwoDecimalFormat),
+    forecastDefaultFixedRow(ForecastDataRowId.TotalStockPriceGrowth, ssg.fcTotalStockPriceGrowthDefault, PercentFormat),
+    forecastDefaultFixedRow(ForecastDataRowId.AnnualStockPriceGrowth, ssg.fcAnnualStockPriceGrowthDefault, PercentFormat),
+    forecastDefaultFixedRow(ForecastDataRowId.CurrentDividendYield, ssg.currentDividendYield, PercentFormat),
+    forecastDefaultFixedRow(ForecastDataRowId.TotalAnnualReturn, ssg.fcTotalAnnualReturnDefault, PercentFormat)
+  ];
+};
+
+export const getForecastDefaultColumns = (): Column[] => {
+  var dataColumns = IndexForecastRow.map((idx): Column => ({ columnId: idx, width: 100 }));
+
+  return [
+    ...dataColumns
+  ];
+};
+
+const fixedRow = (id: string, title: string, dataRow: number[], format: Intl.NumberFormat): Row => {
+  var fixedCells = dataRow.map((data): DefaultCellTypes => nonEditable(numberCell(data, format)));
 
   return {
     rowId: id,
     cells: [
       nonEditable(textCell(title)),
-      ...numberCells
+      ...fixedCells
     ]
   };
 };
 
-const growthRow = (id: string, title: string, dataRow: number[], format: Intl.NumberFormat): Row => {
-  var numberCells = dataRow.map((data): DefaultCellTypes => numberCell(data, format));
+const historicalEntryRow = (id: string, title: string, dataRow: number[], format: Intl.NumberFormat): Row => {
+  var entryCells = dataRow.map((data): DefaultCellTypes => numberCell(data, format, 'ssg-entry-cell'));
 
   return {
     rowId: id,
     cells: [
       nonEditable(textCell(title)),
-      nonEditable(emptyCell),
-      ...numberCells
+      ...entryCells
     ]
   };
 };
@@ -112,15 +148,27 @@ const growthRow = (id: string, title: string, dataRow: number[], format: Intl.Nu
 const historicalHeaderRow = (startingYear: number): Row => {
   var headerCells = IndexRow.map((idx): DefaultCellTypes =>
     (idx === 0)
-      ? numberCell(startingYear, YearFormat)
+      ? numberCell(startingYear, YearFormat, 'ssg-entry-cell')
       : nonEditable(numberCell(startingYear + idx, YearFormat))
   );
 
   return {
     rowId: HistoricalDataRowId.Header,
     cells: [
-      nonEditable(emptyCell),
+      nonEditable(textCell('', 'ssg-corner-cell')),
       ...headerCells
+    ]
+  };
+};
+
+const forecastEntryRow = (id: string, title: string, dataRow: number[], format: Intl.NumberFormat): Row => {
+  return {
+    rowId: id,
+    cells: [
+      nonEditable(textCell(title)),
+      numberCell(dataRow[0], format, 'ssg-downside-cell'),
+      numberCell(dataRow[1], format, 'ssg-base-cell'),
+      numberCell(dataRow[2], format, 'ssg-upside-cell')
     ]
   };
 };
@@ -129,18 +177,48 @@ const forecastHeaderRow = (): Row => {
   return {
     rowId: ForecastDataRowId.Header,
     cells: [
-      nonEditable(emptyCell),
-      textCell("Downside"),
-      textCell("Base"),
-      textCell("Upside")
+      nonEditable(textCell('', 'ssg-corner-cell')),
+      nonEditable(textCell("Downside")),
+      nonEditable(textCell("Base")),
+      nonEditable(textCell("Upside"))
     ]
   };
 };
 
-const fixed = (row: Row): Row => ({ ...row, cells: row.cells.map((cell): DefaultCellTypes => nonEditable(cell)) });
+const forecastDefaultEntryRow = (id: string, dataRow: number[], format: Intl.NumberFormat): Row => {
+  return {
+    rowId: id,
+    cells: [
+      nonEditable(numberCell(dataRow[0], format, 'ssg-downside-cell')),
+      nonEditable(numberCell(dataRow[1], format, 'ssg-base-cell')),
+      nonEditable(numberCell(dataRow[2], format, 'ssg-upside-cell'))
+    ]
+  };
+};
 
-const emptyCell: DefaultCellTypes = { type: "text", text: "" };
-const textCell = (text: string, className?: string): DefaultCellTypes => ({ type: "text", text, className });
-const numberCell = (value: number, format: Intl.NumberFormat, className?: string ): DefaultCellTypes => ({ type: "number", value, format, className });
+const forecastDefaultFixedRow = (id: string, dataRow: number[], format: Intl.NumberFormat): Row => {
+  return {
+    rowId: id,
+    cells: [
+      nonEditable(numberCell(dataRow[0], format)),
+      nonEditable(numberCell(dataRow[1], format)),
+      nonEditable(numberCell(dataRow[2], format))
+    ]
+  };
+};
+
+const forecastDefaultHeaderRow = (): Row => {
+  return {
+    rowId: ForecastDataRowId.Header,
+    cells: [
+      nonEditable(textCell("Downside")),
+      nonEditable(textCell("Base")),
+      nonEditable(textCell("Upside"))
+    ]
+  };
+};
+
+const textCell = (text: string, className?: string): DefaultCellTypes => ({ type: "text", text, className: `ssg-cell ${className}` });
+const numberCell = (value: number, format: Intl.NumberFormat, className?: string ): DefaultCellTypes => ({ type: "number", value, format, className: `ssg-cell ${className}` });
 
 const nonEditable = (cell: DefaultCellTypes): DefaultCellTypes => ({ ...cell, nonEditable: true });

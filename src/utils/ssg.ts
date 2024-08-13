@@ -29,41 +29,46 @@ export const calculateSSG = (olsSSG: any): any => {
 
   // FORECAST CALCULATIONS (5 YEARS OUT)
 
-  ssg.fcRevenueGrowth = forecastRevenueGrowth(ssg.yearsOfData, ssg.revenue, ssg.revenueGrowth);
-  ssg.fcRevenueGrowthDefault = ssg.fcRevenueGrowth;
+  ssg.fcRevenueGrowthDefault = forecastRevenueGrowth(ssg.yearsOfData, ssg.revenue, ssg.revenueGrowth);
 
+  ssg.fcRevenueDefault = getFiveYearAfterGrowth(ssg.revenue[9], ssg.fcRevenueGrowthDefault);
   ssg.fcRevenue = getFiveYearAfterGrowth(ssg.revenue[9], ssg.fcRevenueGrowth);
 
-  ssg.fcPreTaxProfitMargin = forecastPreTaxProfitMargin(ssg.yearsOfData, ssg.preTaxProfitMargin);
-  ssg.fcPreTaxProfitMarginefault = ssg.fcPreTaxProfitMarginefault;
+  ssg.fcPreTaxProfitMarginDefault = forecastPreTaxProfitMargin(ssg.yearsOfData, ssg.preTaxProfitMargin);
 
+  ssg.fcPreTaxNetIncomeDefault = getMultiplication(ssg.fcRevenueDefault, ssg.fcPreTaxProfitMarginDefault);
   ssg.fcPreTaxNetIncome = getMultiplication(ssg.fcRevenue, ssg.fcPreTaxProfitMargin);
 
-  ssg.fcIncomeTaxRate = forecastIncomeTaxRate(ssg.yearsOfData, ssg.incomeTaxRate);
-  ssg.fcIncomeTaxRateDefault = ssg.incomeTaxRate;
+  ssg.fcIncomeTaxRateDefault = forecastIncomeTaxRate(ssg.yearsOfData, ssg.incomeTaxRate);
 
+  ssg.fcNetProfitDefault = getMultiplication(ssg.fcPreTaxNetIncomeDefault, getCompliment(ssg.fcIncomeTaxRateDefault));
   ssg.fcNetProfit = getMultiplication(ssg.fcPreTaxNetIncome, getCompliment(ssg.fcIncomeTaxRate));
 
-  ssg.fcOutstandingShareGrowth = forecastOutstandingSharesGrowth(ssg.yearsOfData, ssg.outstandingShareGrowth);
-  ssg.fcOutstandingShareGrowthDefault = ssg.outstandingShareGrowth;
+  ssg.fcOutstandingShareGrowthDefault = forecastOutstandingSharesGrowth(ssg.yearsOfData, ssg.outstandingShareGrowth);
 
+  ssg.fcOutstandingSharesDefault = getFiveYearAfterGrowth(ssg.outstandingShares[9], ssg.fcOutstandingShareGrowthDefault);
   ssg.fcOutstandingShares = getFiveYearAfterGrowth(ssg.outstandingShares[9], ssg.fcOutstandingShareGrowth);
 
+  ssg.fcEPSDefault = getDivision(ssg.fcNetProfitDefault, ssg.fcOutstandingSharesDefault);
   ssg.fcEPS = getDivision(ssg.fcNetProfit, ssg.fcOutstandingShares);
   
+  ssg.fcEPSGrowthDefault = getFiveYearGrowth(ssg.eps[9], ssg.fcEPSDefault);
   ssg.fcEPSGrowth = getFiveYearGrowth(ssg.eps[9], ssg.fcEPS);
 
-  ssg.fcPERatio = forecastPERatio(ssg.startingYear, ssg.highPERatio, ssg.lowPERatio);
-  ssg.fcPERatioDefault = ssg.fcPERatio;
+  ssg.fcPERatioDefault = forecastPERatio(ssg.startingYear, ssg.highPERatio, ssg.lowPERatio);
 
+  ssg.fcStockPriceDefault = getMultiplication(ssg.fcEPSDefault, ssg.fcPERatioDefault);
   ssg.fcStockPrice = getMultiplication(ssg.fcEPS, ssg.fcPERatio);
 
-  ssg.fcTotalStockPriceGrowth = getTotalFiveYearGrowth(ssg.presentStockPrice, ssg.fcStockPrice);
+  ssg.fcTotalStockPriceGrowthDefault = getTotalFiveYearGrowth(ssg.currentStockPrice, ssg.fcStockPriceDefault);
+  ssg.fcTotalStockPriceGrowth = getTotalFiveYearGrowth(ssg.currentStockPrice, ssg.fcStockPrice);
 
+  ssg.fcAnnualStockPriceGrowthDefault = getAnnualFiveYearGrowth(ssg.fcTotalStockPriceGrowthDefault);
   ssg.fcAnnualStockPriceGrowth = getAnnualFiveYearGrowth(ssg.fcTotalStockPriceGrowth);
 
-  ssg.currentDividendYield = Array(3).fill((ssg.presentDividend / ssg.presentStockPrice));
+  ssg.currentDividendYield = Array(3).fill((ssg.currentDividend / ssg.currentStockPrice));
 
+  ssg.fcTotalAnnualReturnDefault = getAddition(ssg.fcAnnualStockPriceGrowthDefault, ssg.currentDividendYield);
   ssg.fcTotalAnnualReturn = getAddition(ssg.fcAnnualStockPriceGrowth, ssg.currentDividendYield);
 
   return ssg;

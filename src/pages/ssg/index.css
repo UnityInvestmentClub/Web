@@ -1,20 +1,84 @@
 .ssg {
-  /* .ssg-historical-sheet {
-    tbody {
-      tr:first-child {
-        th:first-child {
-          border-top-color: var(--background-color);
-          border-left-color: var(--background-color);
-          background-color: var(--background-color);
-        }
-      }
+  .ssg-form {
+    display: grid;
+    justify-content: center;
+    padding-bottom: 30px;
+  }
 
-      tr:not(:first-child) {
-        th {
-          text-align: left;
-        }
-      }
+  .ssg-row {
+    display: flex;
+    padding-bottom: 20px;
+  }
+
+  .ssg-input {
+    padding-right: 20px;
+    width: 250px;
+  }
+
+  .ssg-input-label {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .ssg-historical {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 50px;
+  }
+
+  .ssg-forecast {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ssg-forecast-default {
+    padding-left: 90px;
+    
+    .ssg-cell {
+      border-color: gray !important;
+      color: gray !important;
     }
   }
-  font-size: 14px; */
+
+  .ssg-corner-cell {
+    border-top: none !important;
+    border-left: none !important;
+  }
+
+  .ssg-entry-cell {
+    background-color: var(--grey);
+    font-weight: 600;
+  }
+
+  .ssg-base-cell {
+    background-color: var(--blue);
+    font-weight: 600;
+  }
+
+  .ssg-downside-cell {
+    background-color: var(--pink);
+    font-weight: 600;
+  }
+
+  .ssg-upside-cell {
+    background-color: var(--green);
+    font-weight: 600;
+  }
+
+  .ssg-cell {
+    border-color: black !important;
+  }
+  .ssg-forecast {
+    padding-bottom: 50px;
+  }
+  
+  .ssg-save {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .ssg-save-button {
+    height: 30px;
+    width: 90px;
+  }
 }
