@@ -1,0 +1,48 @@
+.dashboard {
+  .ssg-list {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: fit-content;
+    justify-content: center;
+    padding-bottom: 30px;
+  };
+
+  .ssg-list-header {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    font-weight: 600;
+    border-bottom: solid 2px;
+  };
+
+  .ssg-list-row {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  };
+
+  .ssg-list-row:hover {
+    background-color: var(--grey);
+    cursor: pointer;
+  }
+  
+  .ssg-list-cell {
+    justify-content: left;
+    width: 150px;
+  };
+
+  .ssg-list-cell-name {
+    justify-content: left;
+    width: 300px;
+  };
+
+  .ssg-new {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .ssg-new-button {
+    padding: 10px;
+  }
+}

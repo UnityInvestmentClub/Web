@@ -1,9 +1,9 @@
-import { IndexRow, IndexForecastRow, IndexGrowthRow } from "../constants.ts";
+import { IndexForecastRow, IndexGrowthRow } from '../constants';
 
-export const calculateSSG = (olsSSG: any): any => {
+export const calculateSSG = (olsSSG: any) => {
   var ssg = { ...olsSSG };
 
-  // HISTORICAL DATA CALCULATIONS
+  // Historical Data Calculations
 
   ssg.revenueGrowth = getGrowth(ssg.revenue);
 
@@ -21,50 +21,56 @@ export const calculateSSG = (olsSSG: any): any => {
 
   ssg.dividendGrowth = getGrowth(ssg.dividendPerShare);
 
-  ssg.dividendPayout = getDivisionNoNegative(ssg.dividendPerShare, ssg.eps);
+  ssg.dividendPayout = getDivision(ssg.dividendPerShare, ssg.eps)
+                        .map((payout: number) => (payout > 0) ? payout : NaN);
   
   ssg.highYield = getDivision(ssg.dividendPerShare, ssg.lowStockPrice);
 
   ssg.outstandingShareGrowth = getGrowth(ssg.outstandingShares);
 
-  // FORECAST CALCULATIONS (5 YEARS OUT)
+  // Default Forecast Operations (5 Years Forward)
 
   ssg.fcRevenueGrowthDefault = forecastRevenueGrowth(ssg.yearsOfData, ssg.revenue, ssg.revenueGrowth);
+  
+  ssg.fcPreTaxProfitMarginDefault = forecastPreTaxProfitMargin(ssg.yearsOfData, ssg.preTaxProfitMargin);
+  
+  ssg.fcIncomeTaxRateDefault = forecastIncomeTaxRate(ssg.yearsOfData, ssg.incomeTaxRate);
+  
+  ssg.fcOutstandingShareGrowthDefault = forecastOutstandingSharesGrowth(ssg.yearsOfData, ssg.outstandingShareGrowth);
+  
+  ssg.fcPERatioDefault = forecastPERatio(ssg.startingYear, ssg.highPERatio, ssg.lowPERatio);
 
+  // Forecast Calculations (Default and User-Entered Values)
+
+  // TODO: Make base case project for each year
   ssg.fcRevenueDefault = getFiveYearAfterGrowth(ssg.revenue[9], ssg.fcRevenueGrowthDefault);
   ssg.fcRevenue = getFiveYearAfterGrowth(ssg.revenue[9], ssg.fcRevenueGrowth);
-
-  ssg.fcPreTaxProfitMarginDefault = forecastPreTaxProfitMargin(ssg.yearsOfData, ssg.preTaxProfitMargin);
 
   ssg.fcPreTaxNetIncomeDefault = getMultiplication(ssg.fcRevenueDefault, ssg.fcPreTaxProfitMarginDefault);
   ssg.fcPreTaxNetIncome = getMultiplication(ssg.fcRevenue, ssg.fcPreTaxProfitMargin);
 
-  ssg.fcIncomeTaxRateDefault = forecastIncomeTaxRate(ssg.yearsOfData, ssg.incomeTaxRate);
-
   ssg.fcNetProfitDefault = getMultiplication(ssg.fcPreTaxNetIncomeDefault, getCompliment(ssg.fcIncomeTaxRateDefault));
   ssg.fcNetProfit = getMultiplication(ssg.fcPreTaxNetIncome, getCompliment(ssg.fcIncomeTaxRate));
-
-  ssg.fcOutstandingShareGrowthDefault = forecastOutstandingSharesGrowth(ssg.yearsOfData, ssg.outstandingShareGrowth);
 
   ssg.fcOutstandingSharesDefault = getFiveYearAfterGrowth(ssg.outstandingShares[9], ssg.fcOutstandingShareGrowthDefault);
   ssg.fcOutstandingShares = getFiveYearAfterGrowth(ssg.outstandingShares[9], ssg.fcOutstandingShareGrowth);
 
+  // TODO: Make base case project for each year
   ssg.fcEPSDefault = getDivision(ssg.fcNetProfitDefault, ssg.fcOutstandingSharesDefault);
   ssg.fcEPS = getDivision(ssg.fcNetProfit, ssg.fcOutstandingShares);
   
   ssg.fcEPSGrowthDefault = getFiveYearGrowth(ssg.eps[9], ssg.fcEPSDefault);
   ssg.fcEPSGrowth = getFiveYearGrowth(ssg.eps[9], ssg.fcEPS);
 
-  ssg.fcPERatioDefault = forecastPERatio(ssg.startingYear, ssg.highPERatio, ssg.lowPERatio);
-
+  // TODO: Make downside, base, and upside project for each year
   ssg.fcStockPriceDefault = getMultiplication(ssg.fcEPSDefault, ssg.fcPERatioDefault);
   ssg.fcStockPrice = getMultiplication(ssg.fcEPS, ssg.fcPERatio);
 
   ssg.fcTotalStockPriceGrowthDefault = getTotalFiveYearGrowth(ssg.currentStockPrice, ssg.fcStockPriceDefault);
   ssg.fcTotalStockPriceGrowth = getTotalFiveYearGrowth(ssg.currentStockPrice, ssg.fcStockPrice);
 
-  ssg.fcAnnualStockPriceGrowthDefault = getAnnualFiveYearGrowth(ssg.fcTotalStockPriceGrowthDefault);
-  ssg.fcAnnualStockPriceGrowth = getAnnualFiveYearGrowth(ssg.fcTotalStockPriceGrowth);
+  ssg.fcAnnualStockPriceGrowthDefault = getFiveYearGrowth(ssg.currentStockPrice, ssg.fcStockPriceDefault);
+  ssg.fcAnnualStockPriceGrowth = getFiveYearGrowth(ssg.currentStockPrice, ssg.fcStockPrice);
 
   ssg.currentDividendYield = Array(3).fill((ssg.currentDividend / ssg.currentStockPrice));
 
@@ -74,58 +80,42 @@ export const calculateSSG = (olsSSG: any): any => {
   return ssg;
 };
 
-const getCompliment = (taxRateRow: number[]): number[] => taxRateRow.map((taxRate): number => 1 - taxRate);
+const getCompliment = (taxRateRow: number[]) => taxRateRow.map((taxRate: number) => 1 - taxRate);
 
-const getGrowth = (dataRow: number[]): number[] => {
-  return IndexGrowthRow.map((idx): number => 
+const getGrowth = (dataRow: number[]) => {
+  return IndexGrowthRow.map((idx: number) => 
     (dataRow[idx] > 0)
       ? (dataRow[idx + 1] / dataRow[idx]) - 1
       : NaN
   );
 };
 
-const getDivisionNoNegative = (dataRow1: number[], dataRow2: number[]): number[] => {
-  return IndexRow.map((idx): number => 
-    (dataRow1[idx] > 0 && dataRow2[idx] > 0)
-      ? dataRow1[idx] / dataRow2[idx]
-      : NaN
-  );
+const getDivision = (dataRow1: number[], dataRow2: number[]) => {
+  return Array(dataRow1.length).fill(NaN).map((_, idx: number) => dataRow1[idx] / dataRow2[idx]);
 };
 
-const getDivision = (dataRow1: number[], dataRow2: number[]): number[] => {
-  return Array(dataRow1.length).fill(NaN).map((_, idx): number => 
-    (dataRow2[idx] !== 0)
-      ? dataRow1[idx] / dataRow2[idx]
-      : NaN
-  );
+const getAddition = (dataRow1: number[], dataRow2: number[]) => {
+  return IndexForecastRow.map((idx: number) => dataRow1[idx] + dataRow2[idx]);
 };
 
-const getAddition = (dataRow1: number[], dataRow2: number[]): number[] => {
-  return IndexForecastRow.map((idx): number => dataRow1[idx] + dataRow2[idx]);
+const getMultiplication = (dataRow1: number[], dataRow2: number[]) => {
+  return IndexForecastRow.map((idx: number) => dataRow1[idx] * dataRow2[idx]);
 };
 
-const getMultiplication = (dataRow1: number[], dataRow2: number[]): number[] => {
-  return IndexForecastRow.map((idx): number => dataRow1[idx] * dataRow2[idx]);
+const getFiveYearAfterGrowth = (latest: number, fcGrowthRow: number[]) => {
+  return IndexForecastRow.map((idx: number) => latest * ((1 + fcGrowthRow[idx]) ** 5));
 };
 
-const getFiveYearAfterGrowth = (latest: number, fcGrowthRow: []): number[] => {
-  return IndexForecastRow.map((idx): number => latest * ((1 + fcGrowthRow[idx]) ** 5));
+const getFiveYearGrowth = (latest: number, fcDataRow: number[]) => {
+  return IndexForecastRow.map((idx: number) => ((fcDataRow[idx] / latest) ** 0.2) - 1);
 };
 
-const getFiveYearGrowth = (latest: number, fcDataRow: []): number[] => {
-  return IndexForecastRow.map((idx): number => ((fcDataRow[idx] / latest) ** 0.2) - 1);
+const getTotalFiveYearGrowth = (latest: number, fcDataRow: number[]) => {
+  return IndexForecastRow.map((idx: number) => (fcDataRow[idx] / latest) - 1);
 };
 
-const getTotalFiveYearGrowth = (latest: number, fcDataRow: number[]): number[] => {
-  return IndexForecastRow.map((idx): number => (fcDataRow[idx] / latest) - 1);
-};
-
-const getAnnualFiveYearGrowth = (fcGrowthRow: number[]): number[] => {
-  return IndexForecastRow.map((idx): number => ((1 + fcGrowthRow[idx]) ** 0.2) - 1);
-};
-
-const forecastRevenueGrowth = (yearsOfData: number, revenue: number[], revenueGrowth: number[]): number[] => {
-  var latestRevenue = revenue.slice(-1 - Math.min(5, yearsOfData));
+const forecastRevenueGrowth = (yearsOfData: number, revenue: number[], revenueGrowth: number[]) => {
+  var latestRevenue = revenue.slice(-Math.min(5, yearsOfData) - 1);
   
   var base = ((latestRevenue.at(-1) / latestRevenue[0]) ** (1 / Math.min(5, yearsOfData))) - 1;
 
@@ -140,7 +130,7 @@ const forecastRevenueGrowth = (yearsOfData: number, revenue: number[], revenueGr
   return [ downside, base, upside ];
 };
 
-const forecastPreTaxProfitMargin = (yearsOfData: number, preTaxProfitMargin: number[]): number[] => {
+const forecastPreTaxProfitMargin = (yearsOfData: number, preTaxProfitMargin: number[]) => {
   var latestProfitMargin = preTaxProfitMargin.slice(-Math.min(5, yearsOfData));
   
   var base = sum(latestProfitMargin) / latestProfitMargin.length;
@@ -156,7 +146,7 @@ const forecastPreTaxProfitMargin = (yearsOfData: number, preTaxProfitMargin: num
   return [ downside, base, upside ];
 };
 
-const forecastIncomeTaxRate = (yearsOfData: number, incomeTaxRate: number[]): number[] => {
+const forecastIncomeTaxRate = (yearsOfData: number, incomeTaxRate: number[]) => {
     var latestTaxRate = incomeTaxRate.slice(-Math.min(5, yearsOfData));
   
     var base = median(latestTaxRate);
@@ -164,10 +154,10 @@ const forecastIncomeTaxRate = (yearsOfData: number, incomeTaxRate: number[]): nu
     return Array(3).fill(base);
 };
 
-const forecastOutstandingSharesGrowth = (yearsOfData: number, outstandingShareGrowth: number[]): number[] => {
+const forecastOutstandingSharesGrowth = (yearsOfData: number, outstandingShareGrowth: number[]) => {
   var latestShareGrowth = outstandingShareGrowth.slice(-Math.min(5, yearsOfData) + 1);
   
-  var base = Math.max(-0.05, Math.min(sum(latestShareGrowth) / latestShareGrowth.length));
+  var base = Math.max(-0.05, Math.min(0.05, sum(latestShareGrowth) / latestShareGrowth.length));
 
   var downside = (yearsOfData > 5)
     ? Math.min(0.05, (sum(latestShareGrowth) - min(latestShareGrowth)) / 3)
@@ -180,7 +170,7 @@ const forecastOutstandingSharesGrowth = (yearsOfData: number, outstandingShareGr
   return [ downside, base, upside ];
 };
 
-const forecastPERatio = (yearsOfData: number, highStockPrice: number[], lowStockPrice: number[]): number[] => {
+const forecastPERatio = (yearsOfData: number, highStockPrice: number[], lowStockPrice: number[]) => {
   var latestHighPrice = sort(highStockPrice.slice(-Math.min(5, yearsOfData)));
   var latestLowPrice = sort(lowStockPrice.slice(-Math.min(5, yearsOfData)));
 
@@ -196,15 +186,15 @@ const forecastPERatio = (yearsOfData: number, highStockPrice: number[], lowStock
   return [ downside, base, upside ];
 };
 
-export const sort = (dataRow: number[]): number[] => dataRow.toSorted((a, b) => a - b);
+export const sort = (dataRow: number[]) => dataRow.toSorted((a, b) => a - b);
 
-export const max = (dataRow: number[]): number => Math.max(...dataRow);
+export const max = (dataRow: number[]) => Math.max(...dataRow);
 
-export const min = (dataRow: number[]): number => Math.min(...dataRow);
+export const min = (dataRow: number[]) => Math.min(...dataRow);
 
-export const sum = (dataRow: number[]): number => dataRow.reduce((a, b) => a + b);
+export const sum = (dataRow: number[]) => dataRow.reduce((a, b) => a + b);
 
-export const median = (dataRow: number[]): number => {
+export const median = (dataRow: number[]) => {
   var sortedRow = sort(dataRow);
   var idx = Math.floor(sortedRow.length / 2);
 

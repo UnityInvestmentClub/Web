@@ -1,34 +1,48 @@
 .ssg {
   .ssg-form {
-    display: grid;
-    justify-content: center;
+    margin: auto;
+    width: fit-content;
     padding-bottom: 30px;
-  }
 
-  .ssg-row {
-    display: flex;
-    padding-bottom: 20px;
-  }
-
-  .ssg-input {
-    padding-right: 20px;
-    width: 250px;
-  }
-
-  .ssg-input-label {
-    margin: 0;
-    font-weight: 500;
+    .ssg-row {
+      display: flex;
+      padding-bottom: 20px;
+    }
+  
+    .ssg-input-container {
+      margin-right: 40px;
+      margin-left: 40px;
+      width: 170px;
+    
+      .ssg-input-label {
+        margin: 0;
+      }
+  
+      .ssg-input {
+        width: 170px;
+      }
+  
+      .ssg-select {
+        width: 170px;
+      }
+    }
   }
 
   .ssg-historical {
     display: flex;
     justify-content: center;
     padding-bottom: 50px;
+
+    .ssg-entry-cell {
+      background-color: var(--grey);
+      font-weight: 600;
+    }
   }
 
   .ssg-forecast {
     display: flex;
     justify-content: center;
+    padding-bottom: 50px;
   }
 
   .ssg-forecast-default {
@@ -40,45 +54,46 @@
     }
   }
 
+  /* Historical & Forecast */
   .ssg-corner-cell {
     border-top: none !important;
     border-left: none !important;
   }
-
-  .ssg-entry-cell {
-    background-color: var(--grey);
-    font-weight: 600;
-  }
-
+  
+  /* Forecast & Forecast Default */
   .ssg-base-cell {
     background-color: var(--blue);
     font-weight: 600;
   }
 
+  /* Forecast & Forecast Default */
   .ssg-downside-cell {
     background-color: var(--pink);
     font-weight: 600;
   }
 
+  /* Forecast & Forecast Default */
   .ssg-upside-cell {
     background-color: var(--green);
     font-weight: 600;
   }
 
+  /* Historical, Forecast & Forecast Default*/
   .ssg-cell {
     border-color: black !important;
   }
-  .ssg-forecast {
-    padding-bottom: 50px;
-  }
-  
-  .ssg-save {
+
+  .ssg-buttons {
     display: flex;
     justify-content: center;
-  }
   
-  .ssg-save-button {
-    height: 30px;
-    width: 90px;
+    .ssg-save-button {
+      padding: 10px;
+    }
+    
+    .ssg-back-button {
+      padding: 10px;
+      margin-right: 10px;
+    }
   }
 }

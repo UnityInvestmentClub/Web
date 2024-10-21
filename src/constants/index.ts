@@ -1,58 +1,61 @@
+export const DBUrl = import.meta.env.PROD ? import.meta.env.VITE_DB_PROD_URL : import.meta.env.VITE_DB_DEV_URL;
+export const DBKey = import.meta.env.PROD ? import.meta.env.VITE_DB_PROD_KEY : import.meta.env.VITE_DB_DEV_KEY;
+
 export const enum HistoricalDataRowId {
-  Header = "historical-header",
-  Revenue = "revenue",
-  RevenueGrowth = "revenueGrowth",
-  NetProfit = "netProfit",
-  IncomeTaxRate = "incomeTaxRate",
-  PreTaxNetIncome = "preTaxNetIncome",
-  PreTaxIncomeGrowth = "preTaxIncomeGrowth",
-  PreTaxProfitMargin = "preTaxProfitMargin",
-  EPS = "eps",
-  EPSGrowth = "epsGrowth",
-  HighStockPrice = "highStockPrice",
-  LowStockPrice = "lowStockPrice",
-  HighPERatio = "highPERatio",
-  LowPERatio = "lowPERatio",
-  DividendPerShare = "dividendPerShare",
-  DividendGrowth = "dividendGrowth",
-  DividendPayout = "dividendPayout",
-  HighYield = "highYield",
-  OutstandingShares = "outstandingShares",
-  OutstandingShareGrowth = "outstandingShareGrowth"
+  Header = 'historical-header',
+  Revenue = 'revenue',
+  RevenueGrowth = 'revenueGrowth',
+  NetProfit = 'netProfit',
+  IncomeTaxRate = 'incomeTaxRate',
+  PreTaxNetIncome = 'preTaxNetIncome',
+  PreTaxIncomeGrowth = 'preTaxIncomeGrowth',
+  PreTaxProfitMargin = 'preTaxProfitMargin',
+  EPS = 'eps',
+  EPSGrowth = 'epsGrowth',
+  HighStockPrice = 'highStockPrice',
+  LowStockPrice = 'lowStockPrice',
+  HighPERatio = 'highPERatio',
+  LowPERatio = 'lowPERatio',
+  DividendPerShare = 'dividendPerShare',
+  DividendGrowth = 'dividendGrowth',
+  DividendPayout = 'dividendPayout',
+  HighYield = 'highYield',
+  OutstandingShares = 'outstandingShares',
+  OutstandingShareGrowth = 'outstandingShareGrowth'
 };
 
 export const enum ForecastDataRowId {
-  Header = "forecast-header",
-  RevenueGrowth = "fcRevenueGrowth",
-  Revenue = "fcRevenue",
-  PreTaxProfitMargin = "fcPreTaxProfitMargin",
-  PreTaxNetIncome = "fcPreTaxNetIncome",
-  IncomeTaxRate = "fcIncomeTaxRate",
-  NetProfit = "fcNetProfit",
-  OutstandingShareGrowth = "fcOutstandingShareGrowth",
-  OutstandingShares = "fcOutstandingShares",
-  EPS = "fcEPS",
-  EPSGrowth = "fcEPSGrowth",
-  PERatio= "fcPERatio",
-  StockPrice = "fcStockPrice",
-  TotalStockPriceGrowth = "fcTotalStockPriceGrowth",
-  AnnualStockPriceGrowth = "fcAnnualStockPriceGrowth",
-  CurrentDividendYield = "currentDividendYield",
-  TotalAnnualReturn = "fcTotalAnnualReturn"
+  Header = 'forecast-header',
+  RevenueGrowth = 'fcRevenueGrowth',
+  Revenue = 'fcRevenue',
+  PreTaxProfitMargin = 'fcPreTaxProfitMargin',
+  PreTaxNetIncome = 'fcPreTaxNetIncome',
+  IncomeTaxRate = 'fcIncomeTaxRate',
+  NetProfit = 'fcNetProfit',
+  OutstandingShareGrowth = 'fcOutstandingShareGrowth',
+  OutstandingShares = 'fcOutstandingShares',
+  EPS = 'fcEPS',
+  EPSGrowth = 'fcEPSGrowth',
+  PERatio= 'fcPERatio',
+  StockPrice = 'fcStockPrice',
+  TotalStockPriceGrowth = 'fcTotalStockPriceGrowth',
+  AnnualStockPriceGrowth = 'fcAnnualStockPriceGrowth',
+  CurrentDividendYield = 'currentDividendYield',
+  TotalAnnualReturn = 'fcTotalAnnualReturn'
 };
 
-export const EmptySSG: any = {
+export const EmptySSG = {
   name: '',
   isPresentedVersion: false,
   presentedMonth: 0,
   stockTicker: '',
   preparedBy: '',
-  preparedDate: 0,
+  preparedDate: '',
   sourceData: '',
-  sourceDate: 0,
+  sourceDate: '',
   yearsOfData: 10,
   currentStockPrice: 0,
-  currentStockPriceDate: 0,
+  currentStockPriceDate: '',
   currentDividend: 0,
   startingYear: 2014,
 
@@ -111,15 +114,19 @@ export const EmptySSG: any = {
 
   fcStockPriceDefault: Array(3).fill(NaN),
   fcStockPrice: Array(3).fill(NaN),
+
   fcTotalStockPriceGrowthDefault: Array(3).fill(NaN),
   fcTotalStockPriceGrowth: Array(3).fill(NaN),
+
   fcAnnualStockPriceGrowthDefault: Array(3).fill(NaN),
   fcAnnualStockPriceGrowth: Array(3).fill(NaN),
+
   currentDividendYield: Array(3).fill(NaN),
+
   fcTotalAnnualReturnDefault: Array(3).fill(NaN),
   fcTotalAnnualReturn: Array(3).fill(NaN)
 };
 
-export const IndexRow: number[] = Array(10).fill(NaN).map((_, idx) => idx);
-export const IndexGrowthRow: number[] = Array(9).fill(NaN).map((_, idx) => idx);
-export const IndexForecastRow: number[] = Array(3).fill(NaN).map((_, idx) => idx);
+export const IndexRow = Array(10).fill(NaN).map((_, idx: number) => idx);
+export const IndexGrowthRow = Array(9).fill(NaN).map((_, idx: number) => idx);
+export const IndexForecastRow = Array(3).fill(NaN).map((_, idx: number) => idx);
