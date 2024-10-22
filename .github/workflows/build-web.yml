@@ -1,0 +1,32 @@
+name: Build Web
+
+on:
+  push:
+    branches: [main]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.5
+          cache: npm
+      - name: Install Dependencies
+        runs: npm ci
+      - name: Lint
+        runs: npm run lint
+      - name: Typecheck
+        runs: npm run typecheck
+      - name: Build
+        runs: npm run build
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: ./dist

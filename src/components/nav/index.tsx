@@ -2,7 +2,7 @@ import './index.css';
 import { useLocation } from 'wouter';
 import { useApi, useAppState } from '../../hooks';
 
-export default () => {
+export const Nav = () => {
   const { logout } = useApi();
   const { loggedIn } = useAppState();
   const [_, navigate] = useLocation();

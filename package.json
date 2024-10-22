@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "tsc": "tsc",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@silevis/reactgrid": "^4.1.7",

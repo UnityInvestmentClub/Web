@@ -22,7 +22,7 @@ export const enum HistoricalDataRowId {
   HighYield = 'highYield',
   OutstandingShares = 'outstandingShares',
   OutstandingShareGrowth = 'outstandingShareGrowth'
-};
+}
 
 export const enum ForecastDataRowId {
   Header = 'forecast-header',
@@ -42,7 +42,7 @@ export const enum ForecastDataRowId {
   AnnualStockPriceGrowth = 'fcAnnualStockPriceGrowth',
   CurrentDividendYield = 'currentDividendYield',
   TotalAnnualReturn = 'fcTotalAnnualReturn'
-};
+}
 
 export const EmptySSG = {
   name: '',

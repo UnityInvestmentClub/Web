@@ -8,9 +8,7 @@ import { getHistoricalDataRows, getHistoricalDataColumns, getForecastDataRows, g
 import { calculateSSG } from '../../utils/ssg';
 import { HistoricalDataRowId, ForecastDataRowId, EmptySSG } from '../../constants/';
 
-//TODO: convert ssg hooks to global context with reducers
-
-export default () => {
+export const SSGPage = () => {
   const [ssg, setSSG] = useState(EmptySSG);
   const [_, navigate] = useLocation();
   const { getSSG, saveSSG, updateSSG } = useApi();
@@ -22,7 +20,9 @@ export default () => {
         .then(data => convertDTOToSSG(data))
         .then(data => setSSG(data))
         .catch(error => console.error(error));
-  }, []);
+    else
+      setSSG(EmptySSG);
+  }, [routeParams]);
 
   const convertDTOToSSG = (data: any) => {
     return {

@@ -7,3 +7,5 @@ export type PropsBase = {
 export type ActionBase = {
   type: string;
 };
+
+export type EmptyFunction = () => void;

@@ -1,2 +1,2 @@
-export { AppStateProvider, useAppState } from './appState';
-export { SupabaseProvider, useSupabase } from './supabase';
+export { AppStateContext, AppStateProvider } from './appState';
+export { SupabaseContext, SupabaseProvider } from './supabase';

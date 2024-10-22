@@ -1,20 +1,23 @@
-import { createContext, useContext, useReducer } from 'react';
+import { useReducer, createContext } from 'react';
+import { EmptyFunction } from '../../_types';
 import { ActionBase, PropsBase } from '../../_types';
 
-interface State {
+type AppStateState = {
   loggedIn: boolean,
-  setLoggedInState: () => void,
-  setLoggedOutState: () => void
+  setLoggedInState: EmptyFunction,
+  setLoggedOutState: EmptyFunction
 }
 
-const AppStateContext = createContext({});
-
-const initial = {
+const initial: AppStateState = {
   // Checks if supabase auth token is in local storage
-  loggedIn: !!localStorage.getItem('sb-vtzzrkeofjdjfusqxjvh-auth-token')
+  loggedIn: !!localStorage.getItem('sb-vtzzrkeofjdjfusqxjvh-auth-token'),
+  setLoggedInState: () => undefined,
+  setLoggedOutState: () => undefined
 };
 
-const reducer = (state = initial, { type }: ActionBase) => {
+export const AppStateContext = createContext(initial);
+
+const reducer = (state: AppStateState, { type }: ActionBase) => {
   switch (type) {
     case 'login': return { ...state, loggedIn: true };
     case 'logout': return { ...state, loggedIn: false };
@@ -22,17 +25,10 @@ const reducer = (state = initial, { type }: ActionBase) => {
 };
 
 export const AppStateProvider = ({ children }: PropsBase) => {
-
   const [ appState, dispatch ] = useReducer(reducer, initial);
 
   const setLoggedInState = () => dispatch({ type: 'login' });
   const setLoggedOutState = () => dispatch({ type: 'logout' });
 
   return <AppStateContext.Provider value={{ ...appState, setLoggedInState, setLoggedOutState }}>{children}</AppStateContext.Provider>
-};
-
-export const useAppState = () => {
-  const context: Partial<State> = useContext(AppStateContext);
-
-  return context;
 };

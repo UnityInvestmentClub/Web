@@ -1,15 +1,15 @@
 import './index.css';
-import { Redirect, Route, Switch } from 'wouter';
+import { Redirect, Route, Router, Switch } from 'wouter';
 import { DashboardPage, SSGPage, LoginPage } from '../pages';
 import { Nav } from '../components'
-import { useAppState } from '../context';
+import { useAppState } from '../hooks';
 import { PropsBase } from '../_types';
 
 interface Props extends PropsBase {
   path: string
-};
+}
 
-export default () => {
+export const Layout = () => {
   const { loggedIn } = useAppState();
 
   const ProtectedRoute = ({ children, path }: Props) => {
@@ -26,16 +26,18 @@ export default () => {
 
   return (
     <main>
-      <Nav />
-      <div className='main'>
-        <Switch>
-          <Route path='/login'>{ loggedIn ? <Redirect to='/' /> : <LoginPage /> }</Route>
-          <ProtectedRoute path='/'><DashboardPage /></ProtectedRoute>
-          <ProtectedRoute path='/ssg'><SSGPage /></ProtectedRoute>
-          <ProtectedRoute path='/ssg/:id'><SSGPage /></ProtectedRoute>
-          <Route path='*'><Redirect to='/' /></Route>
-        </Switch>
-      </div>
+      <Router base='/Web'>
+        <Nav />
+        <div className='main'>
+          <Switch>
+            <Route path='/login'>{ loggedIn ? <Redirect to='/' /> : <LoginPage /> }</Route>
+            <ProtectedRoute path='/'><DashboardPage /></ProtectedRoute>
+            <ProtectedRoute path='/ssg'><SSGPage /></ProtectedRoute>
+            <ProtectedRoute path='/ssg/:id'><SSGPage /></ProtectedRoute>
+            <Route path='*'><Redirect to='/' /></Route>
+          </Switch>
+        </div>
+      </Router>
     </main>
   );
 };

@@ -1,4 +1,4 @@
-import { Row, Column, DefaultCellTypes } from '@silevis/reactgrid';
+import { DefaultCellTypes } from '@silevis/reactgrid';
 import { ForecastDataRowId, HistoricalDataRowId, IndexRow, IndexForecastRow } from '../constants';
 
 const YearFormat = new Intl.NumberFormat('en-US', { useGrouping: false });

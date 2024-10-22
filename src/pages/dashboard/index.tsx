@@ -3,32 +3,10 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { useApi } from '../../hooks';
 
-//TODO: convert ssg hooks to global context with reducers
-
-export default () => {
+export const DashboardPage = () => {
   const [ssgList, setSSGList] = useState([]);
   const [_, navigate] = useLocation();
   const { getSSGList } = useApi();
-
-  useEffect(() => {
-    getSSGList()
-      .then(data => convertDTOListToSSGList(data))
-      .then(data => setSSGList(data))
-      .catch(error => console.error(error));
-  }, []);
-
-  // const fetchSSGs = async () => {
-  //   let { data, error } = await client.from('ssgs').select('*').order('created_date', { ascending: false });
-
-  //   if (error)
-  //     throw error;
-
-  //   setSSGList(convertDTOListToSSGList(data));
-  // };
-
-  const convertDTOListToSSGList = (dataList: any[]) => {
-    return dataList.map(data => convertDTOToSSG(data));
-  };
 
   const convertDTOToSSG = (data: any) => {
     return {
@@ -471,6 +449,17 @@ export default () => {
       ]
     };
   };
+  
+  useEffect(() => {
+    const convertDTOListToSSGList = (dataList: any[]) => {
+      return dataList.map(data => convertDTOToSSG(data));
+    };
+
+    getSSGList()
+      .then(data => convertDTOListToSSGList(data))
+      .then(data => setSSGList(data))
+      .catch(error => console.error(error));
+  }, []);
 
   const SSGList = () => {
     var ssgListRows = ssgList.map((ssg: any) => {

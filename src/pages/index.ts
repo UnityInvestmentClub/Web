@@ -1,3 +1,3 @@
-export { default as DashboardPage } from './dashboard';
-export { default as SSGPage } from './ssg';
-export { default as LoginPage } from './login';
+export { DashboardPage } from './dashboard';
+export { SSGPage } from './ssg';
+export { LoginPage } from './login';
