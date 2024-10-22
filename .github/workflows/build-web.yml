@@ -31,4 +31,4 @@ jobs:
         with:
           name: build-artifacts
           path: ./dist
-          if-no-file-found: error
+          if-no-files-found: error
