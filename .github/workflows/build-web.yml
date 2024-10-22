@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,3 +31,4 @@ jobs:
         with:
           name: build-artifacts
           path: ./dist
+          if-no-file-found: error

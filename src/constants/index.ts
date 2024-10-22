@@ -1,5 +1,5 @@
-export const DBUrl = import.meta.env.PROD ? import.meta.env.VITE_DB_PROD_URL : import.meta.env.VITE_DB_DEV_URL;
-export const DBKey = import.meta.env.PROD ? import.meta.env.VITE_DB_PROD_KEY : import.meta.env.VITE_DB_DEV_KEY;
+export const DBUrl = import.meta.env.VITE_DB_URL;
+export const DBKey = import.meta.env.VITE_DB_KEY;
 
 export const enum HistoricalDataRowId {
   Header = 'historical-header',

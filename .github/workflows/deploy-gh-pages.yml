@@ -18,6 +18,7 @@ concurrency:
 
 jobs:
   deploy:
+    name: Deploy
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -30,7 +31,7 @@ jobs:
         with:
           name: build-artifacts
           path: ./dist
-          run-id: ${{ github.event.inputs.message }}
+          run-id: ${{ github.event.inputs.build_run_id }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
