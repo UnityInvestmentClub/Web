@@ -27,8 +27,8 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_DB_URL: ${{ secrets.VITE_DB_URL }}
-          VITE_DB_KEY: ${{ secrets.VITE_DB_KEY }}
+          VITE_DB_URL: ${{ vars.DB_PROD_URL }}
+          VITE_DB_KEY: ${{ secrets.DB_PROD_KEY }}
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
