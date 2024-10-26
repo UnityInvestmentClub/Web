@@ -7,7 +7,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <SupabaseProvider>
       <AppStateProvider>
-          <Layout />
+        <Layout />
       </AppStateProvider>
     </SupabaseProvider>
   </React.StrictMode>

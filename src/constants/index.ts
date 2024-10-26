@@ -1,4 +1,4 @@
-export const DBUrl = import.meta.env.VITE_DB_URL;
+export const DBId = import.meta.env.VITE_DB_ID;
 export const DBKey = import.meta.env.VITE_DB_KEY;
 
 export const enum HistoricalDataRowId {

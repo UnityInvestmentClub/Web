@@ -26,6 +26,7 @@ export const Layout = () => {
 
   return (
     <main>
+      {/* base='/Web' needed to support gh pages*/}
       <Router base='/Web'>
         <Nav />
         <div className='main'>

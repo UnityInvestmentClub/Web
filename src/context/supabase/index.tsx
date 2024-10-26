@@ -1,9 +1,9 @@
 import { createContext, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { DBUrl, DBKey } from '../../constants';
+import { DBId, DBKey } from '../../constants';
 import { PropsBase } from '../../_types';
 
-const supabaseClient = createClient(DBUrl, DBKey);
+const supabaseClient = createClient(`https://${DBId}.supabase.co`, DBKey);
 
 export const SupabaseContext = createContext(supabaseClient);
 

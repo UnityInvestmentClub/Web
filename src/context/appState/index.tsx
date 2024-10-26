@@ -1,6 +1,6 @@
 import { useReducer, createContext } from 'react';
-import { EmptyFunction } from '../../_types';
-import { ActionBase, PropsBase } from '../../_types';
+import { DBId } from '../../constants';
+import { ActionBase, PropsBase, EmptyFunction } from '../../_types';
 
 type AppStateState = {
   loggedIn: boolean,
@@ -10,7 +10,7 @@ type AppStateState = {
 
 const initial: AppStateState = {
   // Checks if supabase auth token is in local storage
-  loggedIn: !!localStorage.getItem('sb-vtzzrkeofjdjfusqxjvh-auth-token'),
+  loggedIn: !!localStorage.getItem(`sb-${DBId}-auth-token`),
   setLoggedInState: () => undefined,
   setLoggedOutState: () => undefined
 };
