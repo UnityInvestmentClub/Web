@@ -4,13 +4,14 @@ import { ActionBase, PropsBase, EmptyFunction } from '../../_types';
 
 type AppStateState = {
   loggedIn: boolean,
+  authId: string,
   setLoggedInState: EmptyFunction,
   setLoggedOutState: EmptyFunction
 }
 
 const initial: AppStateState = {
-  // Checks if supabase auth token is in local storage
   loggedIn: !!localStorage.getItem(`sb-${DBId}-auth-token`),
+  authId: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.id,
   setLoggedInState: () => undefined,
   setLoggedOutState: () => undefined
 };
@@ -19,8 +20,18 @@ export const AppStateContext = createContext(initial);
 
 const reducer = (state: AppStateState, { type }: ActionBase) => {
   switch (type) {
-    case 'login': return { ...state, loggedIn: true };
-    case 'logout': return { ...state, loggedIn: false };
+    case 'login':
+      return {
+        ...state,
+        loggedIn: true,
+        authId: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.id
+      };
+    case 'logout':
+      return {
+        ...state,
+        loggedIn: false,
+        authId: null
+      };
   }
 };
 

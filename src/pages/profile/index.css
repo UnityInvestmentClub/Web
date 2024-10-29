@@ -1,0 +1,51 @@
+.profile {
+  .profile-form {
+    margin: auto;
+    width: fit-content;
+    padding-bottom: 30px;
+
+    .profile-row {
+      display: flex;
+      padding-bottom: 20px;
+    }
+  }
+
+  .profile-input-container {
+    margin-right: 40px;
+    margin-left: 40px;
+    width: 170px;
+  
+    .profile-input-label {
+      margin: 0;
+    }
+
+    .profile-input {
+      width: 170px;
+    }
+
+    .profile-select {
+      width: 170px;
+    }
+  }
+
+  .profile-save {
+    display: flex;
+    justify-content: center;
+  
+    .profile-save-button {
+      padding: 10px;
+    }
+  }
+
+  .profile-password-form{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 70px;
+
+    .profile-input-container {
+      padding-bottom: 20px;
+    }
+  }
+}

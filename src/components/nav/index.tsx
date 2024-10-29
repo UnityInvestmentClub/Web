@@ -1,18 +1,15 @@
 import './index.css';
 import { useLocation } from 'wouter';
-import { useApi, useAppState } from '../../hooks';
+import { useAuth, useAppState } from '../../hooks';
 
 export const Nav = () => {
-  const { logout } = useApi();
+  const { logout } = useAuth();
   const { loggedIn } = useAppState();
   const [_, navigate] = useLocation();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error(error);
-    }
+  const handleLogout = () => {
+    logout()
+      .catch(console.error);
   };
 
   return (
@@ -24,7 +21,10 @@ export const Nav = () => {
         <div className='navtab' onClick={() => navigate('/ssg')}>
           Create SSG
         </div>
-        <div className='navtab navtab-right' onClick={handleLogout}>
+        <div className='navtab navtab-right' onClick={() => navigate('/profile')}>
+          Profile
+        </div>
+        <div className='navtab' onClick={handleLogout}>
           Log Out
         </div>
       </div>
