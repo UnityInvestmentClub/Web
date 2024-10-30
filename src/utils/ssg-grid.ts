@@ -1,12 +1,13 @@
 import { DefaultCellTypes } from '@silevis/reactgrid';
 import { ForecastDataRowId, HistoricalDataRowId, IndexRow, IndexForecastRow } from '../constants';
+import { SSG } from '../_types';
 
 const YearFormat = new Intl.NumberFormat('en-US', { useGrouping: false });
 const OneDecimalFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
 const TwoDecimalFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 1 });
 const PercentFormat = new Intl.NumberFormat('en-US', { style: 'percent', useGrouping: false, maximumFractionDigits: 1, minimumFractionDigits: 1 });
 
-export const getHistoricalDataRows = (ssg: any) => {
+export const getHistoricalDataRows = (ssg: SSG) => {
   return [
     historicalHeaderRow(ssg.startingYear),
     
@@ -46,7 +47,7 @@ export const getHistoricalDataColumns = () => {
   ];
 };
 
-export const getForecastDataRows = (ssg: any) => {
+export const getForecastDataRows = (ssg: SSG) => {
   return [
     forecastHeaderRow(),
 
@@ -84,7 +85,7 @@ export const getForecastDataColumns = () => {
   ];
 };
 
-export const getForecastDefaultRows = (ssg: any) => {
+export const getForecastDefaultRows = (ssg: SSG) => {
   return [
     forecastDefaultHeaderRow(),
 

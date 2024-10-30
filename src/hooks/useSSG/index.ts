@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 import { useAppState, useSupabase } from '../index';
+import { SSG, SSGDTO } from '../../_types';
 
-const convertDTOToSSG = (data: any) => {
+const convertDTOToSSG = (data: SSGDTO) => {
   return {
     id: data.id,
     name: data.name,
@@ -29,7 +30,7 @@ const convertDTOToSSG = (data: any) => {
       data.revenue_year_8,
       data.revenue_year_9,
       data.revenue_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     revenueGrowth: [
       data.revenue_growth_year_1,
@@ -41,7 +42,7 @@ const convertDTOToSSG = (data: any) => {
       data.revenue_growth_year_7,
       data.revenue_growth_year_8,
       data.revenue_growth_year_9
-    ],
+    ].map((number: number) => number ?? NaN),
 
     netProfit: [
       data.net_profit_year_1,
@@ -54,7 +55,7 @@ const convertDTOToSSG = (data: any) => {
       data.net_profit_year_8,
       data.net_profit_year_9,
       data.net_profit_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     incomeTaxRate: [
       data.income_tax_rate_year_1,
@@ -67,7 +68,7 @@ const convertDTOToSSG = (data: any) => {
       data.income_tax_rate_year_8,
       data.income_tax_rate_year_9,
       data.income_tax_rate_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     preTaxNetIncome: [
       data.pre_tax_net_income_year_1,
@@ -80,7 +81,7 @@ const convertDTOToSSG = (data: any) => {
       data.pre_tax_net_income_year_8,
       data.pre_tax_net_income_year_9,
       data.pre_tax_net_income_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     preTaxIncomeGrowth: [
       data.pre_tax_income_growth_year_1,
@@ -92,7 +93,7 @@ const convertDTOToSSG = (data: any) => {
       data.pre_tax_income_growth_year_7,
       data.pre_tax_income_growth_year_8,
       data.pre_tax_income_growth_year_9
-    ],
+    ].map((number: number) => number ?? NaN),
 
     preTaxProfitMargin: [
       data.pre_tax_profit_margin_year_1,
@@ -105,7 +106,7 @@ const convertDTOToSSG = (data: any) => {
       data.pre_tax_profit_margin_year_8,
       data.pre_tax_profit_margin_year_9,
       data.pre_tax_profit_margin_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     eps: [
       data.eps_year_1,
@@ -118,7 +119,7 @@ const convertDTOToSSG = (data: any) => {
       data.eps_year_8,
       data.eps_year_9,
       data.eps_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     epsGrowth: [
       data.eps_growth_year_1,
@@ -130,7 +131,7 @@ const convertDTOToSSG = (data: any) => {
       data.eps_growth_year_7,
       data.eps_growth_year_8,
       data.eps_growth_year_9
-    ],
+    ].map((number: number) => number ?? NaN),
 
     highStockPrice: [
       data.high_stock_price_year_1,
@@ -143,7 +144,7 @@ const convertDTOToSSG = (data: any) => {
       data.high_stock_price_year_8,
       data.high_stock_price_year_9,
       data.high_stock_price_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     lowStockPrice: [
       data.low_stock_price_year_1,
@@ -156,7 +157,7 @@ const convertDTOToSSG = (data: any) => {
       data.low_stock_price_year_8,
       data.low_stock_price_year_9,
       data.low_stock_price_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     highPERatio: [
       data.high_pe_ratio_year_1,
@@ -169,7 +170,7 @@ const convertDTOToSSG = (data: any) => {
       data.high_pe_ratio_year_8,
       data.high_pe_ratio_year_9,
       data.high_pe_ratio_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     lowPERatio: [
       data.low_pe_ratio_year_1,
@@ -182,7 +183,7 @@ const convertDTOToSSG = (data: any) => {
       data.low_pe_ratio_year_8,
       data.low_pe_ratio_year_9,
       data.low_pe_ratio_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     dividendPerShare: [
       data.dividend_per_share_year_1,
@@ -195,7 +196,7 @@ const convertDTOToSSG = (data: any) => {
       data.dividend_per_share_year_8,
       data.dividend_per_share_year_9,
       data.dividend_per_share_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     dividendGrowth: [
       data.dividend_growth_year_1,
@@ -207,7 +208,7 @@ const convertDTOToSSG = (data: any) => {
       data.dividend_growth_year_7,
       data.dividend_growth_year_8,
       data.dividend_growth_year_9
-    ],
+    ].map((number: number) => number ?? NaN),
 
     dividendPayout: [
       data.dividend_payout_year_1,
@@ -220,7 +221,7 @@ const convertDTOToSSG = (data: any) => {
       data.dividend_payout_year_8,
       data.dividend_payout_year_9,
       data.dividend_payout_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     highYield: [
       data.high_yield_year_1,
@@ -233,7 +234,7 @@ const convertDTOToSSG = (data: any) => {
       data.high_yield_year_8,
       data.high_yield_year_9,
       data.high_yield_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     outstandingShares: [
       data.outstanding_shares_year_1,
@@ -246,7 +247,7 @@ const convertDTOToSSG = (data: any) => {
       data.outstanding_shares_year_8,
       data.outstanding_shares_year_9,
       data.outstanding_shares_year_10
-    ],
+    ].map((number: number) => number ?? NaN),
 
     outstandingShareGrowth: [
       data.outstanding_shares_growth_year_1,
@@ -258,193 +259,193 @@ const convertDTOToSSG = (data: any) => {
       data.outstanding_shares_growth_year_7,
       data.outstanding_shares_growth_year_8,
       data.outstanding_shares_growth_year_9
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcRevenueGrowthDefault: [
       data.fc_revenue_growth_default_downside,
       data.fc_revenue_growth_default_base,
       data.fc_revenue_growth_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcRevenueGrowth: [
       data.fc_revenue_growth_downside,
       data.fc_revenue_growth_base,
       data.fc_revenue_growth_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcRevenueDefault: [
       data.fc_revenue_year_5_default_downside,
       data.fc_revenue_year_5_default_base,
       data.fc_revenue_year_5_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcRevenue: [
       data.fc_revenue_year_5_downside,
       data.fc_revenue_year_5_base,
       data.fc_revenue_year_5_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcPreTaxProfitMarginDefault: [
       data.fc_pre_tax_profit_margin_default_downside,
       data.fc_pre_tax_profit_margin_default_base,
       data.fc_pre_tax_profit_margin_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcPreTaxProfitMargin: [
       data.fc_pre_tax_profit_margin_downside,
       data.fc_pre_tax_profit_margin_base,
       data.fc_pre_tax_profit_margin_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcPreTaxNetIncomeDefault: [
       data.fc_pre_tax_net_income_year_5_default_downside,
       data.fc_pre_tax_net_income_year_5_default_base,
       data.fc_pre_tax_net_income_year_5_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcPreTaxNetIncome: [
       data.fc_pre_tax_net_income_year_5_downside,
       data.fc_pre_tax_net_income_year_5_base,
       data.fc_pre_tax_net_income_year_5_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcIncomeTaxRateDefault: [
       data.fc_income_tax_rate_default_downside,
       data.fc_income_tax_rate_default_base,
       data.fc_income_tax_rate_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcIncomeTaxRate: [
       data.fc_income_tax_rate_downside,
       data.fc_income_tax_rate_base,
       data.fc_income_tax_rate_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcNetProfitDefault: [
       data.fc_net_profit_year_5_default_downside,
       data.fc_net_profit_year_5_default_base,
       data.fc_net_profit_year_5_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcNetProfit: [
       data.fc_net_profit_year_5_downside,
       data.fc_net_profit_year_5_base,
       data.fc_net_profit_year_5_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcOutstandingShareGrowthDefault: [
       data.fc_outstanding_shares_growth_default_downside,
       data.fc_outstanding_shares_growth_default_base,
       data.fc_outstanding_shares_growth_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcOutstandingShareGrowth: [
       data.fc_outstanding_shares_growth_downside,
       data.fc_outstanding_shares_growth_base,
       data.fc_outstanding_shares_growth_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcOutstandingSharesDefault: [
       data.fc_outstanding_shares_year_5_default_downside,
       data.fc_outstanding_shares_year_5_default_base,
       data.fc_outstanding_shares_year_5_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcOutstandingShares: [
       data.fc_outstanding_shares_year_5_downside,
       data.fc_outstanding_shares_year_5_base,
       data.fc_outstanding_shares_year_5_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcEPSDefault: [
       data.fc_eps_year_5_default_downside,
       data.fc_eps_year_5_default_base,
       data.fc_eps_year_5_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcEPS: [
       data.fc_eps_year_5_downside,
       data.fc_eps_year_5_base,
       data.fc_eps_year_5_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcEPSGrowthDefault: [
       data.fc_eps_growth_default_downside,
       data.fc_eps_growth_default_base,
       data.fc_eps_growth_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcEPSGrowth: [
       data.fc_eps_growth_downside,
       data.fc_eps_growth_base,
       data.fc_eps_growth_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcPERatioDefault: [
       data.fc_pe_ratio_default_downside,
       data.fc_pe_ratio_default_base,
       data.fc_pe_ratio_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcPERatio: [
       data.fc_pe_ratio_downside,
       data.fc_pe_ratio_base,
       data.fc_pe_ratio_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcStockPriceDefault: [
       data.fc_stock_price_year_5_default_downside,
       data.fc_stock_price_year_5_default_base,
       data.fc_stock_price_year_5_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcStockPrice: [
       data.fc_stock_price_year_5_downside,
       data.fc_stock_price_year_5_base,
       data.fc_stock_price_year_5_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcTotalStockPriceGrowthDefault: [
       data.fc_total_stock_price_growth_default_downside,
       data.fc_total_stock_price_growth_default_base,
       data.fc_total_stock_price_growth_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcTotalStockPriceGrowth: [
       data.fc_total_stock_price_growth_downside,
       data.fc_total_stock_price_growth_base,
       data.fc_total_stock_price_growth_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcAnnualStockPriceGrowthDefault: [
       data.fc_annual_stock_price_growth_default_downside,
       data.fc_annual_stock_price_growth_default_base,
       data.fc_annual_stock_price_growth_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcAnnualStockPriceGrowth: [
       data.fc_annual_stock_price_growth_downside,
       data.fc_annual_stock_price_growth_base,
       data.fc_annual_stock_price_growth_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
-    currentDividendYield: Array(3).fill(data.current_dividend_yield),
+    currentDividendYield: Array(3).fill(data.current_dividend_yield).map((number: number) => number ?? NaN),
 
     fcTotalAnnualReturnDefault: [
       data.fc_total_annual_return_default_downside,
       data.fc_total_annual_return_default_base,
       data.fc_total_annual_return_default_upside
-    ],
+    ].map((number: number) => number ?? NaN),
 
     fcTotalAnnualReturn: [
       data.fc_total_annual_return_downside,
       data.fc_total_annual_return_base,
       data.fc_total_annual_return_upside
-    ]
+    ].map((number: number) => number ?? NaN)
   };
 };
 
-const convertSSGToDTO = (ssg: any) => {
+const convertSSGToDTO = (ssg: SSG) => {
   return {
     name: ssg.name,
     is_presented_version: ssg.isPresentedVersion,
@@ -791,16 +792,16 @@ export const useSSG = () => {
   const { authId } = useAppState();
   const client = useSupabase();
 
-  const getSSGs = useCallback(async () => {
+  const getSSGs = useCallback(async (): Promise<SSG[]> => {
     var { data, error } = await client.from('ssgs').select('*').order('created_date', { ascending: false });
 
     if (error)
       throw error;
 
-    return data.map((ssgDTO: any) => convertDTOToSSG(ssgDTO));
+    return data.map((ssgDTO: SSGDTO) => convertDTOToSSG(ssgDTO));
   }, [client]);
 
-  const getSSG = useCallback(async (id: string) => {
+  const getSSG = useCallback(async (id: string): Promise<SSG> => {
     var { data, error } = await client.from('ssgs').select('*').eq('id', id).single();
 
     if (error)
@@ -809,7 +810,7 @@ export const useSSG = () => {
     return convertDTOToSSG(data);
   }, [client]);
 
-  const createSSG = async (ssg: any) => {
+  const createSSG = async (ssg: SSG) => {
     const ssgDTO = {
       ...convertSSGToDTO(ssg),
       created_date: new Date().toISOString(),
@@ -822,14 +823,14 @@ export const useSSG = () => {
       throw error;
   };
 
-  const updateSSG = async (ssg: any) => {
+  const updateSSG = async (id: string, ssg: SSG) => {
     const ssgDTO = {
       ...convertSSGToDTO(ssg),
       modified_date: new Date().toISOString(),
       modified_by: authId
     };
 
-    var { error } = await client.from('ssgs').update(ssgDTO).eq('id', ssg.id);
+    var { error } = await client.from('ssgs').update(ssgDTO).eq('id', id);
 
     if (error)
       throw error;

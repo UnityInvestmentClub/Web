@@ -17,10 +17,7 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": [
       'error',
       { "varsIgnorePattern": "_" }
-    ],
-    
-    // TODO: Delete this and stop using 'any'
-    '@typescript-eslint/no-explicit-any': 'off'
+    ]
   },
   'settings': {
     'react': {

@@ -1,4 +1,4 @@
-name: Deploy Web to Github Pages
+name: Deploy Web
 
 on:
   workflow_dispatch:
@@ -24,7 +24,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Project
         uses: actions/checkout@v4
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
@@ -35,10 +35,10 @@ jobs:
           run-id: ${{ github.event.inputs.build_run_id }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
-      - name: Upload artifact
+      - name: Upload Artifacts to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
-      - name: Deploy to GitHub Pages
+      - name: Deploy GitHub Page
         id: deployment
         uses: actions/deploy-pages@v4

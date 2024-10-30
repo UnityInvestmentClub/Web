@@ -2,6 +2,7 @@ import './index.css';
 import { useState} from 'react';
 import { useLocation } from 'wouter';
 import { useAuth } from '../../hooks';
+import { ButtonClickEvent, InputChangeEvent } from '../../_types';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -9,15 +10,15 @@ export const LoginPage = () => {
   const [_, navigate] = useLocation();
   const { login } = useAuth();
 
-  const onEmailChange = (e: any) => {
+  const onEmailChange = (e: InputChangeEvent) => {
     setEmail(e.target.value);
   };
 
-  const onPasswordChange = (e: any) => {
+  const onPasswordChange = (e: InputChangeEvent) => {
     setPassword(e.target.value);
   };
 
-  const handleLogin = (e: any) => {
+  const handleLogin = (e: ButtonClickEvent) => {
     e.preventDefault();
 
     login(email, password)

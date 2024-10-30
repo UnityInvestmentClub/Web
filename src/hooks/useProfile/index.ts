@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 import { useAppState, useSupabase } from '../index';
+import { Profile, ProfileDTO } from '../../_types';
 
-const convertDTOToProfile = (data: any) => {
+const convertDTOToProfile = (data: ProfileDTO) => {
   return {
     id: data.id,
     firstName: data.first_name,
@@ -17,7 +18,7 @@ const convertDTOToProfile = (data: any) => {
   };
 };
 
-const convertProfileToDTO = (profile: any) => {
+const convertProfileToDTO = (profile: Profile) => {
   return {
     first_name: profile.firstName,
     last_name: profile.lastName,
@@ -36,16 +37,16 @@ export const useProfile = () => {
   const { authId } = useAppState();
   const client = useSupabase();
 
-  const getProfiles = useCallback(async () => {
+  const getProfiles = useCallback(async (): Promise<Profile[]> => {
     var { data, error } = await client.from('profiles').select('*').order('created_date', { ascending: false });
 
     if (error)
       throw error;
 
-    return data.map((profileDTO: any) => convertDTOToProfile(profileDTO));
+    return data.map((profileDTO: ProfileDTO) => convertDTOToProfile(profileDTO));
   }, [client]);
 
-  const getProfile = useCallback(async () => {
+  const getProfile = useCallback(async (): Promise<Profile> => {
     var { data, error } = await client.from('profiles').select('*').eq('auth_id', authId).single();
 
     if (error)
@@ -54,7 +55,7 @@ export const useProfile = () => {
     return convertDTOToProfile(data);
   }, [authId, client]);
 
-  const updateProfile = async (profile: any) => {
+  const updateProfile = async (profile: Profile) => {
     const profileDTO = {
       ...convertProfileToDTO(profile),
       modified_date: new Date().toISOString(),

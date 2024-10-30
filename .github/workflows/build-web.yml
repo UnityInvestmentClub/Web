@@ -11,7 +11,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Project
         uses: actions/checkout@v4
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -20,15 +20,17 @@ jobs:
           cache: npm
       - name: Install Dependencies
         run: npm ci
-      - name: Lint
+      - name: Lint Project
         run: npm run lint
-      - name: Typecheck
+      - name: Typecheck Project
         run: npm run typecheck
-      - name: Build
+      - name: Build Project
         run: npm run build
         env:
           VITE_DB_ID: ${{ secrets.DB_PROD_ID }}
           VITE_DB_KEY: ${{ secrets.DB_PROD_KEY }}
+      - name: Create 404 file (GH Pages)
+        run: cp ./dist/index.html ./dist/404.html
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:

@@ -1,11 +1,13 @@
 import './index.css';
 import { useEffect, useState} from 'react';
-//import { useLocation } from 'wouter';
 import { useProfile, useAuth } from '../../hooks';
+import { Profile, InputChangeEvent, SelectChangeEvent } from '../../_types';
 
-const initialProfile = {
+const initialProfile: Profile = {
   firstName: '',
   lastName: '',
+  email: '',
+  phoneNumber: '',
   joinDate: '',
   exitDate: '',
   address: '',
@@ -56,17 +58,17 @@ export const ProfilePage = () => {
         .catch(console.error);
   };
 
-  const onFormChange = (e: any) => {
+  const onFormChange = (e: InputChangeEvent | SelectChangeEvent) => {
     var { name, value } = e.target;
     
     setProfile({ ...profile, [name]: value});
   };
 
-  const onPasswordChange = (e: any) => {
+  const onPasswordChange = (e: InputChangeEvent) => {
     setPassword(e.target.value);
   };
 
-  const onPasswordConfirmationChange = (e: any) => {
+  const onPasswordConfirmationChange = (e: InputChangeEvent) => {
     setPasswordConfirmation(e.target.value);
   };
 
@@ -82,8 +84,6 @@ export const ProfilePage = () => {
             <p className='profile-input-label'>Last Name</p>
             <input className='profile-input' type='text' name='lastName' value={profile.lastName} onChange={onFormChange}></input>
           </div>
-        </div>
-        <div className='profile-row'>
           <div className='profile-input-container'>
             <p className='profile-input-label'>Join Date</p>
             <input className='profile-input' type='date' name='joinDate' value={profile.joinDate} onChange={onFormChange}></input>
@@ -95,6 +95,16 @@ export const ProfilePage = () => {
         </div>
         <div className='profile-row'>
           <div className='profile-input-container'>
+            <p className='profile-input-label'>Email</p>
+            <input className='profile-input' type='text' name='email' value={profile.email} onChange={onFormChange}></input>
+          </div>
+          <div className='profile-input-container'>
+            <p className='profile-input-label'>Phone Number</p>
+            <input className='profile-input' type='text' name='phoneNumber' value={profile.phoneNumber} onChange={onFormChange}></input>
+          </div>
+        </div>
+        <div className='profile-row'>
+          <div className='profile-input-container'>
             <p className='profile-input-label'>Address</p>
             <input className='profile-input' type='text' name='address' value={profile.address} onChange={onFormChange}></input>
           </div>
@@ -102,12 +112,9 @@ export const ProfilePage = () => {
             <p className='profile-input-label'>City</p>
             <input className='profile-input' type='text' name='city' value={profile.city} onChange={onFormChange}></input>
           </div>
-        </div>
-        <div className='profile-row'>
           <div className='profile-input-container'>
             <p className='profile-input-label'>State</p>
             <select className='profile-select' name='state' value={profile.state} onChange={onFormChange}>
-              <option value='0'>Select</option>
               <option value='AL'>AL</option>
               <option value='AK'>AK</option>
               <option value='AZ'>AZ</option>

@@ -7,20 +7,21 @@ import { useSSG } from '../../hooks';
 import { getHistoricalDataRows, getHistoricalDataColumns, getForecastDataRows, getForecastDataColumns, getForecastDefaultRows, getForecastDefaultColumns } from '../../utils/ssg-grid';
 import { calculateSSG } from '../../utils/ssg';
 import { HistoricalDataRowId, ForecastDataRowId } from '../../constants/';
+import { InputChangeEvent, SelectChangeEvent, SSG } from '../../_types';
 
-const initialSSG = {
+const initialSSG: SSG = {
   name: '',
   isPresentedVersion: false,
-  presentedMonth: 0,
+  presentedMonth: '',
   stockTicker: '',
   preparedBy: '',
   preparedDate: '',
   sourceData: '',
   sourceDate: '',
   yearsOfData: 10,
-  currentStockPrice: '',
+  currentStockPrice: NaN,
   currentStockPriceDate: '',
-  currentDividend: '',
+  currentDividend: NaN,
   startingYear: 2014,
 
   revenue: Array(10).fill(NaN),
@@ -118,21 +119,22 @@ export const SSGPage = () => {
   };
 
   const handleSave = () => {
-    updateSSG(ssg)
+    updateSSG(ssg.id, ssg)
       .then(() => navigate('/'))
       .catch(console.error);
   };
 
-  const onFormChange = (e: any) => {
-    var { name, value, checked, type } = e.target;
+  const onFormChange = (e: InputChangeEvent | SelectChangeEvent) => {
+    var { name, value, type } = e.target;
     var newValue;
     
     switch (type) {
       case 'checkbox':
-        newValue = checked;
+        if ('checked' in e.target)
+          newValue = e.target.checked;
         break;
       case 'number':
-        newValue = parseFloat(value) || '';
+        newValue = Number(value);
         break;
       default:
         newValue = value;
@@ -200,7 +202,6 @@ export const SSGPage = () => {
           {ssg.isPresentedVersion ? <div className='ssg-input-container'>
             <p className='ssg-input-label'>Presented Month</p>
             <select className='ssg-select' name='presentedMonth' value={ssg.presentedMonth} onChange={onFormChange}>
-              <option value='0'>Select</option>
               <option value='January'>January</option>
               <option value='February'>February</option>
               <option value='March'>March</option>
@@ -241,13 +242,13 @@ export const SSGPage = () => {
           </div>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Years of Available Data</p>
-            <input className='ssg-input' type='number' name='yearsOfData' value={ssg.yearsOfData} onChange={onFormChange}></input>
+            <input className='ssg-input' type='number' name='yearsOfData' value={ssg.yearsOfData || ''} onChange={onFormChange}></input>
           </div>
         </div>
         <div className='ssg-row'>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Current Stock Price</p>
-            <input className='ssg-input' type='number' name='currentStockPrice' value={ssg.currentStockPrice} onChange={onFormChange}></input>
+            <input className='ssg-input' type='number' name='currentStockPrice' value={ssg.currentStockPrice || ''} onChange={onFormChange}></input>
           </div>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Current Price Date</p>
@@ -255,7 +256,7 @@ export const SSGPage = () => {
           </div>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Current Dividend</p>
-            <input className='ssg-input' type='number' name='currentDividend' value={ssg.currentDividend} onChange={onFormChange}></input>
+            <input className='ssg-input' type='number' name='currentDividend' value={ssg.currentDividend || ''} onChange={onFormChange}></input>
           </div>
         </div>
       </div>

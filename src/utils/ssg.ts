@@ -1,6 +1,7 @@
 import { IndexForecastRow, IndexGrowthRow } from '../constants';
+import { SSG } from '../_types';
 
-export const calculateSSG = (ssg: any) => {
+export const calculateSSG = (ssg: SSG) => {
   var updatedSSG = { ...ssg };
 
   // Historical Data Calculations
