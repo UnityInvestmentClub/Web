@@ -1,7 +1,7 @@
 import './index.css';
 import { useEffect, useState} from 'react';
-import { useProfile, useAuth } from '../../hooks';
-import { Profile, InputChangeEvent, SelectChangeEvent } from '../../_types';
+import { useProfile, useAuth } from '@hooks/';
+import { Profile, InputChangeEvent, SelectChangeEvent } from '@_types/';
 
 const initialProfile: Profile = {
   firstName: '',
@@ -24,38 +24,42 @@ export const ProfilePage = () => {
   const { updatePassword } = useAuth();
 
   useEffect(() => {
-    const loadData = () => {
-      getProfile()
-        .then(setProfile)
-        .catch(console.error);
+    const loadData = async () => {
+      try {
+        setProfile(await getProfile());
+      } catch (e) {
+        console.error(e);
+      }
     };
 
     loadData();
   }, [getProfile]);
 
-  const handleSave = () => {
-    updateProfile(profile)
-      .catch(console.error);
+  const handleSave = async () => {
+    try {
+      await updateProfile(profile);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const handleUpdatePassword = () => {
+  const handleUpdatePassword = async () => {
     const symbolRegex = /[$-/:-?{-~!"^_`]/;
-    var validPassword = true;
 
-    if (password !== passwordConfirmation)
-      validPassword = false;
-    if (password.length < 6)
-      validPassword = false;
-    if (password === password.toLowerCase())
-      validPassword = false;
-    if (password === password.toUpperCase())
-      validPassword = false;
-    if (!symbolRegex.test(password))
-      validPassword = false;
+    if (
+      password !== passwordConfirmation || //password does not match confirmation
+      password.length < 6 || //password less than 6 characters
+      password === password.toLowerCase() || //password missing upper case character
+      password === password.toUpperCase() || //password missing lower case character
+      !symbolRegex.test(password) //password missing symbol
+    )
+      return;
 
-    if (validPassword)
-      updatePassword(password)
-        .catch(console.error);
+    try {
+      await updatePassword(password);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const onFormChange = (e: InputChangeEvent | SelectChangeEvent) => {

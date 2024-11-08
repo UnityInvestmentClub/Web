@@ -1,15 +1,18 @@
 import './index.css';
 import { useLocation } from 'wouter';
-import { useAuth, useAppState } from '../../hooks';
+import { useAuth, useAppState } from '@hooks/';
 
 export const Nav = () => {
   const { logout } = useAuth();
   const { loggedIn } = useAppState();
   const [_, navigate] = useLocation();
 
-  const handleLogout = () => {
-    logout()
-      .catch(console.error);
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (

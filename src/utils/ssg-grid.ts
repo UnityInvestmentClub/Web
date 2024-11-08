@@ -1,6 +1,6 @@
 import { DefaultCellTypes } from '@silevis/reactgrid';
-import { ForecastDataRowId, HistoricalDataRowId, IndexRow, IndexForecastRow } from '../constants';
-import { SSG } from '../_types';
+import { ForecastDataRowId, HistoricalDataRowId, IndexRow, IndexForecastRow } from '@constants/';
+import { SSG } from '@_types/';
 
 const YearFormat = new Intl.NumberFormat('en-US', { useGrouping: false });
 const OneDecimalFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 });

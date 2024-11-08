@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useAppState, useSupabase } from '../index';
-import { SSG, SSGDTO } from '../../_types';
+import { useAppState, useSupabase } from '@hooks/';
+import { SSG, SSGDTO } from '@_types/';
 
 const convertDTOToSSG = (data: SSGDTO) => {
   return {

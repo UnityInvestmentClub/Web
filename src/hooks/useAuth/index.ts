@@ -1,4 +1,4 @@
-import { useAppState, useSupabase } from '../index';
+import { useAppState, useSupabase } from '@hooks/';
 
 export const useAuth = () => {
   const client = useSupabase();

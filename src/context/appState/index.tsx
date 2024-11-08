@@ -1,6 +1,6 @@
-import { useReducer, createContext } from 'react';
-import { DBId } from '../../constants';
-import { ActionBase, PropsBase, EmptyFunction } from '../../_types';
+import { useReducer, useContext, createContext } from 'react';
+import { DBId } from '@constants/';
+import { ActionBase, PropsBase, EmptyFunction } from '@_types/';
 
 type AppStateState = {
   loggedIn: boolean,
@@ -16,7 +16,7 @@ const initial: AppStateState = {
   setLoggedOutState: () => undefined
 };
 
-export const AppStateContext = createContext(initial);
+const AppStateContext = createContext(initial);
 
 const reducer = (state: AppStateState, { type }: ActionBase) => {
   switch (type) {
@@ -43,3 +43,5 @@ export const AppStateProvider = ({ children }: PropsBase) => {
 
   return <AppStateContext.Provider value={{ ...appState, setLoggedInState, setLoggedOutState }}>{children}</AppStateContext.Provider>
 };
+
+export const useAppState = () => useContext(AppStateContext);

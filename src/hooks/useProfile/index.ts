@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useAppState, useSupabase } from '../index';
-import { Profile, ProfileDTO } from '../../_types';
+import { useAppState, useSupabase } from '@hooks/';
+import { Profile, ProfileDTO } from '@_types/';
 
 const convertDTOToProfile = (data: ProfileDTO) => {
   return {

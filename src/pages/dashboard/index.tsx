@@ -1,26 +1,28 @@
 import './index.css';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
-import { useSSG } from '../../hooks';
-import { SSG } from '../../_types';
+import { useSSG } from '@hooks/';
+import { SSG } from '@_types/';
 
 export const DashboardPage = () => {
-  const [ssgList, setSSGList] = useState([]);
+  const [ssgs, setSSGs] = useState([]);
   const [_, navigate] = useLocation();
   const { getSSGs } = useSSG();
 
   useEffect(() => {
-    const loadData = () => {
-      getSSGs()
-        .then(setSSGList)
-        .catch(console.error);
+    const loadData = async () => {
+      try {
+        setSSGs(await getSSGs());
+      } catch (e) {
+        console.error(e);
+      }
     }
     
     loadData();
   }, [getSSGs]);
 
   const SSGList = () => {
-    var ssgListRows = ssgList.map((ssg: SSG) => {
+    var ssgListRows = ssgs.map((ssg: SSG) => {
       return <div className='ssg-list-row' onClick={() => navigate(`/ssg/${ssg.id}`)} key={ssg.id}>
         <div className='ssg-list-cell-name'>{ssg.name}</div>
         <div className='ssg-list-cell'>{ssg.stockTicker}</div>

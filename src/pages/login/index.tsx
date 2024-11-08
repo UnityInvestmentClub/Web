@@ -1,8 +1,8 @@
 import './index.css';
 import { useState} from 'react';
 import { useLocation } from 'wouter';
-import { useAuth } from '../../hooks';
-import { ButtonClickEvent, InputChangeEvent } from '../../_types';
+import { useAuth } from '@hooks/';
+import { ButtonClickEvent, InputChangeEvent } from '@_types/';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -18,11 +18,16 @@ export const LoginPage = () => {
     setPassword(e.target.value);
   };
 
-  const handleLogin = (e: ButtonClickEvent) => {
+  const handleLogin = async (e: ButtonClickEvent) => {
     e.preventDefault();
 
-    login(email, password)
-      .then(() => navigate('/'));
+    try {
+      await login(email, password);
+
+      navigate('/');
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (

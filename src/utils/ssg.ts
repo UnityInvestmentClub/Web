@@ -1,5 +1,5 @@
-import { IndexForecastRow, IndexGrowthRow } from '../constants';
-import { SSG } from '../_types';
+import { IndexForecastRow, IndexGrowthRow } from '@constants/';
+import { SSG } from '@_types/';
 
 export const calculateSSG = (ssg: SSG) => {
   var updatedSSG = { ...ssg };

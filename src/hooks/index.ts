@@ -1,5 +1,6 @@
-export { useAuth } from './useAuth';
-export { useSSG } from './useSSG';
-export { useProfile } from './useProfile';
-export { useAppState } from './useAppState';
-export { useSupabase } from './useSupabase';
+export { useAuth } from '@hooks/useAuth';
+export { useSSG } from '@hooks/useSSG';
+export { useProfile } from '@hooks/useProfile';
+
+export { useAppState } from '@context/appState';
+export { useSupabase } from '@context/supabase';
