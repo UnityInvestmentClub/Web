@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useAppState, useSupabase } from '@hooks/';
-import { SSG, SSGDTO } from '@_types/';
+import { SSGTable, SSGProfileTable } from '@constants/';
+import { SSG, SSGDTO, Preparer, PreparerDTO } from '@_types/';
 
 const convertDTOToSSG = (data: SSGDTO) => {
   return {
@@ -9,7 +10,6 @@ const convertDTOToSSG = (data: SSGDTO) => {
     isPresentedVersion: data.is_presented_version,
     presentedMonth: data.presented_month,
     stockTicker: data.stock_ticker,
-    preparedBy: '',
     preparedDate: data.prepared_date.toString(),
     sourceData: data.source_data,
     sourceDate: data.source_date.toString(),
@@ -18,6 +18,7 @@ const convertDTOToSSG = (data: SSGDTO) => {
     currentStockPriceDate: data.current_stock_price_date.toString(),
     currentDividend: data.current_dividend,
     startingYear: data.starting_year,
+    preparedBy: data.prepared_by.map((preparer: PreparerDTO) => ({ id: preparer.id, firstName: preparer.first_name, lastName: preparer.last_name })),
     
     revenue: [
       data.revenue_year_1,
@@ -442,7 +443,7 @@ const convertDTOToSSG = (data: SSGDTO) => {
       data.fc_total_annual_return_base,
       data.fc_total_annual_return_upside
     ].map((number: number) => number ?? NaN)
-  };
+  } as SSG;
 };
 
 const convertSSGToDTO = (ssg: SSG) => {
@@ -785,29 +786,29 @@ const convertSSGToDTO = (ssg: SSG) => {
     fc_total_annual_return_downside: ssg.fcTotalAnnualReturn[0],
     fc_total_annual_return_base: ssg.fcTotalAnnualReturn[1],
     fc_total_annual_return_upside: ssg.fcTotalAnnualReturn[2]
-  };
+  } as SSGDTO;
 };
 
 export const useSSG = () => {
   const { authId } = useAppState();
   const client = useSupabase();
 
-  const getSSGs = useCallback(async (): Promise<SSG[]> => {
-    var { data, error } = await client.from('ssgs').select('*').order('created_date', { ascending: false });
-
-    if (error)
-      throw error;
-
-    return data.map((ssgDTO: SSGDTO) => convertDTOToSSG(ssgDTO));
-  }, [client]);
-
-  const getSSG = useCallback(async (id: string): Promise<SSG> => {
-    var { data, error } = await client.from('ssgs').select('*').eq('id', id).single();
+  const getSSG = useCallback(async (id: string) => {
+    var { data, error } = await client.from(SSGTable).select('*, prepared_by: profiles ( id, first_name, last_name )').eq('id', id).single();
 
     if (error)
       throw error;
 
     return convertDTOToSSG(data);
+  }, [client]);
+
+  const getSSGs = useCallback(async () => {
+    var { data, error } = await client.from(SSGTable).select('*, prepared_by: profiles ( id, first_name, last_name )').order('created_date', { ascending: false });
+
+    if (error)
+      throw error;
+
+    return data.map((ssgDTO: SSGDTO) => convertDTOToSSG(ssgDTO));
   }, [client]);
 
   const createSSG = async (ssg: SSG) => {
@@ -817,10 +818,20 @@ export const useSSG = () => {
       created_by: authId
     };
 
-    var { error } = await client.from('ssgs').insert(ssgDTO);
+    var { data: ssgData, error: ssgError } = await client.from(SSGTable).insert(ssgDTO).select('*').single();
 
-    if (error)
-      throw error;
+    if (ssgError)
+      throw ssgError;
+
+    const ssgProfileDTOs = ssg.preparedBy.map((preparer: Preparer) => ({
+      ssg_id: ssgData.id,
+      profile_id: preparer.id
+    }));
+
+    var { error: ssgProfileError } = await client.from(SSGProfileTable).insert(ssgProfileDTOs);
+
+    if (ssgProfileError)
+      throw ssgProfileError;
   };
 
   const updateSSG = async (id: string, ssg: SSG) => {
@@ -830,10 +841,25 @@ export const useSSG = () => {
       modified_by: authId
     };
 
-    var { error } = await client.from('ssgs').update(ssgDTO).eq('id', id);
+    var { error: ssgError } = await client.from(SSGTable).update(ssgDTO).eq('id', id);
 
-    if (error)
-      throw error;
+    if (ssgError)
+      throw ssgError;
+
+    var { error: ssgProfileDeletError } = await client.from(SSGProfileTable).delete().eq('ssg_id', id);
+
+    if (ssgProfileDeletError)
+      throw ssgProfileDeletError;
+
+    const ssgProfileDTOs = ssg.preparedBy.map((preparer: Preparer) => ({
+      ssg_id: id,
+      profile_id: preparer.id
+    }));
+
+    var { error: ssgProfileInsertError } = await client.from(SSGProfileTable).insert(ssgProfileDTOs);
+
+    if (ssgProfileInsertError)
+      throw ssgProfileInsertError;
   };
 
   return {

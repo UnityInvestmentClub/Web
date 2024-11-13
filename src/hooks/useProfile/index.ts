@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useAppState, useSupabase } from '@hooks/';
+import { ProfileTable } from '@constants/';
 import { Profile, ProfileDTO } from '@_types/';
 
 const convertDTOToProfile = (data: ProfileDTO) => {
@@ -15,7 +16,7 @@ const convertDTOToProfile = (data: ProfileDTO) => {
     city: data.city,
     state: data.state,
     zipcode: data.zipcode
-  };
+  } as Profile;
 };
 
 const convertProfileToDTO = (profile: Profile) => {
@@ -30,7 +31,7 @@ const convertProfileToDTO = (profile: Profile) => {
     city: profile.city,
     state: profile.state,
     zipcode: profile.zipcode
-  };
+  } as ProfileDTO;
 };
 
 export const useProfile = () => {
@@ -38,7 +39,7 @@ export const useProfile = () => {
   const client = useSupabase();
 
   const getProfiles = useCallback(async (): Promise<Profile[]> => {
-    var { data, error } = await client.from('profiles').select('*').order('created_date', { ascending: false });
+    var { data, error } = await client.from(ProfileTable).select('*').order('first_name');
 
     if (error)
       throw error;
@@ -47,7 +48,7 @@ export const useProfile = () => {
   }, [client]);
 
   const getProfile = useCallback(async (): Promise<Profile> => {
-    var { data, error } = await client.from('profiles').select('*').eq('auth_id', authId).single();
+    var { data, error } = await client.from(ProfileTable).select('*').eq('auth_id', authId).single();
 
     if (error)
       throw error;
@@ -62,7 +63,7 @@ export const useProfile = () => {
       modified_by: authId
     };
 
-    var { error } = await client.from('profiles').update(profileDTO).eq('id', profile.id);
+    var { error } = await client.from(ProfileTable).update(profileDTO).eq('id', profile.id);
 
     if (error)
       throw error;

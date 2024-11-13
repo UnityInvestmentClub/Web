@@ -1,10 +1,21 @@
+export type Preparer = {
+  id?: string,
+  firstName: string,
+  lastName: string
+};
+
+export type PreparerDTO = {
+  id: string,
+  first_name: string,
+  last_name: string,
+};
+
 export type SSG = {
   id?: string,
   name: string,
   isPresentedVersion: boolean,
   presentedMonth?: string,
   stockTicker: string,
-  preparedBy: string,
   preparedDate: string,
   sourceData: string,
   sourceDate: string,
@@ -13,6 +24,7 @@ export type SSG = {
   currentStockPriceDate: string,
   currentDividend: number,
   startingYear: number,
+  preparedBy: Preparer[],
   
   revenue: number[],
 
@@ -116,7 +128,7 @@ export type SSG = {
 };
 
 export type SSGDTO = {
-  id?: string
+  id: string
   name: string,
   is_presented_version: boolean,
   presented_month?: string,
@@ -129,6 +141,7 @@ export type SSGDTO = {
   current_stock_price_date: Date,
   current_dividend: number,
   starting_year: number,
+  prepared_by?: PreparerDTO[]
   
   revenue_year_1: number,
   revenue_year_2: number,

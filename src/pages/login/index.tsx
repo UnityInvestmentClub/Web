@@ -35,11 +35,11 @@ export const LoginPage = () => {
       <form className='login-form'>
         <div className='login-input-container'>
           <p className='login-input-label'>Email</p>
-          <input className='login-input' type='text' name='email' value={email} onChange={onEmailChange}></input>
+          <input className='login-input' type='text' name='email' value={email} onChange={onEmailChange} />
         </div>
         <div className='login-input-container'>
           <p className='login-input-label'>Password</p>
-          <input className='login-input' type='password' name='password' value={password} onChange={onPasswordChange}></input>
+          <input className='login-input' type='password' name='password' value={password} onChange={onPasswordChange} />
         </div>
         <button className='login-button' type='submit' onClick={handleLogin}>Login</button>
       </form>

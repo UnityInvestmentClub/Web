@@ -1,6 +1,10 @@
 export const DBId = import.meta.env.VITE_DB_ID;
 export const DBKey = import.meta.env.VITE_DB_KEY;
 
+export const SSGTable = 'ssgs';
+export const ProfileTable = 'profiles';
+export const SSGProfileTable = 'rel_ssg_profile';
+
 export const enum HistoricalDataRowId {
   Header = 'historical-header',
   Revenue = 'revenue',

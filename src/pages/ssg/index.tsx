@@ -1,5 +1,6 @@
 import './index.css';
 import '@silevis/reactgrid/styles.css';
+import Select, { MultiValue } from 'react-select';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'wouter';
 import { ReactGrid, CellChange } from '@silevis/reactgrid';
@@ -7,7 +8,7 @@ import { useProfile, useSSG } from '@hooks/';
 import { getHistoricalDataRows, getHistoricalDataColumns, getForecastDataRows, getForecastDataColumns, getForecastDefaultRows, getForecastDefaultColumns } from '../../utils/ssg-grid';
 import { calculateSSG } from '../../utils/ssg';
 import { HistoricalDataRowId, ForecastDataRowId } from '@constants/';
-import { InputChangeEvent, SelectChangeEvent, SSG, Profile } from '@_types/';
+import { InputChangeEvent, SelectChangeEvent, SSG, Profile, Preparer } from '@_types/';
 
 const initialData = {
   ssg: {
@@ -15,7 +16,6 @@ const initialData = {
     isPresentedVersion: false,
     presentedMonth: '',
     stockTicker: '',
-    preparedBy: '',
     preparedDate: '',
     sourceData: '',
     sourceDate: '',
@@ -24,6 +24,7 @@ const initialData = {
     currentStockPriceDate: '',
     currentDividend: NaN,
     startingYear: 2014,
+    preparedBy: [] as Preparer[],
   
     revenue: Array(10).fill(NaN),
     revenueGrowth: Array(9).fill(NaN),
@@ -110,7 +111,6 @@ export const SSGPage = () => {
           : structuredClone(initialData.ssg);
 
         var profiles = await getProfiles();
-        console.log(profiles);
 
         setData({ ssg, profiles });
       } catch (e) {
@@ -141,6 +141,14 @@ export const SSGPage = () => {
     }
   };
 
+  const getPreparerOptions = () => {
+    return data.profiles.map((profile: Profile) => ({
+      id: profile.id,
+      firstName: profile.firstName,
+      lastName: profile.lastName
+    }));
+  };
+
   const onFormChange = (e: InputChangeEvent | SelectChangeEvent) => {
     var { name, value, type } = e.target;
     var newValue;
@@ -168,6 +176,13 @@ export const SSGPage = () => {
         ...data,
         ssg: { ...data.ssg, [name]: newValue }
       });
+  };
+
+  const onPreparedByChange = (preparers: MultiValue<Preparer>) => {
+    setData({
+      ...data,
+      ssg: { ...data.ssg, preparedBy: preparers as Preparer[] || [] }
+    });
   };
 
   const onSSGChange = (changes: CellChange[]) => {
@@ -216,11 +231,11 @@ export const SSGPage = () => {
         <div className='ssg-row'>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Name</p>
-            <input className='ssg-input' type='text' name='name' value={data.ssg.name} onChange={onFormChange}></input>
+            <input className='ssg-input' type='text' name='name' value={data.ssg.name} onChange={onFormChange} />
           </div>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Presented Version</p>
-            <input className='ssg-input' type='checkbox' name='isPresentedVersion' checked={data.ssg.isPresentedVersion} onChange={onFormChange}></input>
+            <input className='ssg-input' type='checkbox' name='isPresentedVersion' checked={data.ssg.isPresentedVersion} onChange={onFormChange} />
           </div>
           {data.ssg.isPresentedVersion ? <div className='ssg-input-container'>
             <p className='ssg-input-label'>Presented Month</p>
@@ -243,43 +258,43 @@ export const SSGPage = () => {
         <div className='ssg-row'>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Ticker</p>
-            <input className='ssg-input' type='text' name='stockTicker' value={data.ssg.stockTicker} onChange={onFormChange}></input>
+            <input className='ssg-input' type='text' name='stockTicker' value={data.ssg.stockTicker} onChange={onFormChange} />
           </div>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Prepared By</p>
-            <input className='ssg-input' type='text' name='preparedBy' value={data.ssg.preparedBy} onChange={onFormChange}></input>
+            <Select isMulti onChange={onPreparedByChange} value={data.ssg.preparedBy} options={getPreparerOptions()} getOptionValue={(profile: Preparer) => profile.id} getOptionLabel={(profile: Preparer) => `${profile.firstName} ${profile.lastName}`} closeMenuOnSelect={false} />
           </div>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Prepared Date</p>
-            <input className='ssg-input' type='date' name='preparedDate' value={data.ssg.preparedDate} onChange={onFormChange}></input>
+            <input className='ssg-input' type='date' name='preparedDate' value={data.ssg.preparedDate} onChange={onFormChange} />
           </div>
         </div>
         <div className='ssg-row'>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Source of Data</p>
-            <input className='ssg-input' type='text' name='sourceData' value={data.ssg.sourceData} onChange={onFormChange}></input>
+            <input className='ssg-input' type='text' name='sourceData' value={data.ssg.sourceData} onChange={onFormChange} />
           </div>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Source Date</p>
-            <input className='ssg-input' type='date' name='sourceDate' value={data.ssg.sourceDate} onChange={onFormChange}></input>
+            <input className='ssg-input' type='date' name='sourceDate' value={data.ssg.sourceDate} onChange={onFormChange} />
           </div>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Years of Available Data</p>
-            <input className='ssg-input' type='number' name='yearsOfData' value={data.ssg.yearsOfData || ''} onChange={onFormChange}></input>
+            <input className='ssg-input' type='number' name='yearsOfData' value={data.ssg.yearsOfData || ''} onChange={onFormChange} />
           </div>
         </div>
         <div className='ssg-row'>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Current Stock Price</p>
-            <input className='ssg-input' type='number' name='currentStockPrice' value={data.ssg.currentStockPrice || ''} onChange={onFormChange}></input>
+            <input className='ssg-input' type='number' name='currentStockPrice' value={data.ssg.currentStockPrice || ''} onChange={onFormChange} />
           </div>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Current Price Date</p>
-            <input className='ssg-input' type='date' name='currentStockPriceDate' value={data.ssg.currentStockPriceDate} onChange={onFormChange}></input>
+            <input className='ssg-input' type='date' name='currentStockPriceDate' value={data.ssg.currentStockPriceDate} onChange={onFormChange} />
           </div>
           <div className='ssg-input-container'>
             <p className='ssg-input-label'>Current Dividend</p>
-            <input className='ssg-input' type='number' name='currentDividend' value={data.ssg.currentDividend || ''} onChange={onFormChange}></input>
+            <input className='ssg-input' type='number' name='currentDividend' value={data.ssg.currentDividend || ''} onChange={onFormChange} />
           </div>
         </div>
       </div>

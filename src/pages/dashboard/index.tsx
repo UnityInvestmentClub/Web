@@ -5,7 +5,7 @@ import { useSSG } from '@hooks/';
 import { SSG } from '@_types/';
 
 export const DashboardPage = () => {
-  const [ssgs, setSSGs] = useState([]);
+  const [ssgs, setSSGs] = useState([] as SSG[]);
   const [_, navigate] = useLocation();
   const { getSSGs } = useSSG();
 
@@ -24,9 +24,9 @@ export const DashboardPage = () => {
   const SSGList = () => {
     var ssgListRows = ssgs.map((ssg: SSG) => {
       return <div className='ssg-list-row' onClick={() => navigate(`/ssg/${ssg.id}`)} key={ssg.id}>
-        <div className='ssg-list-cell-name'>{ssg.name}</div>
+        <div className='ssg-list-cell'>{ssg.name}</div>
         <div className='ssg-list-cell'>{ssg.stockTicker}</div>
-        <div className='ssg-list-cell'>{ssg.preparedBy}</div>
+        <div className='ssg-list-cell'>{ssg.preparedBy.map(preparer => `${preparer.firstName} ${preparer.lastName}`).join(', ')}</div>
         <div className='ssg-list-cell'>{ssg.preparedDate}</div>
       </div>
     });

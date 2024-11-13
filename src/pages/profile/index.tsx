@@ -82,39 +82,39 @@ export const ProfilePage = () => {
         <div className='profile-row'>
           <div className='profile-input-container'>
             <p className='profile-input-label'>First Name</p>
-            <input className='profile-input' type='text' name='firstName' value={profile.firstName} onChange={onFormChange}></input>
+            <input className='profile-input' type='text' name='firstName' value={profile.firstName} onChange={onFormChange} />
           </div>
           <div className='profile-input-container'>
             <p className='profile-input-label'>Last Name</p>
-            <input className='profile-input' type='text' name='lastName' value={profile.lastName} onChange={onFormChange}></input>
+            <input className='profile-input' type='text' name='lastName' value={profile.lastName} onChange={onFormChange} />
           </div>
           <div className='profile-input-container'>
             <p className='profile-input-label'>Join Date</p>
-            <input className='profile-input' type='date' name='joinDate' value={profile.joinDate} onChange={onFormChange}></input>
+            <input className='profile-input' type='date' name='joinDate' value={profile.joinDate} onChange={onFormChange} />
           </div>
           <div className='profile-input-container'>
             <p className='profile-input-label'>Exit Date</p>
-            <input className='profile-input' type='date' name='exitDate' value={profile.exitDate} onChange={onFormChange}></input>
+            <input className='profile-input' type='date' name='exitDate' value={profile.exitDate} onChange={onFormChange} />
           </div>
         </div>
         <div className='profile-row'>
           <div className='profile-input-container'>
             <p className='profile-input-label'>Email</p>
-            <input className='profile-input' type='text' name='email' value={profile.email} onChange={onFormChange}></input>
+            <input className='profile-input' type='text' name='email' value={profile.email} onChange={onFormChange} />
           </div>
           <div className='profile-input-container'>
             <p className='profile-input-label'>Phone Number</p>
-            <input className='profile-input' type='text' name='phoneNumber' value={profile.phoneNumber} onChange={onFormChange}></input>
+            <input className='profile-input' type='text' name='phoneNumber' value={profile.phoneNumber} onChange={onFormChange} />
           </div>
         </div>
         <div className='profile-row'>
           <div className='profile-input-container'>
             <p className='profile-input-label'>Address</p>
-            <input className='profile-input' type='text' name='address' value={profile.address} onChange={onFormChange}></input>
+            <input className='profile-input' type='text' name='address' value={profile.address} onChange={onFormChange} />
           </div>
           <div className='profile-input-container'>
             <p className='profile-input-label'>City</p>
-            <input className='profile-input' type='text' name='city' value={profile.city} onChange={onFormChange}></input>
+            <input className='profile-input' type='text' name='city' value={profile.city} onChange={onFormChange} />
           </div>
           <div className='profile-input-container'>
             <p className='profile-input-label'>State</p>
@@ -174,7 +174,7 @@ export const ProfilePage = () => {
           </div>
           <div className='profile-input-container'>
             <p className='profile-input-label'>Zipcode</p>
-            <input className='profile-input' type='text' name='zipcode' value={profile.zipcode} onChange={onFormChange}></input>
+            <input className='profile-input' type='text' name='zipcode' value={profile.zipcode} onChange={onFormChange} />
           </div>
         </div>
       </div>
@@ -184,11 +184,11 @@ export const ProfilePage = () => {
       <div className='profile-password-form'>
         <div className='profile-input-container'>
           <p className='profile-input-label'>New Password</p>
-          <input className='profile-input' type='password' name='password' value={password} onChange={onPasswordChange}></input>
+          <input className='profile-input' type='password' name='password' value={password} onChange={onPasswordChange} />
         </div>
         <div className='profile-input-container'>
           <p className='profile-input-label'>Confirm New Password</p>
-          <input className='profile-input' type='password' name='passwordConfirmation' value={passwordConfirmation} onChange={onPasswordConfirmationChange}></input>
+          <input className='profile-input' type='password' name='passwordConfirmation' value={passwordConfirmation} onChange={onPasswordConfirmationChange} />
         </div>
       </div>
       <div className='profile-save'>
