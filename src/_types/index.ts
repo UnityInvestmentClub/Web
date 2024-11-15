@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 export type PropsBase = {
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 export type ActionBase = {

@@ -28,61 +28,6 @@
     }
   }
 
-  .ssg-historical {
-    display: flex;
-    justify-content: center;
-    padding-bottom: 50px;
-
-    .ssg-entry-cell {
-      background-color: var(--grey);
-      font-weight: 600;
-    }
-  }
-
-  .ssg-forecast {
-    display: flex;
-    justify-content: center;
-    padding-bottom: 50px;
-  }
-
-  .ssg-forecast-default {
-    padding-left: 90px;
-    
-    .ssg-cell {
-      border-color: gray !important;
-      color: gray !important;
-    }
-  }
-
-  /* Historical & Forecast */
-  .ssg-corner-cell {
-    border-top: none !important;
-    border-left: none !important;
-  }
-  
-  /* Forecast & Forecast Default */
-  .ssg-base-cell {
-    background-color: var(--blue);
-    font-weight: 600;
-  }
-
-  /* Forecast & Forecast Default */
-  .ssg-downside-cell {
-    background-color: var(--pink);
-    font-weight: 600;
-  }
-
-  /* Forecast & Forecast Default */
-  .ssg-upside-cell {
-    background-color: var(--green);
-    font-weight: 600;
-  }
-
-  /* Historical, Forecast & Forecast Default*/
-  .ssg-cell {
-    border-color: black !important;
-  }
-
   .ssg-buttons {
     display: flex;
     justify-content: center;

@@ -1,4 +1,3 @@
-import { IndexForecastRow, IndexGrowthRow } from '@constants/';
 import { SSG } from '@_types/';
 
 export const calculateSSG = (ssg: SSG) => {
@@ -84,7 +83,7 @@ export const calculateSSG = (ssg: SSG) => {
 const getCompliment = (taxRateRow: number[]) => taxRateRow.map((taxRate: number) => 1 - taxRate);
 
 const getGrowth = (dataRow: number[]) => {
-  return IndexGrowthRow.map((idx: number) => 
+  return Array(9).fill(NaN).map((_, idx: number) => 
     (dataRow[idx] > 0)
       ? (dataRow[idx + 1] / dataRow[idx]) - 1
       : NaN
@@ -96,23 +95,23 @@ const getDivision = (dataRow1: number[], dataRow2: number[]) => {
 };
 
 const getAddition = (dataRow1: number[], dataRow2: number[]) => {
-  return IndexForecastRow.map((idx: number) => dataRow1[idx] + dataRow2[idx]);
+  return Array(3).fill(NaN).map((_, idx: number) => dataRow1[idx] + dataRow2[idx]);
 };
 
 const getMultiplication = (dataRow1: number[], dataRow2: number[]) => {
-  return IndexForecastRow.map((idx: number) => dataRow1[idx] * dataRow2[idx]);
+  return Array(3).fill(NaN).map((_, idx: number) => dataRow1[idx] * dataRow2[idx]);
 };
 
 const getFiveYearAfterGrowth = (latest: number, fcGrowthRow: number[]) => {
-  return IndexForecastRow.map((idx: number) => latest * ((1 + fcGrowthRow[idx]) ** 5));
+  return Array(3).fill(NaN).map((_, idx: number) => latest * ((1 + fcGrowthRow[idx]) ** 5));
 };
 
 const getFiveYearGrowth = (latest: number, fcDataRow: number[]) => {
-  return IndexForecastRow.map((idx: number) => ((fcDataRow[idx] / latest) ** 0.2) - 1);
+  return Array(3).fill(NaN).map((_, idx: number) => ((fcDataRow[idx] / latest) ** 0.2) - 1);
 };
 
 const getTotalFiveYearGrowth = (latest: number, fcDataRow: number[]) => {
-  return IndexForecastRow.map((idx: number) => (fcDataRow[idx] / latest) - 1);
+  return Array(3).fill(NaN).map((_, idx: number) => (fcDataRow[idx] / latest) - 1);
 };
 
 const forecastRevenueGrowth = (yearsOfData: number, revenue: number[], revenueGrowth: number[]) => {
@@ -187,15 +186,15 @@ const forecastPERatio = (yearsOfData: number, highStockPrice: number[], lowStock
   return [ downside, base, upside ];
 };
 
-export const sort = (dataRow: number[]) => dataRow.toSorted((a, b) => a - b);
+const sort = (dataRow: number[]) => dataRow.toSorted((a, b) => a - b);
 
-export const max = (dataRow: number[]) => Math.max(...dataRow);
+const max = (dataRow: number[]) => Math.max(...dataRow);
 
-export const min = (dataRow: number[]) => Math.min(...dataRow);
+const min = (dataRow: number[]) => Math.min(...dataRow);
 
-export const sum = (dataRow: number[]) => dataRow.reduce((a, b) => a + b);
+const sum = (dataRow: number[]) => dataRow.reduce((a, b) => a + b);
 
-export const median = (dataRow: number[]) => {
+const median = (dataRow: number[]) => {
   var sortedRow = sort(dataRow);
   var idx = Math.floor(sortedRow.length / 2);
 

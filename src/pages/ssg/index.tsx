@@ -3,9 +3,9 @@ import '@silevis/reactgrid/styles.css';
 import Select, { MultiValue } from 'react-select';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'wouter';
-import { ReactGrid, CellChange } from '@silevis/reactgrid';
+import { CellChange } from '@silevis/reactgrid';
 import { useProfile, useSSG } from '@hooks/';
-import { getHistoricalDataRows, getHistoricalDataColumns, getForecastDataRows, getForecastDataColumns, getForecastDefaultRows, getForecastDefaultColumns } from '../../utils/ssg-grid';
+import { HistoricalSheet, ForecastSheet } from '@components/';
 import { calculateSSG } from '../../utils/ssg';
 import { HistoricalDataRowId, ForecastDataRowId } from '@constants/';
 import { InputChangeEvent, SelectChangeEvent, SSG, Profile, Preparer } from '@_types/';
@@ -20,9 +20,9 @@ const initialData = {
     sourceData: '',
     sourceDate: '',
     yearsOfData: 10,
-    currentStockPrice: NaN,
+    currentStockPrice: 0,
     currentStockPriceDate: '',
-    currentDividend: NaN,
+    currentDividend: 0,
     startingYear: 2014,
     preparedBy: [] as Preparer[],
   
@@ -185,7 +185,7 @@ export const SSGPage = () => {
     });
   };
 
-  const onSSGChange = (changes: CellChange[]) => {
+  const onSheetChange = (changes: CellChange[]) => {
     var updatedSSG = { ...data.ssg };
 
     changes.forEach((change: CellChange) => {
@@ -215,9 +215,7 @@ export const SSGPage = () => {
         case ForecastDataRowId.PreTaxProfitMargin:
         case ForecastDataRowId.IncomeTaxRate:
         case ForecastDataRowId.OutstandingShareGrowth:
-          updatedSSG[rowId][idx] = (Math.abs(newValue) >= 1)
-            ? newValue / 100
-            : newValue;
+          updatedSSG[rowId][idx] = newValue / 100;
           break;
       }
     });
@@ -298,15 +296,8 @@ export const SSGPage = () => {
           </div>
         </div>
       </div>
-      <div className='ssg-historical'>
-        <ReactGrid rows={getHistoricalDataRows(data.ssg)} columns={getHistoricalDataColumns()} onCellsChanged={onSSGChange} enableRangeSelection />
-      </div>
-      <div className='ssg-forecast'>
-        <ReactGrid rows={getForecastDataRows(data.ssg)} columns={getForecastDataColumns()} onCellsChanged={onSSGChange} enableRangeSelection />
-        <div className='ssg-forecast-default'>
-          <ReactGrid rows={getForecastDefaultRows(data.ssg)} columns={getForecastDefaultColumns()} enableRangeSelection />
-        </div>
-      </div>
+      <HistoricalSheet ssg={data.ssg} onChange={onSheetChange} />
+      <ForecastSheet ssg={data.ssg} onChange={onSheetChange} />
       <div className='ssg-buttons'>
         {routeParams[0]
           ? <button className='ssg-save-button' onClick={handleSave}>Save</button>

@@ -1,3 +1,5 @@
+import { DefaultCellTypes } from "@silevis/reactgrid"; 
+
 export const DBId = import.meta.env.VITE_DB_ID;
 export const DBKey = import.meta.env.VITE_DB_KEY;
 
@@ -48,6 +50,12 @@ export const enum ForecastDataRowId {
   TotalAnnualReturn = 'fcTotalAnnualReturn'
 }
 
-export const IndexRow = Array(10).fill(NaN).map((_, idx: number) => idx);
-export const IndexGrowthRow = Array(9).fill(NaN).map((_, idx: number) => idx);
-export const IndexForecastRow = Array(3).fill(NaN).map((_, idx: number) => idx);
+export const YearFormat = new Intl.NumberFormat('en-US', { useGrouping: false });
+export const OneDecimalFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
+export const TwoDecimalFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 1 });
+export const PercentFormat = new Intl.NumberFormat('en-US', { style: 'percent', useGrouping: false, maximumFractionDigits: 1, minimumFractionDigits: 1 });
+
+export const textCell = (text: string, className?: string): DefaultCellTypes => ({ type: 'text', text, className: `cell ${className}` });
+export const numberCell = (value: number, format: Intl.NumberFormat, className?: string ): DefaultCellTypes => ({ type: 'number', value, format, className: `cell ${className}` });
+export const nonEditable = (cell: DefaultCellTypes) => ({ ...cell, nonEditable: true });
+export const cornerCell = () => nonEditable(textCell('', 'corner-cell'));
