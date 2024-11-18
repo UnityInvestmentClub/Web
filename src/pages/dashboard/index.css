@@ -32,11 +32,6 @@
     width: 300px;
   };
 
-  .ssg-list-cell-name {
-    justify-content: left;
-    width: 300px;
-  };
-
   .ssg-new {
     display: flex;
     justify-content: center;

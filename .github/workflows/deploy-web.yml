@@ -26,6 +26,7 @@ jobs:
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
+        
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -33,12 +34,15 @@ jobs:
           path: ./dist
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.inputs.build_run_id }}
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
       - name: Upload Artifacts to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
+          
       - name: Deploy GitHub Page
         id: deployment
         uses: actions/deploy-pages@v4

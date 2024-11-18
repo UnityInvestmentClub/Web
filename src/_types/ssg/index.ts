@@ -469,3 +469,6 @@ export type SSGDTO = {
   fc_total_annual_return_base: number,
   fc_total_annual_return_upside: number
 };
+
+export type SSGDataField = 'startingYear' | 'revenue' | 'netProfit' | 'incomeTaxRate' | 'eps' | 'highStockPrice' | 'lowStockPrice' | 'dividendPerShare' | 'outstandingShares' | 'fcRevenueGrowth' | 'fcPreTaxProfitMargin' | 'fcIncomeTaxRate' | 'fcOutstandingShareGrowth' | 'fcPERatio';
+export type SSGFormField = 'name' | 'isPresentedVersion' | 'presentedMonth' | 'stockTicker' | 'preparedDate' | 'sourceData' | 'sourceDate' | 'yearsOfData' | 'currentStockPrice' | 'currentStockPriceDate' | 'currentDividend';

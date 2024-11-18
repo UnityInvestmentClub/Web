@@ -34,7 +34,7 @@ export const DashboardPage = () => {
     return (
       <div className='ssg-list'>
         <div className='ssg-list-header'>
-          <div className='ssg-list-cell-name'>Name</div>
+          <div className='ssg-list-cell'>Name</div>
           <div className='ssg-list-cell'>Stock Ticker</div>
           <div className='ssg-list-cell'>Prepared By</div>
           <div className='ssg-list-cell'>Prepared Date</div>

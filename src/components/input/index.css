@@ -1,0 +1,13 @@
+.input {
+  margin-right: 40px;
+  margin-left: 40px;
+  width: 170px;
+
+  .input-label {
+    margin: 0;
+  }
+
+  .input-element {
+    width: 170px;
+  }
+}

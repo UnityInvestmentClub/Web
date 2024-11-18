@@ -3,6 +3,9 @@ name: Build Web
 on:
   push:
     branches: [main]
+  
+  pull_request:
+    branches: [main]
 
   workflow_dispatch:
 
@@ -13,25 +16,33 @@ jobs:
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22.5
           cache: npm
+
       - name: Install Dependencies
         run: npm ci
+
       - name: Lint Project
         run: npm run lint
+
       - name: Typecheck Project
         run: npm run typecheck
+
       - name: Build Project
         run: npm run build
         env:
           VITE_DB_ID: ${{ secrets.DB_PROD_ID }}
           VITE_DB_KEY: ${{ secrets.DB_PROD_KEY }}
+
       - name: Create 404 file (GH Pages)
         run: cp ./dist/index.html ./dist/404.html
+
       - name: Upload Build Artifacts
+        if: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master' }}
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
