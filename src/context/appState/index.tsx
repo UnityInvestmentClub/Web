@@ -1,12 +1,12 @@
 import { useReducer, useContext, createContext } from 'react';
 import { DBId } from '@constants/';
-import { ActionBase, PropsBase, EmptyFunction } from '@_types/';
+import { ActionBase, PropsBase } from '@_types/';
 
 type AppStateState = {
   loggedIn: boolean,
   authId: string,
-  setLoggedInState: EmptyFunction,
-  setLoggedOutState: EmptyFunction
+  setLoggedInState: () => void,
+  setLoggedOutState: () => void
 }
 
 const initial: AppStateState = {

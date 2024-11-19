@@ -1,0 +1,13 @@
+.checkbox {
+  margin-right: 40px;
+  margin-left: 40px;
+  width: 170px;
+
+  .checkbox-label {
+    margin: 0;
+  }
+
+  .checkbox-element {
+    width: 170px;
+  }
+}

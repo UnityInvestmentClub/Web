@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 export type PropsBase = {
+  className?: string;
   children?: ReactNode;
 };
 
@@ -8,11 +9,5 @@ export type ActionBase = {
   type: string;
 };
 
-export type EmptyFunction = () => void;
-
-export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
-export type SelectChangeEvent = React.ChangeEvent<HTMLSelectElement>;
-export type ButtonClickEvent = React.MouseEvent<HTMLButtonElement>;
-
-export { type SSG, type SSGDTO, type Preparer, type PreparerDTO } from '@_types/ssg';
+export { type SSG, type SSGDTO, type Preparer, type PreparerDTO, type SSGDataField, type SSGFormField } from '@_types/ssg';
 export { type Profile, type ProfileDTO } from '@_types/profile';
