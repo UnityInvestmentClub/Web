@@ -14,9 +14,9 @@ module.exports = {
     'react-refresh/only-export-components': 'warn',
     'react/react-in-jsx-scope': 'off',
     'no-var': 'off',
-    "@typescript-eslint/no-unused-vars": [
+    '@typescript-eslint/no-unused-vars': [
       'error',
-      { "varsIgnorePattern": "_" }
+      { 'varsIgnorePattern': '_' }
     ]
   },
   'settings': {

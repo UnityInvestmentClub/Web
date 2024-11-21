@@ -1,0 +1,65 @@
+.forecast-sheet {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 50px;
+
+  .title-cell {
+    justify-content: left !important;
+    padding-left: 20px !important;
+  }
+
+  .number-cell {
+    background-color: rgb(250, 251, 252) !important;
+  }
+
+  .base-cell {
+    background-color: var(--blue) !important;
+    font-weight: 600;
+  }
+
+  .downside-cell {
+    background-color: var(--pink) !important;
+    font-weight: 600;
+  }
+
+  .upside-cell {
+    background-color: var(--green) !important;
+    font-weight: 600;
+  }
+
+  .top-shadow {
+    box-shadow: inset 0px 8px 5px -5px rgba(230, 230, 230) !important;
+  }
+
+  .left-shadow {
+    box-shadow: inset 8px 0px 5px -5px rgb(230, 230, 230) !important;
+  }
+
+  .corner-shadow {
+    box-shadow: inset 8px 8px 5px -5px rgb(230, 230, 230) !important;
+  }
+  
+  .forecast-sheet-default {
+    padding-left: 200px;
+    
+    .header-cell {
+      color: gray !important;
+    }
+
+    .number-cell {
+      color: gray !important;
+    }
+
+    .downside-cell {
+      color: gray !important;
+    }
+
+    .base-cell {
+      color: gray !important;
+    }
+
+    .upside-cell {
+      color: gray !important;
+    }
+  }
+}

@@ -1,0 +1,31 @@
+.historical-sheet {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 50px;
+
+  .title-cell {
+    justify-content: left !important;
+    padding-left: 20px !important;
+  }
+  
+  .number-cell {
+    background-color: rgb(250, 251, 252) !important;
+  }
+
+  .entry-cell {
+    background-color: rgb(245, 245, 245) !important;
+    font-weight: 600 !important;
+  }
+
+  .top-shadow {
+    box-shadow: inset 0px 8px 5px -5px rgba(230, 230, 230) !important;
+  }
+
+  .left-shadow {
+    box-shadow: inset 8px 0px 5px -5px rgb(230, 230, 230) !important;
+  }
+
+  .corner-shadow {
+    box-shadow: inset 8px 8px 5px -5px rgb(230, 230, 230) !important;
+  }
+}
