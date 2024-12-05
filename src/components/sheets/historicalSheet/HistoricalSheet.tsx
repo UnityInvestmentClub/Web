@@ -319,7 +319,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
 
   return (
     <div className='historical-sheet'>
-      <BaseSheet id='historical' rows={rows} columns={columns} cells={cells} />
+      <BaseSheet id='historical' rows={rows} columns={columns} cells={cells} stickyLeftColumns={1} />
     </div>
   );
 };

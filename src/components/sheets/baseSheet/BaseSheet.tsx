@@ -1,5 +1,5 @@
 import './BaseSheet.css';
-import { ReactGrid, Row, Column, Cell, NumericalRange, CellsLookup, StyledRange, useReactGridAPI } from '@silevis/reactgrid';
+import { ReactGrid, Row, Column, Cell, NumericalRange, CellsLookup, useReactGridAPI } from '@silevis/reactgrid';
 import { PropsBase } from '@_types/';
 import { PercentFormat } from '@constants/';
 
@@ -8,10 +8,10 @@ interface Props extends PropsBase {
   rows: Row[],
   columns: Column[],
   cells: Cell[],
-  styledRanges?: StyledRange[]
+  stickyLeftColumns?: number
 }
 
-export const BaseSheet = ({ id, rows, columns, cells, styledRanges }: Props) => {
+export const BaseSheet = ({ id, rows, columns, cells, stickyLeftColumns  }: Props) => {
   var gridAPI = useReactGridAPI(id);
 
   const onCopy = (
@@ -80,7 +80,7 @@ export const BaseSheet = ({ id, rows, columns, cells, styledRanges }: Props) => 
 
   return (
     <div className='base-sheet'>
-      <ReactGrid id={id} rows={rows} columns={columns} cells={indexedCells} styledRanges={styledRanges || []} onCopy={onCopy} onPaste={onPaste} moveRightOnEnter disableFillHandle />
+      <ReactGrid id={id} rows={rows} columns={columns} cells={indexedCells} stickyLeftColumns={stickyLeftColumns} onCopy={onCopy} onPaste={onPaste} moveRightOnEnter disableFillHandle />
     </div>
   );
 };

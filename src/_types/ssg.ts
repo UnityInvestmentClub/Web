@@ -360,6 +360,10 @@ export type SSGDTO = {
   fc_revenue_year_5_default_upside: number,
   
   fc_revenue_year_5_downside: number,
+  fc_revenue_year_1_base: number,
+  fc_revenue_year_2_base: number,
+  fc_revenue_year_3_base: number,
+  fc_revenue_year_4_base: number,
   fc_revenue_year_5_base: number,
   fc_revenue_year_5_upside: number,
 
@@ -416,6 +420,10 @@ export type SSGDTO = {
   fc_eps_year_5_default_upside: number,
   
   fc_eps_year_5_downside: number,
+  fc_eps_year_1_base: number,
+  fc_eps_year_2_base: number,
+  fc_eps_year_3_base: number,
+  fc_eps_year_4_base: number,
   fc_eps_year_5_base: number,
   fc_eps_year_5_upside: number,
 
@@ -439,8 +447,21 @@ export type SSGDTO = {
   fc_stock_price_year_5_default_base: number,
   fc_stock_price_year_5_default_upside: number,
 
+  
+  fc_stock_price_year_1_downside: number,
+  fc_stock_price_year_2_downside: number,
+  fc_stock_price_year_3_downside: number,
+  fc_stock_price_year_4_downside: number,
   fc_stock_price_year_5_downside: number,
+  fc_stock_price_year_1_base: number,
+  fc_stock_price_year_2_base: number,
+  fc_stock_price_year_3_base: number,
+  fc_stock_price_year_4_base: number,
   fc_stock_price_year_5_base: number,
+  fc_stock_price_year_1_upside: number,
+  fc_stock_price_year_2_upside: number,
+  fc_stock_price_year_3_upside: number,
+  fc_stock_price_year_4_upside: number,
   fc_stock_price_year_5_upside: number,
 
   fc_total_stock_price_growth_default_downside: number,

@@ -3,7 +3,7 @@ import MultiSelect, { MultiValue } from 'react-select';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'wouter';
 import { useProfile, useSSG } from '@hooks/';
-import { Input, Select, Checkbox, HistoricalSheet, ForecastSheet } from '@components/';
+import { Input, Select, Checkbox, HistoricalSheet, ForecastSheet, LoadingSpinner } from '@components/';
 import { calculateSSG } from '@utils/';
 import { SSG, Profile, Preparer, SSGDataField, SSGFormField } from '@_types/';
 
@@ -94,6 +94,7 @@ const initialData = {
 }
 
 export const SSGPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(initialData);
   const [_, navigate] = useLocation();
   const { getSSG, createSSG, updateSSG } = useSSG();
@@ -103,6 +104,8 @@ export const SSGPage = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
+        setIsLoading(true);
+
         var ssg = routeParams[0]
           ? await getSSG(routeParams[0])
           : initialData.ssg;
@@ -110,6 +113,8 @@ export const SSGPage = () => {
         var profiles = await getProfiles();
 
         setData({ ssg, profiles });
+        
+        setIsLoading(false);
       } catch (e) {
         console.error(e);
       }
@@ -161,6 +166,8 @@ export const SSGPage = () => {
         newValue = value;
         break;
     }
+
+    console.log(name, newValue);
     
     setData(data => ({
       ...data,
@@ -216,13 +223,15 @@ export const SSGPage = () => {
     });
   };
 
-  return (
-    <div className='ssg'>
+  return isLoading
+    ? <LoadingSpinner />
+    : <div className='ssg'>
       <div className='ssg-form'>
         <div className='ssg-row'>
           <Input type='text' name='name' label='Name' value={data.ssg.name} onChange={onFormChange} />
           <Checkbox name='isPresentedVersion' label='Presented Version' checked={data.ssg.isPresentedVersion} onChange={onFormChange} />
-          {data.ssg.isPresentedVersion ?? <Select name='presentedMonth' label='Presented Month' value={data.ssg.presentedMonth} onChange={onFormChange}>
+          {data.ssg.isPresentedVersion ? <Select name='presentedMonth' label='Presented Month' value={data.ssg.presentedMonth} onChange={onFormChange}>
+            <option value=''>Select a Month</option>
             <option value='January'>January</option>
             <option value='February'>February</option>
             <option value='March'>March</option>
@@ -235,7 +244,7 @@ export const SSGPage = () => {
             <option value='October'>October</option>
             <option value='November'>November</option>
             <option value='December'>December</option>
-          </Select>}
+          </Select> : null}
         </div>
         <div className='ssg-row'>
           <Input type='text' name='stockTicker' label='Ticker' value={data.ssg.stockTicker} onChange={onFormChange} />
@@ -266,6 +275,5 @@ export const SSGPage = () => {
           : <button className='ssg-save-button' onClick={handleCreate}>Create</button>
         }
       </div>
-    </div>
-  );
+    </div>;
 };

@@ -1,7 +1,8 @@
 .ssg {
   .ssg-form {
     margin: auto;
-    width: fit-content;
+    display: grid;
+    justify-content: center;
     padding-bottom: 30px;
 
     .ssg-row {

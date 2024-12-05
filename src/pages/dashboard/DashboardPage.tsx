@@ -1,10 +1,12 @@
 import './DashboardPage.css';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
+import { LoadingSpinner } from '@components/';
 import { useSSG } from '@hooks/';
 import { SSG } from '@_types/';
 
 export const DashboardPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [ssgs, setSSGs] = useState([] as SSG[]);
   const [_, navigate] = useLocation();
   const { getSSGs } = useSSG();
@@ -13,6 +15,8 @@ export const DashboardPage = () => {
     const loadData = async () => {
       try {
         setSSGs(await getSSGs());
+
+        setIsLoading(false);
       } catch (e) {
         console.error(e);
       }
@@ -44,12 +48,12 @@ export const DashboardPage = () => {
     );
   };
 
-  return (
-    <div className='dashboard'>
+  return isLoading
+    ? <LoadingSpinner />
+    : <div className='dashboard'>
       <SSGList />
       <div className='ssg-new'>
         <button className='ssg-new-button' onClick={() => navigate(`/ssg`)}>Create New SSG</button>
       </div>
-    </div>
-  );
+    </div>;
 };

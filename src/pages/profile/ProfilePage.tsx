@@ -1,6 +1,6 @@
 import './ProfilePage.css';
 import { ChangeEvent, useEffect, useState} from 'react';
-import { Input, Select } from '@components/';
+import { Input, Select, LoadingSpinner } from '@components/';
 import { useProfile, useAuth } from '@hooks/';
 import { Profile } from '@_types/';
 
@@ -18,6 +18,7 @@ const initialProfile: Profile = {
 };
 
 export const ProfilePage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState(initialProfile);
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -28,6 +29,8 @@ export const ProfilePage = () => {
     const loadData = async () => {
       try {
         setProfile(await getProfile());
+
+        setIsLoading(false);
       } catch (e) {
         console.error(e);
       }
@@ -80,8 +83,9 @@ export const ProfilePage = () => {
     setPasswordConfirmation((target as HTMLInputElement).value);
   };
 
-  return (
-    <div className='profile'>
+  return isLoading
+    ? <LoadingSpinner />
+    : <div className='profile'>
       <div className='profile-form'>
         <div className='profile-row'>
           <Input type='text' name='firstName' label='First Name' value={profile.firstName} onChange={onFormChange}/>
@@ -164,6 +168,5 @@ export const ProfilePage = () => {
       <div className='profile-save'>
         <button className='profile-save-button' onClick={handleUpdatePassword}>Update Password</button>
       </div>
-    </div>
-  );
+    </div>;
 };

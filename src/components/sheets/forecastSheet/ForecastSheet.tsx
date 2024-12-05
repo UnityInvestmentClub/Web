@@ -243,7 +243,7 @@ export const ForecastSheet = ({ ssg, onChange }: Props) => {
 
   return (
     <div className='forecast-sheet'>
-      <BaseSheet id='forecast' rows={rows} columns={forecastColumns} cells={forecastCells} />
+      <BaseSheet id='forecast' rows={rows} columns={forecastColumns} cells={forecastCells} stickyLeftColumns={1} />
       <div className='forecast-sheet-default'>
         <BaseSheet id='default' rows={rows} columns={defaultColumns} cells={defaultCells} />
       </div>

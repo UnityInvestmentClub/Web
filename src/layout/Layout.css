@@ -15,7 +15,7 @@ body {
 }
 
 .main {
-  margin-top: 50px;
+  margin: 50px;
 }
 
 input::-webkit-outer-spin-button,
