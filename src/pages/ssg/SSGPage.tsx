@@ -1,6 +1,7 @@
 import './SSGPage.css';
 import MultiSelect, { MultiValue } from 'react-select';
 import { useEffect, useState } from 'react';
+import * as yup from 'yup';
 import { useLocation, useParams } from 'wouter';
 import { useProfile, useSSG } from '@hooks/';
 import { Input, Select, Checkbox, HistoricalSheet, ForecastSheet, LoadingSpinner } from '@components/';
@@ -12,6 +13,7 @@ const initialSSG = {
   isPresentedVersion: false,
   presentedMonth: '',
   stockTicker: '',
+  preparedBy: [] as Preparer[],
   preparedDate: '',
   sourceData: '',
   sourceDate: '',
@@ -20,7 +22,6 @@ const initialSSG = {
   currentStockPriceDate: '',
   currentDividend: 0,
   startingYear: 2014,
-  preparedBy: [] as Preparer[],
 
   revenue: Array(10).fill(NaN),
   revenueGrowth: Array(9).fill(NaN),
@@ -89,6 +90,22 @@ const initialSSG = {
   fcTotalAnnualReturnDefault: Array(3).fill(NaN),
   fcTotalAnnualReturn: Array(3).fill(NaN)
 };
+
+const ssgSchema = yup.object({
+  name: yup.string().required(),
+  isPresentedVersion: yup.boolean(),
+  presentedMonth: yup.string()
+    .when('isPresentedVersion', (isPresentedVersion, schema) => isPresentedVersion ? schema.required() : schema),
+  stockTicker: yup.string().required(),
+  preparedBy: yup.array().min(1),
+  preparedDate: yup.date().required(),
+  sourceData: yup.string().required(),
+  sourceDate: yup.date().required(),
+  yearsOfData: yup.number().integer().min(0),
+  currentStockPrice: yup.number().min(0),
+  currentStockPriceDate: yup.date().required(),
+  currentDividend: yup.number().min(0),
+});
 
 export const SSGPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -172,11 +189,15 @@ export const SSGPage = () => {
 
   const handleSubmit = async() => {
     try {
-      routeParams[0]
-        ? await updateSSG(ssg.id, ssg)
-        : await createSSG(ssg);
+      var validationResult = ssgSchema.validateSync(ssg, { abortEarly: false });
 
-      navigate('/');
+      console.log('validationResult', validationResult);
+
+      // routeParams[0]
+      //   ? await updateSSG(ssg.id, ssg)
+      //   : await createSSG(ssg);
+
+      // navigate('/');
     } catch (e) {
       console.error(e);
     }

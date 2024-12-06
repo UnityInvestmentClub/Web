@@ -1,5 +1,5 @@
 import './ProfilePage.css';
-import { ChangeEvent, useEffect, useState} from 'react';
+import { useEffect, useState} from 'react';
 import { Input, Select, LoadingSpinner } from '@components/';
 import { useProfile, useAuth } from '@hooks/';
 import { Profile } from '@_types/';
