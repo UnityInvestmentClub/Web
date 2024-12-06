@@ -1,5 +1,5 @@
 import './ProfilePage.css';
-import { ChangeEvent, useEffect, useState} from 'react';
+import { useEffect, useState} from 'react';
 import { Input, Select, LoadingSpinner } from '@components/';
 import { useProfile, useAuth } from '@hooks/';
 import { Profile } from '@_types/';
@@ -39,7 +39,19 @@ export const ProfilePage = () => {
     loadData();
   }, [getProfile]);
 
-  const handleSave = async () => {
+  const onFormChange = (name: string, value: any) => {
+    setProfile(profile => ({ ...profile, [name]: value }));
+  };
+
+  const onPasswordChange = (_: string, value: any) => {
+    setPassword(value);
+  };
+
+  const onPasswordConfirmationChange = (_: string, value: any) => {
+    setPasswordConfirmation(value);
+  };
+
+  const handleProfileSubmit = async () => {
     try {
       await updateProfile(profile);
     } catch (e) {
@@ -47,7 +59,7 @@ export const ProfilePage = () => {
     }
   };
 
-  const handleUpdatePassword = async () => {
+  const handlePasswordUpdate = async () => {
     const symbolRegex = /[$-/:-?{-~!"^_`]/;
 
     if (
@@ -66,26 +78,9 @@ export const ProfilePage = () => {
     }
   };
 
-  const onFormChange = ({ target }: ChangeEvent) => {
-    var { name, value } = (target as HTMLInputElement);
-
-    setProfile(profile => ({
-      ...profile,
-      [name]: value
-    }));
-  };
-
-  const onPasswordChange = ({ target }: ChangeEvent) => {
-    setPassword((target as HTMLInputElement).value);
-  };
-
-  const onPasswordConfirmationChange = ({ target }: ChangeEvent) => {
-    setPasswordConfirmation((target as HTMLInputElement).value);
-  };
-
   return isLoading
-    ? <LoadingSpinner />
-    : <div className='profile'>
+    ? (<LoadingSpinner />)
+    : (<div className='profile'>
       <div className='profile-form'>
         <div className='profile-row'>
           <Input type='text' name='firstName' label='First Name' value={profile.firstName} onChange={onFormChange}/>
@@ -158,7 +153,7 @@ export const ProfilePage = () => {
       </div>
 
       <div className='profile-save'>
-        <button className='profile-save-button' onClick={handleSave}>Save</button>
+        <button className='profile-save-button' onClick={handleProfileSubmit}>Save</button>
       </div>
 
       <div className='profile-password-form'>
@@ -166,7 +161,7 @@ export const ProfilePage = () => {
         <Input className='profile-password-input' type='password' name='passwordConfirmation' label='Confirm New Password' value={passwordConfirmation} onChange={onPasswordConfirmationChange}/>
       </div>
       <div className='profile-save'>
-        <button className='profile-save-button' onClick={handleUpdatePassword}>Update Password</button>
+        <button className='profile-save-button' onClick={handlePasswordUpdate}>Update Password</button>
       </div>
-    </div>;
+    </div>);
 };

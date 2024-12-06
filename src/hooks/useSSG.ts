@@ -10,6 +10,7 @@ const convertDTOToSSG = (data: SSGDTO) => {
     isPresentedVersion: data.is_presented_version,
     presentedMonth: data.presented_month,
     stockTicker: data.stock_ticker,
+    preparedBy: data.prepared_by.map((preparer: PreparerDTO) => ({ id: preparer.id, firstName: preparer.first_name, lastName: preparer.last_name })),
     preparedDate: data.prepared_date.toString(),
     sourceData: data.source_data,
     sourceDate: data.source_date.toString(),
@@ -18,8 +19,7 @@ const convertDTOToSSG = (data: SSGDTO) => {
     currentStockPriceDate: data.current_stock_price_date.toString(),
     currentDividend: data.current_dividend,
     startingYear: data.starting_year,
-    preparedBy: data.prepared_by.map((preparer: PreparerDTO) => ({ id: preparer.id, firstName: preparer.first_name, lastName: preparer.last_name })),
-    
+ 
     revenue: [
       data.revenue_year_1,
       data.revenue_year_2,

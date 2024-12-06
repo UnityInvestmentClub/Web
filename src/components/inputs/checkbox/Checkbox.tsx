@@ -6,7 +6,7 @@ interface Props extends PropsBase {
   name: string,
   label: string,
   checked: boolean,
-  onChange?: (event: ChangeEvent) => void
+  onChange?: (name: string, value: any) => void
 }
  
 export const Checkbox = ({ className = '', name, label, checked, onChange }: Props) => {
@@ -18,7 +18,7 @@ export const Checkbox = ({ className = '', name, label, checked, onChange }: Pro
         type='checkbox'
         name={name}
         checked={checked}
-        onChange={onChange}
+        onChange={({ target }: ChangeEvent) => onChange((target as HTMLInputElement).name, (target as HTMLInputElement).checked)}
       />
     </div>
   );
