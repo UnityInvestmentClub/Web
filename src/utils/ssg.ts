@@ -3,6 +3,8 @@ import { SSG } from '@_types/';
 export const calculateSSG = (ssg: SSG) => {
   var updatedSSG = { ...ssg };
 
+  var yearsOfData = Math.max(updatedSSG.yearsOfData, 1);
+
   // Historical Data Calculations
 
   updatedSSG.revenueGrowth = getGrowth(updatedSSG.revenue);
@@ -30,13 +32,13 @@ export const calculateSSG = (ssg: SSG) => {
 
   // Default Forecast Operations (5 Years Forward)
 
-  updatedSSG.fcRevenueGrowthDefault = forecastRevenueGrowth(updatedSSG.yearsOfData, updatedSSG.revenue, updatedSSG.revenueGrowth);
+  updatedSSG.fcRevenueGrowthDefault = forecastRevenueGrowth(yearsOfData, updatedSSG.revenue, updatedSSG.revenueGrowth);
   
-  updatedSSG.fcPreTaxProfitMarginDefault = forecastPreTaxProfitMargin(updatedSSG.yearsOfData, updatedSSG.preTaxProfitMargin);
+  updatedSSG.fcPreTaxProfitMarginDefault = forecastPreTaxProfitMargin(yearsOfData, updatedSSG.preTaxProfitMargin);
   
-  updatedSSG.fcIncomeTaxRateDefault = forecastIncomeTaxRate(updatedSSG.yearsOfData, updatedSSG.incomeTaxRate);
+  updatedSSG.fcIncomeTaxRateDefault = forecastIncomeTaxRate(yearsOfData, updatedSSG.incomeTaxRate);
   
-  updatedSSG.fcOutstandingShareGrowthDefault = forecastOutstandingSharesGrowth(updatedSSG.yearsOfData, updatedSSG.outstandingShareGrowth);
+  updatedSSG.fcOutstandingShareGrowthDefault = forecastOutstandingSharesGrowth(yearsOfData, updatedSSG.outstandingShareGrowth);
   
   updatedSSG.fcPERatioDefault = forecastPERatio(updatedSSG.startingYear, updatedSSG.highPERatio, updatedSSG.lowPERatio);
 

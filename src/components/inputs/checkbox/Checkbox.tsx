@@ -18,7 +18,7 @@ export const Checkbox = ({ className = '', name, label, checked, onChange }: Pro
         type='checkbox'
         name={name}
         checked={checked}
-        onChange={({ target }: ChangeEvent) => onChange((target as HTMLInputElement).name, (target as HTMLInputElement).checked)}
+        onChange={({ target }: ChangeEvent) => onChange?.((target as HTMLInputElement).name, (target as HTMLInputElement).checked)}
       />
     </div>
   );
