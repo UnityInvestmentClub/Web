@@ -7,10 +7,19 @@ interface Props extends PropsBase {
   name: string,
   label: string,
   value: string | number,
-  onChange?: (event: ChangeEvent) => void
+  onChange?: (name: string, value: any) => void
 }
- 
-export const Input = ({ className = '', type, name, label, value, onChange }: Props) => {
+
+export const Input = ({ className = '', type, name, label, value, onChange: onChangeProp }: Props) => {
+  const onChange = ({ target }: ChangeEvent) => {
+    const { name, value } = target as HTMLInputElement;
+
+    if (type === 'number')
+      onChangeProp(name, Number(value));
+    else
+      onChangeProp(name, value);
+  };
+
   return (
     <div className={`input ${className}`}>
       <p className='input-label'>{label}</p>
