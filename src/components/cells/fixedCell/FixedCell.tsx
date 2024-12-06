@@ -16,7 +16,7 @@ export const FixedCell = ({ value, format, className = '' }: FixedCellProps) => 
   };
 
   return (
-    <CellWrapper className={className} onStringValueRequested={() => value?.toString() || ''} onStringValueReceived={() => {}}>
+    <CellWrapper className={className} onStringValueRequested={() => value?.toString() ?? ''} onStringValueReceived={() => {}}>
       {getDisplayedValue()}
     </CellWrapper>
   );

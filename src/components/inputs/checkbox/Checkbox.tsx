@@ -6,6 +6,7 @@ interface Props extends PropsBase {
   name: string,
   label: string,
   checked: boolean,
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   onChange?: (name: string, value: any) => void
 }
  
@@ -18,7 +19,7 @@ export const Checkbox = ({ className = '', name, label, checked, onChange }: Pro
         type='checkbox'
         name={name}
         checked={checked}
-        onChange={({ target }: ChangeEvent) => onChange((target as HTMLInputElement).name, (target as HTMLInputElement).checked)}
+        onChange={({ target }: ChangeEvent) => onChange?.((target as HTMLInputElement).name, (target as HTMLInputElement).checked)}
       />
     </div>
   );

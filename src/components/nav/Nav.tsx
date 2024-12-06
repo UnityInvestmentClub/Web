@@ -15,22 +15,20 @@ export const Nav = () => {
     }
   };
 
-  return (
-    loggedIn
-      ? <div className='nav'>
-        <div className='navtab' onClick={() => navigate('/')}>
-          Home
-        </div>
-        <div className='navtab' onClick={() => navigate('/ssg')}>
-          Create SSG
-        </div>
-        <div className='navtab navtab-right' onClick={() => navigate('/profile')}>
-          Profile
-        </div>
-        <div className='navtab' onClick={handleLogout}>
-          Log Out
-        </div>
+  return !loggedIn
+    ? (<div></div>)
+    : (<div className='nav'>
+      <div className='navtab' onClick={() => navigate('/')}>
+        Home
       </div>
-      : <div></div>
-  );
+      <div className='navtab' onClick={() => navigate('/ssg')}>
+        Create SSG
+      </div>
+      <div className='navtab' onClick={() => navigate('/profile')}>
+        Profile
+      </div>
+      <div className='navtab' onClick={handleLogout}>
+        Log Out
+      </div>
+    </div>);
 };

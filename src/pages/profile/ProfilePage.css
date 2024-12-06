@@ -1,34 +1,45 @@
 .profile {
   .profile-form {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 80px;
+    width: 1000px;
     margin: auto;
-    display: grid;
-    justify-content: center;
-    padding-bottom: 30px;
 
     .profile-row {
       display: flex;
-      padding-bottom: 20px;
+      padding-bottom: 30px;
+    }
+
+    .profile-form-input {
+      flex-basis: calc(100% / 5);
+      padding-right: 20px;
+      padding-left: 20px;
     }
   }
-
-  .profile-save {
-    display: flex;
-    justify-content: center;
   
-    .profile-save-button {
-      padding: 10px;
-    }
+  .profile-save-button {
+    padding: 10px;
+    width: fit-content;
+    margin: auto;
+  }
+
+  .profile-error {
+    font-size: 14px;
+    color: red;
+    padding-bottom: 8px;
+    margin: auto;
   }
 
   .profile-password-form{
-    margin: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding-top: 70px;
+    padding-bottom: 80px;
+    width: 400px;
+    margin: auto;
   }
 
   .profile-password-input {
-    padding-bottom: 20px;
+    padding-bottom: 30px;
   }
 }

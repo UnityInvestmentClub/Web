@@ -5,6 +5,7 @@ export { LoadingSpinner } from '@components/loadingSpinner/LoadingSpinner';
 export { Input } from '@components/inputs/input/Input';
 export { Checkbox } from '@components/inputs/checkbox/Checkbox';
 export { Select } from '@components/inputs/select/Select';
+export { MultiSelect } from '@components/inputs/multiSelect/MultiSelect';
 
 export { BaseSheet } from '@components/sheets/baseSheet/BaseSheet';
 export { HistoricalSheet } from '@components/sheets/historicalSheet/HistoricalSheet';
