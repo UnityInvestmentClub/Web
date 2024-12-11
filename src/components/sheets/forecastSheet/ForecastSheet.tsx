@@ -59,97 +59,97 @@ export const ForecastSheet = ({ ssg, onChange }: Props) => {
 
     // row 2
     fixedCell('Revenue Growth', 'title-cell'),
-    entryCell(ssg.fcRevenueGrowth[0], PercentFormat, onChange('fcRevenueGrowth'), 'downside-cell corner-shadow'),
+    entryCell(ssg.fcRevenueGrowth[0], PercentFormat, onChange('fcRevenueGrowth'), 'downside-cell top-shadow'),
     entryCell(ssg.fcRevenueGrowth[1], PercentFormat, onChange('fcRevenueGrowth'), 'base-cell top-shadow'),
     entryCell(ssg.fcRevenueGrowth[2], PercentFormat, onChange('fcRevenueGrowth'), 'upside-cell top-shadow'),
     
     // row 3
     fixedCell('Revenue', 'title-cell'),
-    numberCell(ssg.fcRevenue[0], OneDecimalFormat, 'number-cell left-shadow'),
+    numberCell(ssg.fcRevenue[0], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.fcRevenue[1], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.fcRevenue[2], OneDecimalFormat, 'number-cell'),
 
     // row 4
     fixedCell('Pre-Tax Profit Margin', 'title-cell'),
-    entryCell(ssg.fcPreTaxProfitMargin[0], PercentFormat, onChange('fcPreTaxProfitMargin'), 'downside-cell left-shadow'),
+    entryCell(ssg.fcPreTaxProfitMargin[0], PercentFormat, onChange('fcPreTaxProfitMargin'), 'downside-cell'),
     entryCell(ssg.fcPreTaxProfitMargin[1], PercentFormat, onChange('fcPreTaxProfitMargin'), 'base-cell'),
     entryCell(ssg.fcPreTaxProfitMargin[2], PercentFormat, onChange('fcPreTaxProfitMargin'), 'upside-cell'),
 
     // row 5
     fixedCell('Pre-Tax Net Income', 'title-cell'),
-    numberCell(ssg.fcPreTaxNetIncome[0], OneDecimalFormat, 'number-cell left-shadow'),
+    numberCell(ssg.fcPreTaxNetIncome[0], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.fcPreTaxNetIncome[1], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.fcPreTaxNetIncome[2], OneDecimalFormat, 'number-cell'),
 
     // row 6
     fixedCell('Income Tax Rate', 'title-cell'),
-    entryCell(ssg.fcIncomeTaxRate[0], PercentFormat, onChange('fcIncomeTaxRate'), 'downside-cell left-shadow'),
+    entryCell(ssg.fcIncomeTaxRate[0], PercentFormat, onChange('fcIncomeTaxRate'), 'downside-cell'),
     entryCell(ssg.fcIncomeTaxRate[1], PercentFormat, onChange('fcIncomeTaxRate'), 'base-cell'),
     entryCell(ssg.fcIncomeTaxRate[2], PercentFormat, onChange('fcIncomeTaxRate'), 'upside-cell'),
 
     // row 7
     fixedCell('Net Profit', 'title-cell'),
-    numberCell(ssg.fcNetProfit[0], OneDecimalFormat, 'number-cell left-shadow'),
+    numberCell(ssg.fcNetProfit[0], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.fcNetProfit[1], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.fcNetProfit[2], OneDecimalFormat, 'number-cell'),
 
     // row 8
     fixedCell('Outstanding Share Growth', 'title-cell'),
-    entryCell(ssg.fcOutstandingShareGrowth[0], PercentFormat, onChange('fcOutstandingShareGrowth'), 'downside-cell left-shadow'),
+    entryCell(ssg.fcOutstandingShareGrowth[0], PercentFormat, onChange('fcOutstandingShareGrowth'), 'downside-cell'),
     entryCell(ssg.fcOutstandingShareGrowth[1], PercentFormat, onChange('fcOutstandingShareGrowth'), 'base-cell'),
     entryCell(ssg.fcOutstandingShareGrowth[2], PercentFormat, onChange('fcOutstandingShareGrowth'), 'upside-cell'),
 
     // row 9
     fixedCell('Outstanding Shares', 'title-cell'),
-    numberCell(ssg.fcOutstandingShares[0], OneDecimalFormat, 'number-cell left-shadow'),
+    numberCell(ssg.fcOutstandingShares[0], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.fcOutstandingShares[1], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.fcOutstandingShares[2], OneDecimalFormat, 'number-cell'),
     
     // row 10
     fixedCell('EPS', 'title-cell'),
-    numberCell(ssg.fcEPS[0], TwoDecimalFormat, 'number-cell left-shadow'),
+    numberCell(ssg.fcEPS[0], TwoDecimalFormat, 'number-cell'),
     numberCell(ssg.fcEPS[1], TwoDecimalFormat, 'number-cell'),
     numberCell(ssg.fcEPS[2], TwoDecimalFormat, 'number-cell'),
 
     // row 11
     fixedCell('EPS Growth', 'title-cell'),
-    numberCell(ssg.fcEPSGrowth[0], PercentFormat, 'number-cell left-shadow'),
+    numberCell(ssg.fcEPSGrowth[0], PercentFormat, 'number-cell'),
     numberCell(ssg.fcEPSGrowth[1], PercentFormat, 'number-cell'),
     numberCell(ssg.fcEPSGrowth[2], PercentFormat, 'number-cell'),
 
     // row 12
     fixedCell('PE Ratio', 'title-cell'),
-    entryCell(ssg.fcPERatio[0], OneDecimalFormat, onChange('fcPERatio'), 'downside-cell left-shadow'),
+    entryCell(ssg.fcPERatio[0], OneDecimalFormat, onChange('fcPERatio'), 'downside-cell'),
     entryCell(ssg.fcPERatio[1], OneDecimalFormat, onChange('fcPERatio'), 'base-cell'),
     entryCell(ssg.fcPERatio[2], OneDecimalFormat, onChange('fcPERatio'), 'upside-cell'),
     
     // row 13
     fixedCell('Stock Price', 'title-cell'),
-    numberCell(ssg.fcStockPrice[0], TwoDecimalFormat, 'number-cell left-shadow'),
+    numberCell(ssg.fcStockPrice[0], TwoDecimalFormat, 'number-cell'),
     numberCell(ssg.fcStockPrice[1], TwoDecimalFormat, 'number-cell'),
     numberCell(ssg.fcStockPrice[2], TwoDecimalFormat, 'number-cell'),
 
     // row 14
     fixedCell('Total Stock Price Growth', 'title-cell'),
-    numberCell(ssg.fcTotalStockPriceGrowth[0], PercentFormat, 'number-cell left-shadow'),
+    numberCell(ssg.fcTotalStockPriceGrowth[0], PercentFormat, 'number-cell'),
     numberCell(ssg.fcTotalStockPriceGrowth[1], PercentFormat, 'number-cell'),
     numberCell(ssg.fcTotalStockPriceGrowth[2], PercentFormat, 'number-cell'),
     
     // row 15
     fixedCell('Annual Stock Price Growth', 'title-cell'),
-    numberCell(ssg.fcAnnualStockPriceGrowth[0], PercentFormat, 'number-cell left-shadow'),
+    numberCell(ssg.fcAnnualStockPriceGrowth[0], PercentFormat, 'number-cell'),
     numberCell(ssg.fcAnnualStockPriceGrowth[1], PercentFormat, 'number-cell'),
     numberCell(ssg.fcAnnualStockPriceGrowth[2], PercentFormat, 'number-cell'),
     
     // row 16
     fixedCell('Current Dividend Yield', 'title-cell'),
-    numberCell(ssg.currentDividendYield[0], PercentFormat, 'number-cell left-shadow'),
+    numberCell(ssg.currentDividendYield[0], PercentFormat, 'number-cell'),
     numberCell(ssg.currentDividendYield[1], PercentFormat, 'number-cell'),
     numberCell(ssg.currentDividendYield[2], PercentFormat, 'number-cell'),
     
     // row 17
     fixedCell('Total Annual Return', 'title-cell'),
-    numberCell(ssg.fcTotalAnnualReturn[0], PercentFormat, 'number-cell left-shadow'),
+    numberCell(ssg.fcTotalAnnualReturn[0], PercentFormat, 'number-cell'),
     numberCell(ssg.fcTotalAnnualReturn[1], PercentFormat, 'number-cell'),
     numberCell(ssg.fcTotalAnnualReturn[2], PercentFormat, 'number-cell')
   ];

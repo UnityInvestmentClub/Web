@@ -71,7 +71,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
 
     // row 2
     fixedCell('Revenue', 'title-cell'),
-    entryCell(ssg.revenue[0], OneDecimalFormat, onChange('revenue'), 'entry-cell corner-shadow'),
+    entryCell(ssg.revenue[0], OneDecimalFormat, onChange('revenue'), 'entry-cell top-shadow'),
     entryCell(ssg.revenue[1], OneDecimalFormat, onChange('revenue'), 'entry-cell top-shadow'),
     entryCell(ssg.revenue[2], OneDecimalFormat, onChange('revenue'), 'entry-cell top-shadow'),
     entryCell(ssg.revenue[3], OneDecimalFormat, onChange('revenue'), 'entry-cell top-shadow'),
@@ -84,7 +84,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 3
     fixedCell('Revenue Growth', 'title-cell'),
-    fixedCell('', 'number-cell left-shadow'),
+    fixedCell('', 'number-cell'),
     numberCell(ssg.revenueGrowth[0], PercentFormat, 'number-cell'),
     numberCell(ssg.revenueGrowth[1], PercentFormat, 'number-cell'),
     numberCell(ssg.revenueGrowth[2], PercentFormat, 'number-cell'),
@@ -97,7 +97,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 4
     fixedCell('Net Profit', 'title-cell'),
-    entryCell(ssg.netProfit[0], OneDecimalFormat, onChange('netProfit'), 'entry-cell left-shadow'),
+    entryCell(ssg.netProfit[0], OneDecimalFormat, onChange('netProfit'), 'entry-cell'),
     entryCell(ssg.netProfit[1], OneDecimalFormat, onChange('netProfit'), 'entry-cell'),
     entryCell(ssg.netProfit[2], OneDecimalFormat, onChange('netProfit'), 'entry-cell'),
     entryCell(ssg.netProfit[3], OneDecimalFormat, onChange('netProfit'), 'entry-cell'),
@@ -110,7 +110,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 5
     fixedCell('Income Tax Rate', 'title-cell'),
-    entryCell(ssg.incomeTaxRate[0], PercentFormat, onChange('incomeTaxRate'), 'entry-cell left-shadow'),
+    entryCell(ssg.incomeTaxRate[0], PercentFormat, onChange('incomeTaxRate'), 'entry-cell'),
     entryCell(ssg.incomeTaxRate[1], PercentFormat, onChange('incomeTaxRate'), 'entry-cell'),
     entryCell(ssg.incomeTaxRate[2], PercentFormat, onChange('incomeTaxRate'), 'entry-cell'),
     entryCell(ssg.incomeTaxRate[3], PercentFormat, onChange('incomeTaxRate'), 'entry-cell'),
@@ -123,7 +123,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 6
     fixedCell('Pre-Tax Net Income', 'title-cell'),
-    numberCell(ssg.preTaxNetIncome[0], OneDecimalFormat, 'number-cell left-shadow'),
+    numberCell(ssg.preTaxNetIncome[0], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.preTaxNetIncome[1], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.preTaxNetIncome[2], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.preTaxNetIncome[3], OneDecimalFormat, 'number-cell'),
@@ -136,7 +136,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
 
     // row 7
     fixedCell('Pre-Tax Income Growth', 'title-cell'),
-    fixedCell('', 'number-cell left-shadow'),
+    fixedCell('', 'number-cell'),
     numberCell(ssg.preTaxIncomeGrowth[0], PercentFormat, 'number-cell'),
     numberCell(ssg.preTaxIncomeGrowth[1], PercentFormat, 'number-cell'),
     numberCell(ssg.preTaxIncomeGrowth[2], PercentFormat, 'number-cell'),
@@ -149,7 +149,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 8
     fixedCell('Pre-Tax Profit Margin', 'title-cell'),
-    numberCell(ssg.preTaxProfitMargin[0], PercentFormat, 'number-cell left-shadow'),
+    numberCell(ssg.preTaxProfitMargin[0], PercentFormat, 'number-cell'),
     numberCell(ssg.preTaxProfitMargin[1], PercentFormat, 'number-cell'),
     numberCell(ssg.preTaxProfitMargin[2], PercentFormat, 'number-cell'),
     numberCell(ssg.preTaxProfitMargin[3], PercentFormat, 'number-cell'),
@@ -162,7 +162,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 9
     fixedCell('EPS', 'title-cell'),
-    entryCell(ssg.eps[0], TwoDecimalFormat, onChange('eps'), 'entry-cell left-shadow'),
+    entryCell(ssg.eps[0], TwoDecimalFormat, onChange('eps'), 'entry-cell'),
     entryCell(ssg.eps[1], TwoDecimalFormat, onChange('eps'), 'entry-cell'),
     entryCell(ssg.eps[2], TwoDecimalFormat, onChange('eps'), 'entry-cell'),
     entryCell(ssg.eps[3], TwoDecimalFormat, onChange('eps'), 'entry-cell'),
@@ -175,7 +175,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 10
     fixedCell('EPS Growth', 'title-cell'),
-    fixedCell('', 'number-cell left-shadow'),
+    fixedCell('', 'number-cell'),
     numberCell(ssg.epsGrowth[0], PercentFormat, 'number-cell'),
     numberCell(ssg.epsGrowth[1], PercentFormat, 'number-cell'),
     numberCell(ssg.epsGrowth[2], PercentFormat, 'number-cell'),
@@ -188,7 +188,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 11
     fixedCell('High Stock Price', 'title-cell'),
-    entryCell(ssg.highStockPrice[0], TwoDecimalFormat, onChange('highStockPrice'), 'entry-cell left-shadow'),
+    entryCell(ssg.highStockPrice[0], TwoDecimalFormat, onChange('highStockPrice'), 'entry-cell'),
     entryCell(ssg.highStockPrice[1], TwoDecimalFormat, onChange('highStockPrice'), 'entry-cell'),
     entryCell(ssg.highStockPrice[2], TwoDecimalFormat, onChange('highStockPrice'), 'entry-cell'),
     entryCell(ssg.highStockPrice[3], TwoDecimalFormat, onChange('highStockPrice'), 'entry-cell'),
@@ -201,7 +201,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 12
     fixedCell('Low Stock Price', 'title-cell'),
-    entryCell(ssg.lowStockPrice[0], TwoDecimalFormat, onChange('lowStockPrice'), 'entry-cell left-shadow'),
+    entryCell(ssg.lowStockPrice[0], TwoDecimalFormat, onChange('lowStockPrice'), 'entry-cell'),
     entryCell(ssg.lowStockPrice[1], TwoDecimalFormat, onChange('lowStockPrice'), 'entry-cell'),
     entryCell(ssg.lowStockPrice[2], TwoDecimalFormat, onChange('lowStockPrice'), 'entry-cell'),
     entryCell(ssg.lowStockPrice[3], TwoDecimalFormat, onChange('lowStockPrice'), 'entry-cell'),
@@ -214,7 +214,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 13
     fixedCell('High PE Ratio', 'title-cell'),
-    numberCell(ssg.highPERatio[0], OneDecimalFormat, 'number-cell left-shadow'),
+    numberCell(ssg.highPERatio[0], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.highPERatio[1], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.highPERatio[2], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.highPERatio[3], OneDecimalFormat, 'number-cell'),
@@ -227,7 +227,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
 
     // row 14
     fixedCell('Low PE Ratio', 'title-cell'),
-    numberCell(ssg.lowPERatio[0], OneDecimalFormat, 'number-cell left-shadow'),
+    numberCell(ssg.lowPERatio[0], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.lowPERatio[1], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.lowPERatio[2], OneDecimalFormat, 'number-cell'),
     numberCell(ssg.lowPERatio[3], OneDecimalFormat, 'number-cell'),
@@ -240,7 +240,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 15
     fixedCell('Dividend Per Share', 'title-cell'),
-    entryCell(ssg.dividendPerShare[0], TwoDecimalFormat, onChange('dividendPerShare'), 'entry-cell left-shadow'),
+    entryCell(ssg.dividendPerShare[0], TwoDecimalFormat, onChange('dividendPerShare'), 'entry-cell'),
     entryCell(ssg.dividendPerShare[1], TwoDecimalFormat, onChange('dividendPerShare'), 'entry-cell'),
     entryCell(ssg.dividendPerShare[2], TwoDecimalFormat, onChange('dividendPerShare'), 'entry-cell'),
     entryCell(ssg.dividendPerShare[3], TwoDecimalFormat, onChange('dividendPerShare'), 'entry-cell'),
@@ -253,7 +253,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
 
     // row 16
     fixedCell('Dividend Growth', 'title-cell'),
-    fixedCell('', 'number-cell left-shadow'),
+    fixedCell('', 'number-cell'),
     numberCell(ssg.dividendGrowth[0], PercentFormat, 'number-cell'),
     numberCell(ssg.dividendGrowth[1], PercentFormat, 'number-cell'),
     numberCell(ssg.dividendGrowth[2], PercentFormat, 'number-cell'),
@@ -266,7 +266,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 17
     fixedCell('Dividend Payout', 'title-cell'),
-    numberCell(ssg.dividendPayout[0], PercentFormat, 'number-cell left-shadow'),
+    numberCell(ssg.dividendPayout[0], PercentFormat, 'number-cell'),
     numberCell(ssg.dividendPayout[1], PercentFormat, 'number-cell'),
     numberCell(ssg.dividendPayout[2], PercentFormat, 'number-cell'),
     numberCell(ssg.dividendPayout[3], PercentFormat, 'number-cell'),
@@ -279,7 +279,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 18
     fixedCell('High Yield', 'title-cell'),
-    numberCell(ssg.highYield[0], PercentFormat, 'number-cell left-shadow'),
+    numberCell(ssg.highYield[0], PercentFormat, 'number-cell'),
     numberCell(ssg.highYield[1], PercentFormat, 'number-cell'),
     numberCell(ssg.highYield[2], PercentFormat, 'number-cell'),
     numberCell(ssg.highYield[3], PercentFormat, 'number-cell'),
@@ -292,7 +292,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
     
     // row 19
     fixedCell('Outstanding Shares', 'title-cell'),
-    entryCell(ssg.outstandingShares[0], OneDecimalFormat, onChange('outstandingShares'), 'entry-cell left-shadow'),
+    entryCell(ssg.outstandingShares[0], OneDecimalFormat, onChange('outstandingShares'), 'entry-cell'),
     entryCell(ssg.outstandingShares[1], OneDecimalFormat, onChange('outstandingShares'), 'entry-cell'),
     entryCell(ssg.outstandingShares[2], OneDecimalFormat, onChange('outstandingShares'), 'entry-cell'),
     entryCell(ssg.outstandingShares[3], OneDecimalFormat, onChange('outstandingShares'), 'entry-cell'),
@@ -305,7 +305,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
 
     // row 20
     fixedCell('Outstanding Share Growth', 'title-cell'),
-    fixedCell('', 'number-cell left-shadow'),
+    fixedCell('', 'number-cell'),
     numberCell(ssg.outstandingShareGrowth[0], PercentFormat, 'number-cell'),
     numberCell(ssg.outstandingShareGrowth[1], PercentFormat, 'number-cell'),
     numberCell(ssg.outstandingShareGrowth[2], PercentFormat, 'number-cell'),

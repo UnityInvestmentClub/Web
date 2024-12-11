@@ -49,11 +49,11 @@ export const DashboardPage = () => {
   };
 
   return isLoading
-    ? <LoadingSpinner />
-    : <div className='dashboard'>
+    ? (<LoadingSpinner />)
+    : (<div className='dashboard'>
       <SSGList />
       <div className='ssg-new'>
         <button className='ssg-new-button' onClick={() => navigate(`/ssg`)}>Create New SSG</button>
       </div>
-    </div>;
+    </div>);
 };

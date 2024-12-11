@@ -2,16 +2,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50vh; /* This centers the spinner on the page */
+  height: 50vh;
 }
 
 .spinner {
-  border: 4px solid #f3f3f3; /* Light gray border */
-  border-top: 4px solid #3498db; /* Blue color for the top part of the circle */
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid black;
   border-radius: 50%;
   width: 50px;
   height: 50px;
-  animation: spin 2s linear infinite; /* Infinite spinning animation */
+  animation: spin 2s linear infinite;
 }
   
 @keyframes spin {

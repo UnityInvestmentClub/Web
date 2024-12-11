@@ -1,0 +1,36 @@
+.multiselect {
+  .multiselect-label {
+    font-size: 12px;
+    font-weight: 600;
+    padding-bottom: 5px;
+
+  }
+
+  .multiselect-control {
+    border: solid 1px #c4c4c4;
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px -2px rgba(0, 0, 0, .2);
+  }
+
+  .multiselect-control:hover {
+    border: solid 1px #c4c4c4;
+    border-radius: 5px;
+  }
+
+  .focus {
+    box-shadow: 0px 0px 0px 0.5px black;
+  }
+
+  .error {
+    border: solid 1px #ff9898;
+    background-color: rgb(253, 235, 235);
+  }
+
+  .error:hover {
+    border: solid 1px #ff9898;
+  }
+
+  .error:focus {
+    border: solid 1px darkred;
+  }
+}

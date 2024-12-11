@@ -25,3 +25,5 @@ export type ProfileDTO = {
   state: string,
   zipcode: string
 };
+
+export type ProfileFormField = 'firstName' | 'lastName' | 'email' | 'phoneNumber' | 'joinDate' | 'exitDate' | 'address' | 'city' | 'state' | 'zipcode';

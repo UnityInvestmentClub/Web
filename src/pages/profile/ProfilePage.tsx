@@ -1,8 +1,9 @@
 import './ProfilePage.css';
-import { ChangeEvent, useEffect, useState} from 'react';
+import { FormEvent, useEffect, useState} from 'react';
+import { ValidationError, object, string, date, ref as yupRef } from 'yup';
 import { Input, Select, LoadingSpinner } from '@components/';
 import { useProfile, useAuth } from '@hooks/';
-import { Profile } from '@_types/';
+import { Profile, ProfileFormField } from '@_types/';
 
 const initialProfile: Profile = {
   firstName: '',
@@ -17,11 +18,55 @@ const initialProfile: Profile = {
   zipcode: ''
 };
 
+const initialProfileError = {
+  firstName: false,
+  lastName: false,
+  email: false,
+  phoneNumber: false,
+  joinDate: false,
+  exitDate: false,
+  address: false,
+  city: false,
+  state: false,
+  zipcode: false
+}
+
+const profileSchema = object({
+  firstName: string().required(),
+  lastName: string().required(),
+  email: string().email().required(),
+  phoneNumber: string().required(),
+  joinDate: date().required(),
+  exitDate: date().required(),
+  address: string().required(),
+  city: string().required(),
+  state: string().required(),
+  zipcode: string().required()
+});
+
+const passwordSchema = object({
+  password: string()
+    .min(6, 'Password must have at least 6 characters')
+    .matches(/[a-z]/, 'Password must contain a lowercase letter')
+    .matches(/[A-Z]/, 'Password must contain an uppercase letter')
+    .matches(/[0-9]/, 'Password must contain a number')
+    .matches(/[^a-zA-Z0-9]/, 'Password must contain a special character')
+    .required('Password is required'),
+  passwordConfirmation: string()
+    .oneOf([yupRef('password'), null], 'Passwords must match')
+});
+
 export const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
+
   const [profile, setProfile] = useState(initialProfile);
+  const [profileError, setProfileError] = useState(initialProfileError);
+  const [profileFormError, setProfileFormError] = useState(null);
+
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [passwordFormError, setPasswordFormError] = useState(null);
+
   const { getProfile, updateProfile } = useProfile();
   const { updatePassword } = useAuth();
 
@@ -39,68 +84,88 @@ export const ProfilePage = () => {
     loadData();
   }, [getProfile]);
 
-  const handleSave = async () => {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  const onFormChange = (name: string, value: any) => {
+    setProfile(({ ...profile, [name]: value }));
+
+    setProfileError({
+      ...profileError,
+      [name]: !profileSchema.pick([name as ProfileFormField]).isValidSync({ [name]: value })
+    });
+
+    if (profileSchema.isValidSync({ ...profile, [name]: value }))
+      setProfileFormError(null);
+  };
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  const onPasswordChange = (_: string, value: any) => {
+    setPassword(value);
+
+    if (passwordSchema.isValidSync({ password: value, passwordConfirmation }))
+      setPasswordFormError(null);
+  };
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  const onPasswordConfirmationChange = (_: string, value: any) => {
+    setPasswordConfirmation(value);
+
+    if (passwordSchema.isValidSync({ passwordConfirmation: value, password }))
+      setPasswordFormError(null);
+  };
+
+  const handleProfileSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+
     try {
+      profileSchema.validateSync(profile, { abortEarly: false });
+      
       await updateProfile(profile);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        var errors = { };
+
+        for (const innerError of error.inner) {
+          errors = { ...errors, [innerError.path]: true };
+        }
+        
+        setProfileError({ ...profileError, ...errors });
+      }
+
+      setProfileFormError('Something went wrong! Check everything is entered correctly');
     }
   };
 
-  const handleUpdatePassword = async () => {
-    const symbolRegex = /[$-/:-?{-~!"^_`]/;
-
-    if (
-      password !== passwordConfirmation || // password does not match confirmation
-      password.length < 6 || // password less than 6 characters
-      password === password.toLowerCase() || // password missing upper case character
-      password === password.toUpperCase() || // password missing lower case character
-      !symbolRegex.test(password) // password missing symbol
-    )
-      return;
+  const handlePasswordUpdate = async (event: FormEvent) => {
+    event.preventDefault();
 
     try {
+      passwordSchema.validateSync({ password, passwordConfirmation });
+
       await updatePassword(password);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        setPasswordFormError(error.message);
+      } else {
+        setPasswordFormError('Something went wrong! Check everything is entered correctly');
+      }
     }
-  };
-
-  const onFormChange = ({ target }: ChangeEvent) => {
-    var { name, value } = (target as HTMLInputElement);
-
-    setProfile(profile => ({
-      ...profile,
-      [name]: value
-    }));
-  };
-
-  const onPasswordChange = ({ target }: ChangeEvent) => {
-    setPassword((target as HTMLInputElement).value);
-  };
-
-  const onPasswordConfirmationChange = ({ target }: ChangeEvent) => {
-    setPasswordConfirmation((target as HTMLInputElement).value);
   };
 
   return isLoading
-    ? <LoadingSpinner />
-    : <div className='profile'>
-      <div className='profile-form'>
+    ? (<LoadingSpinner />)
+    : (<div className='profile'>
+      <form className='profile-form' onSubmit={handleProfileSubmit}>
         <div className='profile-row'>
-          <Input type='text' name='firstName' label='First Name' value={profile.firstName} onChange={onFormChange}/>
-          <Input type='text' name='lastName' label='Last Name' value={profile.lastName} onChange={onFormChange}/>
-          <Input type='date' name='joinDate' label='Join Date' value={profile.joinDate} onChange={onFormChange}/>
-          <Input type='date' name='exitDate' label='Exit Date' value={profile.exitDate} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='text' name='firstName' label='First Name' value={profile.firstName} error={profileError.firstName} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='text' name='lastName' label='Last Name' value={profile.lastName} error={profileError.lastName} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='text' name='email' label='Email' value={profile.email} error={profileError.email} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='text' name='phoneNumber' label='Phone Number' value={profile.phoneNumber} error={profileError.phoneNumber} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='date' name='joinDate' label='Join Date' value={profile.joinDate} error={profileError.joinDate} onChange={onFormChange}/>
         </div>
         <div className='profile-row'>
-          <Input type='text' name='email' label='Email' value={profile.email} onChange={onFormChange}/>
-          <Input type='text' name='phoneNumber' label='Phone Number' value={profile.phoneNumber} onChange={onFormChange}/>
-        </div>
-        <div className='profile-row'>
-          <Input type='text' name='address' label='Address' value={profile.address} onChange={onFormChange}/>
-          <Input type='text' name='city' label='City' value={profile.city} onChange={onFormChange}/>
-          <Select name='state' label='State' value={profile.state} onChange={onFormChange}>
+          <Input className='profile-form-input' type='text' name='address' label='Address' value={profile.address} error={profileError.address} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='text' name='city' label='City' value={profile.city} error={profileError.city} onChange={onFormChange}/>
+          <Select className='profile-form-input' name='state' label='State' value={profile.state} error={profileError.state} onChange={onFormChange}>
             <option value='AL'>AL</option>
             <option value='AK'>AK</option>
             <option value='AZ'>AZ</option>
@@ -153,20 +218,20 @@ export const ProfilePage = () => {
             <option value='WI'>WI</option>
             <option value='WY'>WY</option>
           </Select>
-          <Input type='text' name='zipcode' label='Zipcode' value={profile.zipcode} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='text' name='zipcode' label='Zipcode' value={profile.zipcode} error={profileError.zipcode} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='date' name='exitDate' label='Exit Date' value={profile.exitDate} error={profileError.exitDate} onChange={onFormChange}/>
         </div>
-      </div>
+        
+        {profileFormError && <p className='profile-error'>{profileFormError}</p>}
+        <button className='profile-save-button' type='submit'>Save</button>
+      </form>
 
-      <div className='profile-save'>
-        <button className='profile-save-button' onClick={handleSave}>Save</button>
-      </div>
-
-      <div className='profile-password-form'>
+      <form className='profile-password-form' onSubmit={handlePasswordUpdate}>
         <Input className='profile-password-input' type='password' name='password' label='New Password' value={password} onChange={onPasswordChange}/>
         <Input className='profile-password-input' type='password' name='passwordConfirmation' label='Confirm New Password' value={passwordConfirmation} onChange={onPasswordConfirmationChange}/>
-      </div>
-      <div className='profile-save'>
-        <button className='profile-save-button' onClick={handleUpdatePassword}>Update Password</button>
-      </div>
-    </div>;
+        
+        {passwordFormError && <p className='profile-error'>{passwordFormError}</p>}
+        <button className='profile-save-button' type='submit'>Update Password</button>
+      </form>
+    </div>);
 };
