@@ -26,7 +26,8 @@ export const calculateSSG = (ssg: SSG) => {
   updatedSSG.dividendPayout = getDivision(updatedSSG.dividendPerShare, updatedSSG.eps)
                         .map((payout: number) => (payout > 0) ? payout : NaN);
   
-  updatedSSG.highYield = getDivision(updatedSSG.dividendPerShare, updatedSSG.lowStockPrice);
+  updatedSSG.highYield = getDivision(updatedSSG.dividendPerShare, updatedSSG.lowStockPrice)
+                        .map((highYield: number) => (highYield !== 0) ? highYield : NaN);
 
   updatedSSG.outstandingShareGrowth = getGrowth(updatedSSG.outstandingShares);
 
@@ -109,7 +110,10 @@ const getFiveYearAfterGrowth = (latest: number, fcGrowthRow: number[]) => {
 };
 
 const getFiveYearGrowth = (latest: number, fcDataRow: number[]) => {
-  return Array(3).fill(NaN).map((_, idx: number) => ((fcDataRow[idx] / latest) ** 0.2) - 1);
+  if (latest > 0)
+    return Array(3).fill(NaN).map((_, idx: number) => ((fcDataRow[idx] / latest) ** 0.2) - 1);
+  else
+    return Array(3).fill(NaN);
 };
 
 const getTotalFiveYearGrowth = (latest: number, fcDataRow: number[]) => {
