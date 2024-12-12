@@ -1,13 +1,17 @@
 import './DashboardPage.css';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
+import { AgGridReact } from 'ag-grid-react';
+import { ColDef, ClientSideRowModelModule, PaginationModule, TextFilterModule, DateFilterModule } from 'ag-grid-community';
 import { LoadingSpinner } from '@components/';
 import { useSSG } from '@hooks/';
-import { SSG } from '@_types/';
+import { Preparer, SSG } from '@_types/';
 
 export const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true);
+
   const [ssgs, setSSGs] = useState([] as SSG[]);
+  
   const [_, navigate] = useLocation();
   const { getSSGs } = useSSG();
 
@@ -25,35 +29,37 @@ export const DashboardPage = () => {
     loadData();
   }, [getSSGs]);
 
-  const SSGList = () => {
-    var ssgListRows = ssgs.map((ssg: SSG) => {
-      return <div className='ssg-list-row' onClick={() => navigate(`/ssg/${ssg.id}`)} key={ssg.id}>
-        <div className='ssg-list-cell'>{ssg.name}</div>
-        <div className='ssg-list-cell'>{ssg.stockTicker}</div>
-        <div className='ssg-list-cell'>{ssg.preparedBy.map(preparer => `${preparer.firstName} ${preparer.lastName}`).join(', ')}</div>
-        <div className='ssg-list-cell'>{ssg.preparedDate}</div>
-      </div>
-    });
-    
-    return (
-      <div className='ssg-list'>
-        <div className='ssg-list-header'>
-          <div className='ssg-list-cell'>Name</div>
-          <div className='ssg-list-cell'>Stock Ticker</div>
-          <div className='ssg-list-cell'>Prepared By</div>
-          <div className='ssg-list-cell'>Prepared Date</div>
-        </div>
-        {ssgListRows}
-      </div>
-    );
-  };
+  const columns: ColDef[] = [
+    { headerName: 'Name', field: 'name', width: 250, filter: true, resizable: false, suppressMovable: true },
+    { headerName: 'Ticker', field: 'stockTicker', width: 150, filter: true, resizable: false, suppressMovable: true },
+    {
+      headerName: 'Prepared By',
+      field: 'preparedBy',
+      width: 400,
+      filter: true,
+      resizable: false,
+      suppressMovable: true,
+      valueFormatter: params => params.value.map((preparer: Preparer) => `${preparer.firstName} ${preparer.lastName}`).join(', ')
+    },
+    { headerName: 'Prepared Date', field: 'preparedDate', width: 298, filter: 'agDateColumnFilter', resizable: false, suppressMovable: true }
+  ];
 
   return isLoading
     ? (<LoadingSpinner />)
     : (<div className='dashboard'>
-      <SSGList />
-      <div className='ssg-new'>
-        <button className='ssg-new-button' onClick={() => navigate(`/ssg`)}>Create New SSG</button>
+      <div className='ssg-table'>
+        <div className='ssg-create'>
+          <button className='ssg-create-button' onClick={() => navigate(`/ssg`)}>Create SSG</button>
+        </div>
+        <AgGridReact
+          rowData={ssgs}
+          columnDefs={columns}
+          modules={[ClientSideRowModelModule, PaginationModule, TextFilterModule, DateFilterModule]}
+          domLayout='autoHeight'
+          pagination
+          paginationPageSize={10}
+          paginationPageSizeSelector={[10, 25, 50]}
+        />
       </div>
     </div>);
 };

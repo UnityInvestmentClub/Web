@@ -1,11 +1,10 @@
 import './Nav.css';
-import { useLocation } from 'wouter';
+import { Link } from 'wouter';
 import { useAuth, useAppState } from '@hooks/';
 
 export const Nav = () => {
   const { logout } = useAuth();
   const { loggedIn } = useAppState();
-  const [_, navigate] = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -18,15 +17,15 @@ export const Nav = () => {
   return !loggedIn
     ? (<div></div>)
     : (<div className='nav'>
-      <div className='navtab' onClick={() => navigate('/')}>
+      <Link className='navtab' href='/'>
         Home
-      </div>
-      <div className='navtab' onClick={() => navigate('/ssg')}>
+      </Link>
+      <Link className='navtab' href='/ssg'>
         Create SSG
-      </div>
-      <div className='navtab' onClick={() => navigate('/profile')}>
+      </Link>
+      <Link className='navtab' href='/profile'>
         Profile
-      </div>
+      </Link>
       <div className='navtab' onClick={handleLogout}>
         Log Out
       </div>

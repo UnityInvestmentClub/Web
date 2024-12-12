@@ -270,7 +270,7 @@ export const SSGPage = () => {
           <Input className='ssg-form-input small-cell' type='number' name='currentStockPrice' label='Current Stock Price' value={ssg.currentStockPrice ?? ''} error={ssgError.currentStockPrice} onChange={onFormChange} />
           <Input className='ssg-form-input small-cell' type='date' name='currentStockPriceDate' label='Current Price Date' value={ssg.currentStockPriceDate} error={ssgError.currentStockPriceDate} onChange={onFormChange} />
         </div>
-        <div className='ssg-row center'>
+        <div className='ssg-row'>
           <Checkbox className='ssg-form-input small-cell' name='isPresentedVersion' label='Presented Version' checked={ssg.isPresentedVersion} onChange={onFormChange} />
           {ssg.isPresentedVersion && <Select className='ssg-form-input small-cell' name='presentedMonth' label='Presented Month' value={ssg.presentedMonth} error={ssgError.presentedMonth} onChange={onFormChange}>
             <option value=''>Select a Month</option>

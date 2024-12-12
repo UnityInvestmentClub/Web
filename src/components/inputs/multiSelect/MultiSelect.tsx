@@ -32,7 +32,10 @@ export const MultiSelect = <OptionType,>({ className = '', name, label, value, o
         getOptionLabel={getOptionsLabel}
         closeMenuOnSelect={false}
         classNames={{
-          control: (state) => `multiselect-control ${error ? 'error': ''} ${state.isFocused ? 'focus' : ''}`
+          control: (state) => `multiselect-control ${error ? 'error': ''} ${state.isFocused ? 'focus' : ''}`,
+          valueContainer: () => 'multiselect-value-container',
+          input: () => 'multiselect-input',
+          indicatorsContainer: () => 'multiselect-indicators-container'
         }}
       />
     </div>

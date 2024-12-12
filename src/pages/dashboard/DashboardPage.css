@@ -1,4 +1,9 @@
 .dashboard {
+  .ssg-table {
+    width: 1100px;
+    margin: auto;
+  }
+
   .ssg-list {
     display: flex;
     flex-direction: column;
@@ -32,12 +37,13 @@
     width: 300px;
   };
 
-  .ssg-new {
+  .ssg-create {
     display: flex;
-    justify-content: center;
+    padding-bottom: 20px;
   }
   
-  .ssg-new-button {
+  .ssg-create-button {
     padding: 10px;
+    margin-left: auto;
   }
 }

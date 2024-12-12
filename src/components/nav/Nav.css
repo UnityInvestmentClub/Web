@@ -2,12 +2,13 @@
   display: flex;
   justify-content: center;
   margin-top: 10px;
-  margin-bottom: 60px;
 
   .navtab {    
     padding: 20px;
     font-size: 16px;
+    color: black;
     font-weight: bold;
+    text-decoration: none;
   }
 
   .navtab:hover {
