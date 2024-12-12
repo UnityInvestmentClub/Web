@@ -51,15 +51,17 @@ export const DashboardPage = () => {
         <div className='ssg-create'>
           <button className='ssg-create-button' onClick={() => navigate(`/ssg`)}>Create SSG</button>
         </div>
-        <AgGridReact
-          rowData={ssgs}
-          columnDefs={columns}
-          modules={[ClientSideRowModelModule, PaginationModule, TextFilterModule, DateFilterModule]}
-          domLayout='autoHeight'
-          pagination
-          paginationPageSize={10}
-          paginationPageSizeSelector={[10, 25, 50]}
-        />
+        <div className='ssg-list'>
+          <AgGridReact
+            rowData={ssgs}
+            columnDefs={columns}
+            modules={[ClientSideRowModelModule, PaginationModule, TextFilterModule, DateFilterModule]}
+            domLayout='autoHeight'
+            pagination
+            paginationPageSize={10}
+            paginationPageSizeSelector={[10, 25, 50]}
+          />
+        </div>
       </div>
     </div>);
 };
