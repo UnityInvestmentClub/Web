@@ -2,7 +2,7 @@ import './DashboardPage.css';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { AgGridReact } from 'ag-grid-react';
-import { ColDef, ClientSideRowModelModule, PaginationModule, TextFilterModule, DateFilterModule } from 'ag-grid-community';
+import { ColDef, ClientSideRowModelModule, PaginationModule, TextFilterModule, DateFilterModule, RowClickedEvent } from 'ag-grid-community';
 import { LoadingSpinner } from '@components/';
 import { useSSG } from '@hooks/';
 import { Preparer, SSG } from '@_types/';
@@ -28,6 +28,10 @@ export const DashboardPage = () => {
     
     loadData();
   }, [getSSGs]);
+
+  const onSSGRowClicked = ({ data: ssg }: RowClickedEvent) => {
+    navigate(`/ssg/${ssg.id}`)
+  };
 
   const columns: ColDef[] = [
     { headerName: 'Name', field: 'name', width: 250, filter: true, resizable: false, suppressMovable: true },
@@ -60,6 +64,7 @@ export const DashboardPage = () => {
             pagination
             paginationPageSize={10}
             paginationPageSizeSelector={[10, 25, 50]}
+            onRowClicked={onSSGRowClicked}
           />
         </div>
       </div>
