@@ -8,7 +8,7 @@ import { Input, Select, MultiSelect, Checkbox, HistoricalSheet, ForecastSheet, L
 import { calculateSSG } from '@utils/';
 import { SSG, Profile, Preparer, SSGDataField, SSGFormField } from '@_types/';
 
-const initialSSG: SSG = {
+const getInitialSSG = (): SSG => ({
   name: '',
   isPresentedVersion: false,
   presentedMonth: '',
@@ -89,7 +89,7 @@ const initialSSG: SSG = {
 
   fcTotalAnnualReturnDefault: Array(3).fill(NaN),
   fcTotalAnnualReturn: Array(3).fill(NaN)
-};
+});
 
 const initialSSGError = {
   name: false,
@@ -129,7 +129,7 @@ const ssgSchema = object({
 export const SSGPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const [ssg, setSSG] = useState(initialSSG);
+  const [ssg, setSSG] = useState(getInitialSSG());
   const [ssgError, setSSGError] = useState(initialSSGError);
   const [ssgFormError, setSSGFormError] = useState(null);
 
@@ -148,7 +148,7 @@ export const SSGPage = () => {
         setSSGFormError(null);
         setSSGError(initialSSGError);
 
-        setSSG(routeParams[0] ? await getSSG(routeParams[0]) : initialSSG);
+        setSSG(routeParams[0] ? await getSSG(routeParams[0]) : getInitialSSG());
 
         setProfiles(await getProfiles());
         
