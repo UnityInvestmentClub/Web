@@ -56,7 +56,7 @@ export const NumberCell = ({ value: initialValue, onChange, format, className = 
         }
       }}
       onKeyDown={(event: KeyboardEvent) => {
-        if (!isEditMode && (NumericKeys.includes(event.key) || event.key === '.' || event.key === 'Backspace')) {
+        if (!isEditMode && (NumericKeys.includes(event.key) || event.key === '-' || event.key === '.' || event.key === 'Backspace')) {
           setValue('');
           setEditMode(true);
         } else if (!isEditMode && event.key === 'Enter') {

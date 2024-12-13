@@ -6,6 +6,10 @@
 
   .ssg-list {
     box-shadow: 0px 0px 15px rgba(0, 0, 0, .1);
+
+    .ag-row {
+      cursor: pointer;
+    }
   }
 
   .ssg-create {
