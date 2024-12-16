@@ -22,6 +22,13 @@ export const useAuth = () => {
     setLoggedOutState();
   };
 
+  const updateEmail = async (email: string) => {
+    var { error } = await client.auth.updateUser({ email });
+
+    if (error)
+      throw error;
+  };
+
   const updatePassword = async (password: string) => {
     var { error } = await client.auth.updateUser({ password });
 
@@ -29,5 +36,5 @@ export const useAuth = () => {
       throw error;
   };
 
-  return { login, logout, updatePassword };
+  return { login, logout, updatePassword, updateEmail };
 };

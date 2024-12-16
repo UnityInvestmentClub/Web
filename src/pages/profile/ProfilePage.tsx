@@ -11,7 +11,6 @@ const initialProfile: Profile = {
   email: '',
   phoneNumber: '',
   joinDate: '',
-  exitDate: '',
   address: '',
   city: '',
   state: '',
@@ -24,7 +23,6 @@ const initialProfileError = {
   email: false,
   phoneNumber: false,
   joinDate: false,
-  exitDate: false,
   address: false,
   city: false,
   state: false,
@@ -37,7 +35,6 @@ const profileSchema = object({
   email: string().email().required(),
   phoneNumber: string().required(),
   joinDate: date().required(),
-  exitDate: date().required(),
   address: string().required(),
   city: string().required(),
   state: string().required(),
@@ -67,13 +64,13 @@ export const ProfilePage = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [passwordFormError, setPasswordFormError] = useState(null);
 
-  const { getProfile, updateProfile } = useProfile();
+  const { getOwnProfile, updateProfile } = useProfile();
   const { updatePassword } = useAuth();
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        setProfile(await getProfile());
+        setProfile(await getOwnProfile());
 
         setIsLoading(false);
       } catch (e) {
@@ -82,7 +79,7 @@ export const ProfilePage = () => {
     };
 
     loadData();
-  }, [getProfile]);
+  }, [getOwnProfile]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const onFormChange = (name: string, value: any) => {
@@ -158,7 +155,6 @@ export const ProfilePage = () => {
         <div className='profile-row'>
           <Input className='profile-form-input' type='text' name='firstName' label='First Name' value={profile.firstName} error={profileError.firstName} onChange={onFormChange}/>
           <Input className='profile-form-input' type='text' name='lastName' label='Last Name' value={profile.lastName} error={profileError.lastName} onChange={onFormChange}/>
-          <Input className='profile-form-input' type='text' name='email' label='Email' value={profile.email} error={profileError.email} onChange={onFormChange}/>
           <Input className='profile-form-input' type='text' name='phoneNumber' label='Phone Number' value={profile.phoneNumber} error={profileError.phoneNumber} onChange={onFormChange}/>
           <Input className='profile-form-input' type='date' name='joinDate' label='Join Date' value={profile.joinDate} error={profileError.joinDate} onChange={onFormChange}/>
         </div>
@@ -219,19 +215,18 @@ export const ProfilePage = () => {
             <option value='WY'>WY</option>
           </Select>
           <Input className='profile-form-input' type='text' name='zipcode' label='Zipcode' value={profile.zipcode} error={profileError.zipcode} onChange={onFormChange}/>
-          <Input className='profile-form-input' type='date' name='exitDate' label='Exit Date' value={profile.exitDate} error={profileError.exitDate} onChange={onFormChange}/>
         </div>
         
-        {profileFormError && <p className='profile-error'>{profileFormError}</p>}
         <button className='profile-save-button' type='submit'>Save</button>
+        {profileFormError && <p className='profile-error'>{profileFormError}</p>}
       </form>
 
       <form className='profile-password-form' onSubmit={handlePasswordUpdate}>
         <Input className='profile-password-input' type='password' name='password' label='New Password' value={password} onChange={onPasswordChange}/>
         <Input className='profile-password-input' type='password' name='passwordConfirmation' label='Confirm New Password' value={passwordConfirmation} onChange={onPasswordConfirmationChange}/>
         
-        {passwordFormError && <p className='profile-error'>{passwordFormError}</p>}
         <button className='profile-save-button' type='submit'>Update Password</button>
+        {passwordFormError && <p className='profile-error'>{passwordFormError}</p>}
       </form>
     </div>);
 };

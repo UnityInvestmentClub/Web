@@ -1,5 +1,5 @@
 import './Layout.css';
-import { Redirect, Route, Router, Switch } from 'wouter';
+import { Redirect, Route, Switch } from 'wouter';
 import { LoginPage, DashboardPage, SSGPage, ProfilePage } from '@pages/';
 import { Nav } from '@components/';
 import { useAppState } from '@hooks/';
@@ -22,21 +22,19 @@ export const Layout = () => {
 
   return (
     <main>
-      <Router>
-        <Nav />
-        <div className='main'>
-          <Switch>
-            <Route path='/login'>
-              { loggedIn ? <Redirect to='/' /> : <LoginPage /> }
-            </Route>
-            <ProtectedRoute path='/'><DashboardPage /></ProtectedRoute>
-            <ProtectedRoute path='/ssg'><SSGPage /></ProtectedRoute>
-            <ProtectedRoute path='/ssg/:id'><SSGPage /></ProtectedRoute>
-            <ProtectedRoute path='/profile'><ProfilePage /></ProtectedRoute>
-            <Route path='*'><Redirect to='/' /></Route>
-          </Switch>
-        </div>
-      </Router>
+      <Nav />
+      <div className='main'>
+        <Switch>
+          <Route path='/login'>
+            { loggedIn ? <Redirect to='/' /> : <LoginPage /> }
+          </Route>
+          <ProtectedRoute path='/'><DashboardPage /></ProtectedRoute>
+          <ProtectedRoute path='/ssg'><SSGPage /></ProtectedRoute>
+          <ProtectedRoute path='/ssg/:id'><SSGPage /></ProtectedRoute>
+          <ProtectedRoute path='/profile'><ProfilePage /></ProtectedRoute>
+          <Route path='*'><Redirect to='/' /></Route>
+        </Switch>
+      </div>
     </main>
   );
 };

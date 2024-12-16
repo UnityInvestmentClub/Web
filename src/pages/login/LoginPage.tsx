@@ -41,8 +41,8 @@ export const LoginPage = () => {
         <Input className='login-input' type='text' name='email' label='Email' value={email} onChange={onEmailChange}/>
         <Input className='login-input' type='password' name='password' label='Password' value={password} onChange={onPasswordChange}/>
         
-        {loginError && <p className='login-error'>{loginError}</p>}
         <button className='login-button' type='submit'>Login</button>
+        {loginError && <p className='login-error'>{loginError}</p>}
       </form>
     </div>
   );

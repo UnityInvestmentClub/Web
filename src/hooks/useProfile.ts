@@ -11,7 +11,6 @@ const convertDTOToProfile = (data: ProfileDTO) => {
     email: data.email,
     phoneNumber: data.phone_number,
     joinDate: data.join_date?.toString() ?? '',
-    exitDate: data.exit_date?.toString() ?? '',
     address: data.address,
     city: data.city,
     state: data.state,
@@ -26,7 +25,6 @@ const convertProfileToDTO = (profile: Profile) => {
     email: profile.email,
     phone_number: profile.phoneNumber,
     join_date: new Date(profile.joinDate),
-    exit_date: new Date(profile.exitDate),
     address: profile.address,
     city: profile.city,
     state: profile.state,
@@ -47,8 +45,17 @@ export const useProfile = () => {
     return data.map((profileDTO: ProfileDTO) => convertDTOToProfile(profileDTO));
   }, [client]);
 
-  const getProfile = useCallback(async (): Promise<Profile> => {
-    var { data, error } = await client.from(ProfileTable).select('*').eq('auth_id', authId).single();
+  const getProfile = useCallback(async (id: string): Promise<Profile> => {
+    var { data, error } = await client.from(ProfileTable).select('*').eq('id', id).single();
+
+    if (error)
+      throw error;
+
+    return convertDTOToProfile(data);
+  }, [client]);
+
+  const getOwnProfile = useCallback(async (): Promise<Profile> => {
+    var { data, error } = await client.from(ProfileTable).select('*').eq('id', authId).single();
 
     if (error)
       throw error;
@@ -57,11 +64,7 @@ export const useProfile = () => {
   }, [authId, client]);
 
   const updateProfile = async (profile: Profile) => {
-    const profileDTO = {
-      ...convertProfileToDTO(profile),
-      modified_date: new Date().toISOString(),
-      modified_by: authId
-    };
+    const profileDTO = convertProfileToDTO(profile);
 
     var { error } = await client.from(ProfileTable).update(profileDTO).eq('id', profile.id);
 
@@ -72,6 +75,7 @@ export const useProfile = () => {
   return {
     getProfiles,
     getProfile,
+    getOwnProfile,
     updateProfile
   };
 };

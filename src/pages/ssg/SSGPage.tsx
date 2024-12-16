@@ -287,15 +287,14 @@ export const SSGPage = () => {
             <option value='November'>November</option>
             <option value='December'>December</option>
           </Select>}
+          <div className='ssg-form-input small-cell button-cell'>
+            <button className='ssg-save-button' onClick={handleSubmit}>Save</button>
+            {ssgFormError && <p className='ssg-error'>{ssgFormError}</p>}
+          </div>
         </div>
       </div>
 
       <HistoricalSheet ssg={ssg} onChange={onSheetChange} />
       <ForecastSheet ssg={ssg} onChange={onSheetChange} />
-
-      <div className='ssg-buttons'>
-        {ssgFormError && <p className='ssg-error'>{ssgFormError}</p>}
-        <button className='ssg-save-button' onClick={handleSubmit}>Save</button>
-      </div>
     </div>);
 };
