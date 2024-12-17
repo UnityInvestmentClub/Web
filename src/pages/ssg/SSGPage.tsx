@@ -1,6 +1,5 @@
 import './SSGPage.css';
-//import MultiSelect, { MultiValue } from 'react-select';
-import { useEffect, useState } from 'react';
+import { KeyboardEvent, useEffect, useState } from 'react';
 import { ValidationError, object, string, number, date, boolean, array } from 'yup';
 import { useLocation, useParams } from 'wouter';
 import { useProfile, useSSG } from '@hooks/';
@@ -8,7 +7,7 @@ import { Input, Select, MultiSelect, Checkbox, HistoricalSheet, ForecastSheet, L
 import { calculateSSG } from '@utils/';
 import { SSG, Profile, Preparer, SSGDataField, SSGFormField } from '@_types/';
 
-const getInitialSSG = (): SSG => ({
+const initialSSG = {
   name: '',
   isPresentedVersion: false,
   presentedMonth: '',
@@ -89,7 +88,7 @@ const getInitialSSG = (): SSG => ({
 
   fcTotalAnnualReturnDefault: Array(3).fill(NaN),
   fcTotalAnnualReturn: Array(3).fill(NaN)
-});
+} as SSG;
 
 const initialSSGError = {
   name: false,
@@ -129,7 +128,9 @@ const ssgSchema = object({
 export const SSGPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const [ssg, setSSG] = useState(getInitialSSG());
+  const [ssg, setSSG] = useState(initialSSG);
+  const [undoStack, setUndoStack] = useState([] as SSG[]);
+  const [redoStack, setRedoStack] = useState([] as SSG[]);
   const [ssgError, setSSGError] = useState(initialSSGError);
   const [ssgFormError, setSSGFormError] = useState(null);
 
@@ -148,7 +149,7 @@ export const SSGPage = () => {
         setSSGFormError(null);
         setSSGError(initialSSGError);
 
-        setSSG(routeParams[0] ? await getSSG(routeParams[0]) : getInitialSSG());
+        setSSG(routeParams[0] ? await getSSG(routeParams[0]) : initialSSG);
 
         setProfiles(await getProfiles());
         
@@ -184,8 +185,12 @@ export const SSGPage = () => {
   };
 
   const onSheetChange = (field: SSGDataField) => (value: number, colIndex: number) => {
+    //console.log(ssg);
+    setUndoStack(stack => [...stack, ssg]);
+    setRedoStack([]);
+
     setSSG(ssg => {
-      var updatedSSG = { ...ssg };
+      var updatedSSG = structuredClone(ssg);
 
       switch (field) {
         case 'startingYear':
@@ -212,6 +217,39 @@ export const SSGPage = () => {
 
       return calculateSSG(updatedSSG);
     });
+
+    console.log(undoStack);
+  };
+
+  const isMacOs = () => window.navigator.appVersion.indexOf("Mac") !== -1;
+
+  const onKeyDown = ({ ctrlKey, metaKey, key }: KeyboardEvent) => {
+    if ((!isMacOs() && ctrlKey) || metaKey) {
+      if (key === 'z')
+        handleSheetUndo();
+
+      if (key === 'y')
+        handleSheetRedo();
+    }
+
+  };
+
+  const handleSheetUndo = () => {
+    if (undoStack.length > 0) {
+      const previousState = undoStack[undoStack.length - 1];
+      setUndoStack(prev => prev.slice(0, prev.length - 1));
+      setRedoStack(prev => [ssg, ...prev]);
+      setSSG(previousState);
+  }
+  };
+
+  const handleSheetRedo = () => {
+    if (redoStack.length > 0) {
+      const nextState = redoStack[0];
+      setRedoStack(prev => prev.slice(1));
+      setUndoStack(prev => [...prev, ssg]);
+      setSSG(nextState);
+  }
   };
 
   const handleSubmit = async() => {
@@ -240,7 +278,7 @@ export const SSGPage = () => {
 
   return isLoading
     ? (<LoadingSpinner />)
-    : (<div className='ssg'>
+    : (<div className='ssg' onKeyDown={onKeyDown}>
       <div className='ssg-form'>
         <div className='ssg-row'>
           <Input className='ssg-form-input big-cell' type='text' name='name' label='Name' value={ssg.name} error={ssgError.name} onChange={onFormChange} />
