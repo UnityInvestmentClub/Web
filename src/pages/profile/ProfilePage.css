@@ -30,6 +30,13 @@
     margin: auto;
   }
 
+  .profile-success {
+    font-size: 12px;
+    color: green;
+    padding-top: 8px;
+    margin: auto;
+  }
+
   .profile-password-form{
     display: flex;
     flex-direction: column;

@@ -59,10 +59,12 @@ export const ProfilePage = () => {
   const [profile, setProfile] = useState(initialProfile);
   const [profileError, setProfileError] = useState(initialProfileError);
   const [profileFormError, setProfileFormError] = useState(null);
+  const [profileFormSuccess, setProfileFormSuccess] = useState(null);
 
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [passwordFormError, setPasswordFormError] = useState(null);
+  const [passwordFormSuccess, setPasswordFormSuccess] = useState(null);
 
   const { getOwnProfile, updateProfile } = useProfile();
   const { updatePassword } = useAuth();
@@ -92,6 +94,8 @@ export const ProfilePage = () => {
 
     if (profileSchema.isValidSync({ ...profile, [name]: value }))
       setProfileFormError(null);
+
+    setProfileFormSuccess(null);
   };
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -100,6 +104,8 @@ export const ProfilePage = () => {
 
     if (passwordSchema.isValidSync({ password: value, passwordConfirmation }))
       setPasswordFormError(null);
+    
+    setPasswordFormSuccess(null);
   };
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -108,6 +114,8 @@ export const ProfilePage = () => {
 
     if (passwordSchema.isValidSync({ passwordConfirmation: value, password }))
       setPasswordFormError(null);
+    
+    setPasswordFormSuccess(null);
   };
 
   const handleProfileSubmit = async (event: FormEvent) => {
@@ -117,6 +125,8 @@ export const ProfilePage = () => {
       profileSchema.validateSync(profile, { abortEarly: false });
       
       await updateProfile(profile);
+
+      setProfileFormSuccess('Profile updated!');
     } catch (error) {
       if (error instanceof ValidationError) {
         var errors = { };
@@ -139,6 +149,8 @@ export const ProfilePage = () => {
       passwordSchema.validateSync({ password, passwordConfirmation });
 
       await updatePassword(password);
+
+      setPasswordFormSuccess('Password updated!');
     } catch (error) {
       if (error instanceof ValidationError) {
         setPasswordFormError(error.message);
@@ -218,6 +230,7 @@ export const ProfilePage = () => {
         </div>
         
         <button className='profile-save-button' type='submit'>Save</button>
+        {profileFormSuccess && <p className='profile-success'>{profileFormSuccess}</p>}
         {profileFormError && <p className='profile-error'>{profileFormError}</p>}
       </form>
 
@@ -226,6 +239,7 @@ export const ProfilePage = () => {
         <Input className='profile-password-input' type='password' name='passwordConfirmation' label='Confirm New Password' value={passwordConfirmation} onChange={onPasswordConfirmationChange}/>
         
         <button className='profile-save-button' type='submit'>Update Password</button>
+        {passwordFormSuccess && <p className='profile-success'>{passwordFormSuccess}</p>}
         {passwordFormError && <p className='profile-error'>{passwordFormError}</p>}
       </form>
     </div>);

@@ -14,6 +14,20 @@ interface Props extends PropsBase {
 export const BaseSheet = ({ id, rows, columns, cells, stickyLeftColumns }: Props) => {
   var gridAPI = useReactGridAPI(id);
 
+  const indexedCells = cells.map((cell: Cell, idx: number) => ({
+    ...cell,
+    rowIndex: Math.trunc(idx / columns.length),
+    colIndex: idx % columns.length
+  }));
+
+  const styles: RGThemeType = {
+    paneContainer: {
+      left: {
+        boxShadow: '5px 35px 8px -2px rgba(0, 0, 0, 0.1)'
+      }
+    }
+  };
+
   const onCopy = (
     { clipboardData }: React.ClipboardEvent<HTMLDivElement>,
     { startRowIdx, endRowIdx, startColIdx, endColIdx}: NumericalRange
@@ -72,23 +86,32 @@ export const BaseSheet = ({ id, rows, columns, cells, stickyLeftColumns }: Props
     return true;
   };
 
-  const indexedCells = cells.map((cell: Cell, idx: number) => ({
-    ...cell,
-    rowIndex: Math.trunc(idx / columns.length),
-    colIndex: idx % columns.length
-  }));
+  const onKeyDown = () => {
 
-  const styles: RGThemeType = {
-    paneContainer: {
-      left: {
-        boxShadow: '5px 35px 8px -2px rgba(0, 0, 0, 0.1)'
-      }
-    }
+  };
+
+  const undoChanges = () => {
+
+  };
+
+  const redoChanges = () => {
+
   };
 
   return (
     <div className='base-sheet'>
-      <ReactGrid id={id} rows={rows} columns={columns} cells={indexedCells} styles={styles} stickyLeftColumns={stickyLeftColumns} onCopy={onCopy} onPaste={onPaste} moveRightOnEnter disableFillHandle />
+      <ReactGrid
+        id={id}
+        rows={rows}
+        columns={columns}
+        cells={indexedCells}
+        styles={styles}
+        stickyLeftColumns={stickyLeftColumns}
+        onCopy={onCopy}
+        onPaste={onPaste}
+        moveRightOnEnter
+        disableFillHandle
+      />
     </div>
   );
 };
