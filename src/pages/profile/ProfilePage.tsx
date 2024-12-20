@@ -85,12 +85,12 @@ export const ProfilePage = () => {
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const onFormChange = (name: string, value: any) => {
-    setProfile(({ ...profile, [name]: value }));
+    setProfile(profile => ({ ...profile, [name]: value }));
 
-    setProfileError({
+    setProfileError(profileError => ({
       ...profileError,
       [name]: !profileSchema.pick([name as ProfileFormField]).isValidSync({ [name]: value })
-    });
+    }));
 
     if (profileSchema.isValidSync({ ...profile, [name]: value }))
       setProfileFormError(null);
@@ -135,7 +135,7 @@ export const ProfilePage = () => {
           errors = { ...errors, [innerError.path]: true };
         }
         
-        setProfileError({ ...profileError, ...errors });
+        setProfileError(profileError => ({ ...profileError, ...errors }));
       }
 
       setProfileFormError('Something went wrong! Check everything is entered correctly');

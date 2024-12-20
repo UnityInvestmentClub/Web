@@ -1,5 +1,4 @@
 import './BaseSheet.css';
-import { KeyboardEvent } from 'react';
 import { ReactGrid, Row, Column, Cell, NumericalRange, CellsLookup, useReactGridAPI, RGThemeType } from '@silevis/reactgrid';
 import { PropsBase } from '@_types/';
 import { PercentFormat } from '@constants/';
@@ -87,29 +86,8 @@ export const BaseSheet = ({ id, rows, columns, cells, stickyLeftColumns }: Props
     return true;
   };
 
-  const isMacOs = () => window.navigator.appVersion.indexOf("Mac") !== -1;
-
-  const onKeyDown = ({ ctrlKey, metaKey, key }: KeyboardEvent) => {
-    if ((!isMacOs() && ctrlKey) || metaKey) {
-      if (key === 'z')
-        undoChange();
-
-      if (key === 'y')
-        redoChange();
-    }
-
-  };
-
-  const undoChange = () => {
-    console.log('undo');
-  };
-
-  const redoChange = () => {
-    console.log('redo');
-  };
-
   return (
-    <div className='base-sheet' onKeyDown={onKeyDown}>
+    <div className='base-sheet'>
       <ReactGrid
         id={id}
         rows={rows}

@@ -5,6 +5,7 @@ import { ActionBase, PropsBase } from '@_types/';
 type AppStateState = {
   loggedIn: boolean,
   authId: string,
+  isMacOS: boolean,
   setLoggedInState: () => void,
   setLoggedOutState: () => void
 }
@@ -12,6 +13,7 @@ type AppStateState = {
 const initial: AppStateState = {
   loggedIn: !!localStorage.getItem(`sb-${DBId}-auth-token`),
   authId: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.id,
+  isMacOS: navigator.platform.indexOf('Max') !== -1,
   setLoggedInState: () => undefined,
   setLoggedOutState: () => undefined
 };

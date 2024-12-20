@@ -2,7 +2,7 @@ import './SSGPage.css';
 import { KeyboardEvent, useEffect, useState } from 'react';
 import { ValidationError, object, string, number, date, boolean, array } from 'yup';
 import { useLocation, useParams } from 'wouter';
-import { useProfile, useSSG } from '@hooks/';
+import { useProfile, useSSG, useAppState } from '@hooks/';
 import { Input, Select, MultiSelect, Checkbox, HistoricalSheet, ForecastSheet, LoadingSpinner } from '@components/';
 import { calculateSSG } from '@utils/';
 import { SSG, Profile, Preparer, SSGDataField, SSGFormField } from '@_types/';
@@ -133,11 +133,11 @@ export const SSGPage = () => {
   const [redoStack, setRedoStack] = useState([] as SSG[]);
   const [ssgError, setSSGError] = useState(initialSSGError);
   const [ssgFormError, setSSGFormError] = useState(null);
-
   const [profiles, setProfiles] = useState([] as Profile[]);
   
   const { getSSG, createSSG, updateSSG } = useSSG();
   const { getProfiles } = useProfile();
+  const { isMacOS } = useAppState();
 
   const [_, navigate] = useLocation();
   const routeParams = useParams();
@@ -168,28 +168,27 @@ export const SSGPage = () => {
       case 'currentDividend':
       case 'currentStockPrice':
       case 'yearsOfData':
-        setSSG(calculateSSG({ ...ssg, [name]: value }));
+        setSSG(ssg => calculateSSG({ ...ssg, [name]: value }));
         break;
       default:
-        setSSG(({ ...ssg, [name]: value }));
+        setSSG(ssg => ({ ...ssg, [name]: value }));
         break;
     }
 
-    setSSGError({
+    setSSGError(ssgError => ({
       ...ssgError,
       [name]: !ssgSchema.pick([name as SSGFormField]).isValidSync({ [name]: value })
-    });
+    }));
 
     if (ssgSchema.isValidSync({ ...ssg, [name]: value }))
       setSSGFormError(null);
   };
 
   const onSheetChange = (field: SSGDataField) => (value: number, colIndex: number) => {
-    //console.log(ssg);
-    setUndoStack(stack => [...stack, ssg]);
-    setRedoStack([]);
-
     setSSG(ssg => {
+      // setUndoStack(stack => { console.log('test2'); return [...stack, ssg] });
+      // setRedoStack([]);
+      
       var updatedSSG = structuredClone(ssg);
 
       switch (field) {
@@ -217,14 +216,11 @@ export const SSGPage = () => {
 
       return calculateSSG(updatedSSG);
     });
-
-    console.log(undoStack);
   };
 
-  const isMacOs = () => window.navigator.appVersion.indexOf("Mac") !== -1;
-
   const onKeyDown = ({ ctrlKey, metaKey, key }: KeyboardEvent) => {
-    if ((!isMacOs() && ctrlKey) || metaKey) {
+    return;
+    if ((!isMacOS && ctrlKey) || metaKey) {
       if (key === 'z')
         handleSheetUndo();
 
@@ -269,7 +265,7 @@ export const SSGPage = () => {
           errors = { ...errors, [innerError.path]: true };
         }
 
-        setSSGError({ ...ssgError, ...errors });
+        setSSGError(ssgError => ({ ...ssgError, ...errors }));
       }
 
       setSSGFormError('Something went wrong! Check everything is entered correctly!');
