@@ -13,8 +13,8 @@ export type PreparerDTO = {
 export type SSG = {
   id?: string,
   name: string,
+  version: string,
   isPresentedVersion: boolean,
-  presentedMonth?: string,
   stockTicker: string,
   preparedDate: string,
   sourceData: string,
@@ -124,14 +124,22 @@ export type SSG = {
 
   fcTotalAnnualReturnDefault: number[],
 
-  fcTotalAnnualReturn: number[]
+  fcTotalAnnualReturn: number[],
+
+  highEndHoldThreshold: number,
+  lowEndHoldThreshold: number,
+
+  highEndHoldPrice: number,
+  lowEndHoldPrice: number,
+  
+  currentPriceZone: string
 };
 
 export type SSGDTO = {
   id: string
   name: string,
+  version: string,
   is_presented_version: boolean,
-  presented_month?: string,
   stock_ticker: string,
   prepared_date: Date,
   source_data: string,
@@ -154,7 +162,6 @@ export type SSGDTO = {
   revenue_year_9: number,
   revenue_year_10: number,
 
-  revenue_growth_year_1: number,
   revenue_growth_year_2: number,
   revenue_growth_year_3: number,
   revenue_growth_year_4: number,
@@ -163,6 +170,7 @@ export type SSGDTO = {
   revenue_growth_year_7: number,
   revenue_growth_year_8: number,
   revenue_growth_year_9: number,
+  revenue_growth_year_10: number,
 
   net_profit_year_1: number,
   net_profit_year_2: number,
@@ -197,7 +205,6 @@ export type SSGDTO = {
   pre_tax_net_income_year_9: number,
   pre_tax_net_income_year_10: number,
 
-  pre_tax_income_growth_year_1: number,
   pre_tax_income_growth_year_2: number,
   pre_tax_income_growth_year_3: number,
   pre_tax_income_growth_year_4: number,
@@ -206,6 +213,7 @@ export type SSGDTO = {
   pre_tax_income_growth_year_7: number,
   pre_tax_income_growth_year_8: number,
   pre_tax_income_growth_year_9: number,
+  pre_tax_income_growth_year_10: number,
 
   pre_tax_profit_margin_year_1: number,
   pre_tax_profit_margin_year_2: number,
@@ -229,7 +237,6 @@ export type SSGDTO = {
   eps_year_9: number,
   eps_year_10: number,
 
-  eps_growth_year_1: number,
   eps_growth_year_2: number,
   eps_growth_year_3: number,
   eps_growth_year_4: number,
@@ -238,6 +245,7 @@ export type SSGDTO = {
   eps_growth_year_7: number,
   eps_growth_year_8: number,
   eps_growth_year_9: number,
+  eps_growth_year_10: number,
 
   high_stock_price_year_1: number,
   high_stock_price_year_2: number,
@@ -294,7 +302,6 @@ export type SSGDTO = {
   dividend_per_share_year_9: number,
   dividend_per_share_year_10: number,
 
-  dividend_growth_year_1: number,
   dividend_growth_year_2: number,
   dividend_growth_year_3: number,
   dividend_growth_year_4: number,
@@ -303,6 +310,7 @@ export type SSGDTO = {
   dividend_growth_year_7: number,
   dividend_growth_year_8: number,
   dividend_growth_year_9: number,
+  dividend_growth_year_10: number,
 
   dividend_payout_year_1: number,
   dividend_payout_year_2: number,
@@ -337,7 +345,6 @@ export type SSGDTO = {
   outstanding_shares_year_9: number,
   outstanding_shares_year_10: number,
 
-  outstanding_shares_growth_year_1: number,
   outstanding_shares_growth_year_2: number,
   outstanding_shares_growth_year_3: number,
   outstanding_shares_growth_year_4: number,
@@ -346,6 +353,7 @@ export type SSGDTO = {
   outstanding_shares_growth_year_7: number,
   outstanding_shares_growth_year_8: number,
   outstanding_shares_growth_year_9: number,
+  outstanding_shares_growth_year_10: number,
 
   fc_revenue_growth_default_downside: number,
   fc_revenue_growth_default_base: number,
@@ -488,8 +496,16 @@ export type SSGDTO = {
   
   fc_total_annual_return_downside: number,
   fc_total_annual_return_base: number,
-  fc_total_annual_return_upside: number
+  fc_total_annual_return_upside: number,
+
+  high_end_hold_threshold: number,
+  low_end_hold_threshold: number,
+
+  high_end_hold_price: number,
+  low_end_hold_price: number,
+
+  current_price_zone: string
 };
 
 export type SSGDataField = 'startingYear' | 'revenue' | 'netProfit' | 'incomeTaxRate' | 'eps' | 'highStockPrice' | 'lowStockPrice' | 'dividendPerShare' | 'outstandingShares' | 'fcRevenueGrowth' | 'fcPreTaxProfitMargin' | 'fcIncomeTaxRate' | 'fcOutstandingShareGrowth' | 'fcPERatio';
-export type SSGFormField = 'name' | 'isPresentedVersion' | 'presentedMonth' | 'stockTicker' | 'preparedDate' | 'sourceData' | 'sourceDate' | 'yearsOfData' | 'currentStockPrice' | 'currentStockPriceDate' | 'currentDividend';
+export type SSGFormField = 'name' | 'isPresentedVersion' | 'stockTicker' | 'preparedDate' | 'sourceData' | 'sourceDate' | 'yearsOfData' | 'currentStockPrice' | 'currentStockPriceDate' | 'currentDividend';

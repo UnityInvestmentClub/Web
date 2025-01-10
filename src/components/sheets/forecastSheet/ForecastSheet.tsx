@@ -30,6 +30,7 @@ export const ForecastSheet = ({ ssg, onChange }: Props) => {
     { rowIndex: 8, height: 30 },
     { rowIndex: 9, height: 30 },
     { rowIndex: 10, height: 30 },
+    { rowIndex: 11, height: 30 },
     { rowIndex: 12, height: 30 },
     { rowIndex: 13, height: 30 },
     { rowIndex: 14, height: 30 },

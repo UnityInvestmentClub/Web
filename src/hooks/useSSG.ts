@@ -7,8 +7,8 @@ const convertDTOToSSG = (data: SSGDTO) => {
   return {
     id: data.id,
     name: data.name,
+    version: data.version,
     isPresentedVersion: data.is_presented_version,
-    presentedMonth: data.presented_month,
     stockTicker: data.stock_ticker,
     preparedBy: data.prepared_by.map((preparer: PreparerDTO) => ({ id: preparer.id, firstName: preparer.first_name, lastName: preparer.last_name })),
     preparedDate: data.prepared_date.toString(),
@@ -34,7 +34,6 @@ const convertDTOToSSG = (data: SSGDTO) => {
     ].map((number: number) => number ?? NaN),
 
     revenueGrowth: [
-      data.revenue_growth_year_1,
       data.revenue_growth_year_2,
       data.revenue_growth_year_3,
       data.revenue_growth_year_4,
@@ -42,7 +41,8 @@ const convertDTOToSSG = (data: SSGDTO) => {
       data.revenue_growth_year_6,
       data.revenue_growth_year_7,
       data.revenue_growth_year_8,
-      data.revenue_growth_year_9
+      data.revenue_growth_year_9,
+      data.revenue_growth_year_10
     ].map((number: number) => number ?? NaN),
 
     netProfit: [
@@ -85,7 +85,6 @@ const convertDTOToSSG = (data: SSGDTO) => {
     ].map((number: number) => number ?? NaN),
 
     preTaxIncomeGrowth: [
-      data.pre_tax_income_growth_year_1,
       data.pre_tax_income_growth_year_2,
       data.pre_tax_income_growth_year_3,
       data.pre_tax_income_growth_year_4,
@@ -93,7 +92,8 @@ const convertDTOToSSG = (data: SSGDTO) => {
       data.pre_tax_income_growth_year_6,
       data.pre_tax_income_growth_year_7,
       data.pre_tax_income_growth_year_8,
-      data.pre_tax_income_growth_year_9
+      data.pre_tax_income_growth_year_9,
+      data.pre_tax_income_growth_year_10
     ].map((number: number) => number ?? NaN),
 
     preTaxProfitMargin: [
@@ -123,7 +123,6 @@ const convertDTOToSSG = (data: SSGDTO) => {
     ].map((number: number) => number ?? NaN),
 
     epsGrowth: [
-      data.eps_growth_year_1,
       data.eps_growth_year_2,
       data.eps_growth_year_3,
       data.eps_growth_year_4,
@@ -131,7 +130,8 @@ const convertDTOToSSG = (data: SSGDTO) => {
       data.eps_growth_year_6,
       data.eps_growth_year_7,
       data.eps_growth_year_8,
-      data.eps_growth_year_9
+      data.eps_growth_year_9,
+      data.eps_growth_year_10
     ].map((number: number) => number ?? NaN),
 
     highStockPrice: [
@@ -200,7 +200,6 @@ const convertDTOToSSG = (data: SSGDTO) => {
     ].map((number: number) => number ?? NaN),
 
     dividendGrowth: [
-      data.dividend_growth_year_1,
       data.dividend_growth_year_2,
       data.dividend_growth_year_3,
       data.dividend_growth_year_4,
@@ -208,7 +207,8 @@ const convertDTOToSSG = (data: SSGDTO) => {
       data.dividend_growth_year_6,
       data.dividend_growth_year_7,
       data.dividend_growth_year_8,
-      data.dividend_growth_year_9
+      data.dividend_growth_year_9,
+      data.dividend_growth_year_10
     ].map((number: number) => number ?? NaN),
 
     dividendPayout: [
@@ -251,7 +251,6 @@ const convertDTOToSSG = (data: SSGDTO) => {
     ].map((number: number) => number ?? NaN),
 
     outstandingShareGrowth: [
-      data.outstanding_shares_growth_year_1,
       data.outstanding_shares_growth_year_2,
       data.outstanding_shares_growth_year_3,
       data.outstanding_shares_growth_year_4,
@@ -259,7 +258,8 @@ const convertDTOToSSG = (data: SSGDTO) => {
       data.outstanding_shares_growth_year_6,
       data.outstanding_shares_growth_year_7,
       data.outstanding_shares_growth_year_8,
-      data.outstanding_shares_growth_year_9
+      data.outstanding_shares_growth_year_9,
+      data.outstanding_shares_growth_year_10
     ].map((number: number) => number ?? NaN),
 
     fcRevenueGrowthDefault: [
@@ -442,15 +442,23 @@ const convertDTOToSSG = (data: SSGDTO) => {
       data.fc_total_annual_return_downside,
       data.fc_total_annual_return_base,
       data.fc_total_annual_return_upside
-    ].map((number: number) => number ?? NaN)
+    ].map((number: number) => number ?? NaN),
+
+    highEndHoldThreshold: data.high_end_hold_threshold,
+    lowEndHoldThreshold: data.low_end_hold_threshold,
+
+    highEndHoldPrice: data.high_end_hold_price,
+    lowEndHoldPrice: data.low_end_hold_price,
+
+    currentPriceZone: data.current_price_zone
   } as SSG;
 };
 
 const convertSSGToDTO = (ssg: SSG) => {
   return {
     name: ssg.name,
+    version: ssg.version,
     is_presented_version: ssg.isPresentedVersion,
-    presented_month: ssg.isPresentedVersion ? ssg.presentedMonth : null,
     stock_ticker: ssg.stockTicker,
     prepared_date: new Date(ssg.preparedDate),
     source_data: ssg.sourceData,
@@ -472,15 +480,15 @@ const convertSSGToDTO = (ssg: SSG) => {
     revenue_year_9: ssg.revenue[8],
     revenue_year_10: ssg.revenue[9],
 
-    revenue_growth_year_1: ssg.revenueGrowth[0],
-    revenue_growth_year_2: ssg.revenueGrowth[1],
-    revenue_growth_year_3: ssg.revenueGrowth[2],
-    revenue_growth_year_4: ssg.revenueGrowth[3],
-    revenue_growth_year_5: ssg.revenueGrowth[4],
-    revenue_growth_year_6: ssg.revenueGrowth[5],
-    revenue_growth_year_7: ssg.revenueGrowth[6],
-    revenue_growth_year_8: ssg.revenueGrowth[7],
-    revenue_growth_year_9: ssg.revenueGrowth[8],
+    revenue_growth_year_2: ssg.revenueGrowth[0],
+    revenue_growth_year_3: ssg.revenueGrowth[1],
+    revenue_growth_year_4: ssg.revenueGrowth[2],
+    revenue_growth_year_5: ssg.revenueGrowth[3],
+    revenue_growth_year_6: ssg.revenueGrowth[4],
+    revenue_growth_year_7: ssg.revenueGrowth[5],
+    revenue_growth_year_8: ssg.revenueGrowth[6],
+    revenue_growth_year_9: ssg.revenueGrowth[7],
+    revenue_growth_year_10: ssg.revenueGrowth[8],
 
     net_profit_year_1: ssg.netProfit[0],
     net_profit_year_2: ssg.netProfit[1],
@@ -515,15 +523,15 @@ const convertSSGToDTO = (ssg: SSG) => {
     pre_tax_net_income_year_9: ssg.preTaxNetIncome[8],
     pre_tax_net_income_year_10: ssg.preTaxNetIncome[9],
 
-    pre_tax_income_growth_year_1: ssg.preTaxIncomeGrowth[0],
-    pre_tax_income_growth_year_2: ssg.preTaxIncomeGrowth[1],
-    pre_tax_income_growth_year_3: ssg.preTaxIncomeGrowth[2],
-    pre_tax_income_growth_year_4: ssg.preTaxIncomeGrowth[3],
-    pre_tax_income_growth_year_5: ssg.preTaxIncomeGrowth[4],
-    pre_tax_income_growth_year_6: ssg.preTaxIncomeGrowth[5],
-    pre_tax_income_growth_year_7: ssg.preTaxIncomeGrowth[6],
-    pre_tax_income_growth_year_8: ssg.preTaxIncomeGrowth[7],
-    pre_tax_income_growth_year_9: ssg.preTaxIncomeGrowth[8],
+    pre_tax_income_growth_year_2: ssg.preTaxIncomeGrowth[0],
+    pre_tax_income_growth_year_3: ssg.preTaxIncomeGrowth[1],
+    pre_tax_income_growth_year_4: ssg.preTaxIncomeGrowth[2],
+    pre_tax_income_growth_year_5: ssg.preTaxIncomeGrowth[3],
+    pre_tax_income_growth_year_6: ssg.preTaxIncomeGrowth[4],
+    pre_tax_income_growth_year_7: ssg.preTaxIncomeGrowth[5],
+    pre_tax_income_growth_year_8: ssg.preTaxIncomeGrowth[6],
+    pre_tax_income_growth_year_9: ssg.preTaxIncomeGrowth[7],
+    pre_tax_income_growth_year_10: ssg.preTaxIncomeGrowth[8],
 
     pre_tax_profit_margin_year_1: ssg.preTaxProfitMargin[0],
     pre_tax_profit_margin_year_2: ssg.preTaxProfitMargin[1],
@@ -547,15 +555,15 @@ const convertSSGToDTO = (ssg: SSG) => {
     eps_year_9: ssg.eps[8],
     eps_year_10: ssg.eps[9],
 
-    eps_growth_year_1: ssg.epsGrowth[0],
-    eps_growth_year_2: ssg.epsGrowth[1],
-    eps_growth_year_3: ssg.epsGrowth[2],
-    eps_growth_year_4: ssg.epsGrowth[3],
-    eps_growth_year_5: ssg.epsGrowth[4],
-    eps_growth_year_6: ssg.epsGrowth[5],
-    eps_growth_year_7: ssg.epsGrowth[6],
-    eps_growth_year_8: ssg.epsGrowth[7],
-    eps_growth_year_9: ssg.epsGrowth[8],
+    eps_growth_year_2: ssg.epsGrowth[0],
+    eps_growth_year_3: ssg.epsGrowth[1],
+    eps_growth_year_4: ssg.epsGrowth[2],
+    eps_growth_year_5: ssg.epsGrowth[3],
+    eps_growth_year_6: ssg.epsGrowth[4],
+    eps_growth_year_7: ssg.epsGrowth[5],
+    eps_growth_year_8: ssg.epsGrowth[6],
+    eps_growth_year_9: ssg.epsGrowth[7],
+    eps_growth_year_10: ssg.epsGrowth[8],
 
     high_stock_price_year_1: ssg.highStockPrice[0],
     high_stock_price_year_2: ssg.highStockPrice[1],
@@ -612,15 +620,15 @@ const convertSSGToDTO = (ssg: SSG) => {
     dividend_per_share_year_9: ssg.dividendPerShare[8],
     dividend_per_share_year_10: ssg.dividendPerShare[9],
 
-    dividend_growth_year_1: ssg.dividendGrowth[0],
-    dividend_growth_year_2: ssg.dividendGrowth[1],
-    dividend_growth_year_3: ssg.dividendGrowth[2],
-    dividend_growth_year_4: ssg.dividendGrowth[3],
-    dividend_growth_year_5: ssg.dividendGrowth[4],
-    dividend_growth_year_6: ssg.dividendGrowth[5],
-    dividend_growth_year_7: ssg.dividendGrowth[6],
-    dividend_growth_year_8: ssg.dividendGrowth[7],
-    dividend_growth_year_9: ssg.dividendGrowth[8],
+    dividend_growth_year_2: ssg.dividendGrowth[0],
+    dividend_growth_year_3: ssg.dividendGrowth[1],
+    dividend_growth_year_4: ssg.dividendGrowth[2],
+    dividend_growth_year_5: ssg.dividendGrowth[3],
+    dividend_growth_year_6: ssg.dividendGrowth[4],
+    dividend_growth_year_7: ssg.dividendGrowth[5],
+    dividend_growth_year_8: ssg.dividendGrowth[6],
+    dividend_growth_year_9: ssg.dividendGrowth[7],
+    dividend_growth_year_10: ssg.dividendGrowth[8],
 
     dividend_payout_year_1: ssg.dividendPayout[0],
     dividend_payout_year_2: ssg.dividendPayout[1],
@@ -655,15 +663,15 @@ const convertSSGToDTO = (ssg: SSG) => {
     outstanding_shares_year_9: ssg.outstandingShares[8],
     outstanding_shares_year_10: ssg.outstandingShares[9],
 
-    outstanding_shares_growth_year_1: ssg.outstandingShareGrowth[0],
-    outstanding_shares_growth_year_2: ssg.outstandingShareGrowth[1],
-    outstanding_shares_growth_year_3: ssg.outstandingShareGrowth[2],
-    outstanding_shares_growth_year_4: ssg.outstandingShareGrowth[3],
-    outstanding_shares_growth_year_5: ssg.outstandingShareGrowth[4],
-    outstanding_shares_growth_year_6: ssg.outstandingShareGrowth[5],
-    outstanding_shares_growth_year_7: ssg.outstandingShareGrowth[6],
-    outstanding_shares_growth_year_8: ssg.outstandingShareGrowth[7],
-    outstanding_shares_growth_year_9: ssg.outstandingShareGrowth[8],
+    outstanding_shares_growth_year_2: ssg.outstandingShareGrowth[0],
+    outstanding_shares_growth_year_3: ssg.outstandingShareGrowth[1],
+    outstanding_shares_growth_year_4: ssg.outstandingShareGrowth[2],
+    outstanding_shares_growth_year_5: ssg.outstandingShareGrowth[3],
+    outstanding_shares_growth_year_6: ssg.outstandingShareGrowth[4],
+    outstanding_shares_growth_year_7: ssg.outstandingShareGrowth[5],
+    outstanding_shares_growth_year_8: ssg.outstandingShareGrowth[6],
+    outstanding_shares_growth_year_9: ssg.outstandingShareGrowth[7],
+    outstanding_shares_growth_year_10: ssg.outstandingShareGrowth[8],
 
     fc_revenue_growth_default_downside: ssg.fcRevenueGrowthDefault[0],
     fc_revenue_growth_default_base: ssg.fcRevenueGrowthDefault[1],
@@ -785,7 +793,15 @@ const convertSSGToDTO = (ssg: SSG) => {
     
     fc_total_annual_return_downside: ssg.fcTotalAnnualReturn[0],
     fc_total_annual_return_base: ssg.fcTotalAnnualReturn[1],
-    fc_total_annual_return_upside: ssg.fcTotalAnnualReturn[2]
+    fc_total_annual_return_upside: ssg.fcTotalAnnualReturn[2],
+
+    high_end_hold_threshold: ssg.highEndHoldThreshold,
+    low_end_hold_threshold: ssg.lowEndHoldThreshold,
+
+    high_end_hold_price: ssg.highEndHoldPrice,
+    low_end_hold_price: ssg.lowEndHoldPrice,
+
+    current_price_zone: ssg.currentPriceZone
   } as SSGDTO;
 };
 

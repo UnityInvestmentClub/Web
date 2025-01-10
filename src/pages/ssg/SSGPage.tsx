@@ -3,14 +3,14 @@ import { KeyboardEvent, useEffect, useState } from 'react';
 import { ValidationError, object, string, number, date, boolean, array } from 'yup';
 import { useLocation, useParams } from 'wouter';
 import { useProfile, useSSG, useAppState } from '@hooks/';
-import { Input, Select, MultiSelect, Checkbox, HistoricalSheet, ForecastSheet, LoadingSpinner } from '@components/';
+import { Input, MultiSelect, Checkbox, HistoricalSheet, ForecastSheet, LoadingSpinner } from '@components/';
 import { calculateSSG } from '@utils/';
 import { SSG, Profile, Preparer, SSGDataField, SSGFormField } from '@_types/';
 
 const initialSSG = {
   name: '',
+  version: '3.0',
   isPresentedVersion: false,
-  presentedMonth: '',
   stockTicker: '',
   preparedBy: [] as Preparer[],
   preparedDate: '',
@@ -87,13 +87,20 @@ const initialSSG = {
   currentDividendYield: Array(3).fill(NaN),
 
   fcTotalAnnualReturnDefault: Array(3).fill(NaN),
-  fcTotalAnnualReturn: Array(3).fill(NaN)
+  fcTotalAnnualReturn: Array(3).fill(NaN),
+
+  highEndHoldThreshold: .05,
+  lowEndHoldThreshold: .12,
+
+  highEndHoldPrice: null,
+  lowEndHoldPrice: null,
+
+  currentPriceZone: null
 } as SSG;
 
 const initialSSGError = {
   name: false,
   isPresentedVersion: false,
-  presentedMonth: false,
   stockTicker: false,
   preparedBy: false,
   preparedDate: false,
@@ -108,12 +115,6 @@ const initialSSGError = {
 const ssgSchema = object({
   name: string().required(),
   isPresentedVersion: boolean(),
-  presentedMonth: string()
-    .when('isPresentedVersion', {
-      is: true,
-      then: (schema) => schema.required(),
-      otherwise: (schema) => schema.notRequired(),
-    }),
   stockTicker: string().required(),
   preparedBy: array().min(1),
   preparedDate: date().required(),
@@ -306,21 +307,6 @@ export const SSGPage = () => {
         </div>
         <div className='ssg-row'>
           <Checkbox className='ssg-form-input small-cell' name='isPresentedVersion' label='Presented Version' checked={ssg.isPresentedVersion} onChange={onFormChange} />
-          {ssg.isPresentedVersion && <Select className='ssg-form-input small-cell' name='presentedMonth' label='Presented Month' value={ssg.presentedMonth} error={ssgError.presentedMonth} onChange={onFormChange}>
-            <option value=''>Select a Month</option>
-            <option value='January'>January</option>
-            <option value='February'>February</option>
-            <option value='March'>March</option>
-            <option value='April'>April</option>
-            <option value='May'>May</option>
-            <option value='June'>June</option>
-            <option value='July'>July</option>
-            <option value='August'>August</option>
-            <option value='September'>September</option>
-            <option value='October'>October</option>
-            <option value='November'>November</option>
-            <option value='December'>December</option>
-          </Select>}
           <div className='ssg-form-input small-cell button-cell'>
             <button className='ssg-save-button' onClick={handleSubmit}>Save</button>
             {ssgFormError && <p className='ssg-error'>{ssgFormError}</p>}
@@ -330,5 +316,9 @@ export const SSGPage = () => {
 
       <HistoricalSheet ssg={ssg} onChange={onSheetChange} />
       <ForecastSheet ssg={ssg} onChange={onSheetChange} />
+
+      <div className='ssg-buy-hold-sell'>
+        
+      </div>
     </div>);
 };
