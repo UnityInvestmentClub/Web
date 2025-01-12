@@ -17,9 +17,11 @@ export const calculateSSG = (ssg: SSG) => {
 
   updatedSSG.epsGrowth = getGrowth(updatedSSG.eps);
 
-  updatedSSG.highPERatio = getDivision(updatedSSG.highStockPrice, updatedSSG.eps);
+  updatedSSG.highPERatio = getDivision(updatedSSG.highStockPrice, updatedSSG.eps)
+                        .map((peRatio: number) => (peRatio > 0) ? peRatio : NaN);
 
-  updatedSSG.lowPERatio = getDivision(updatedSSG.lowStockPrice, updatedSSG.eps);
+  updatedSSG.lowPERatio = getDivision(updatedSSG.lowStockPrice, updatedSSG.eps)
+                        .map((peRatio: number) => (peRatio > 0) ? peRatio : NaN);
 
   updatedSSG.dividendGrowth = getGrowth(updatedSSG.dividendPerShare);
 
@@ -181,13 +183,13 @@ const forecastPERatio = (yearsOfData: number, highStockPrice: number[], lowStock
   var latestLowPrice = sort(lowStockPrice.slice(-Math.min(5, yearsOfData)));
 
   var latestHighPriceExcludingBest = latestHighPrice.slice(0, latestHighPrice.length - 1);
-  var base = Math.min(40, median(latestHighPriceExcludingBest));
+  var base = Math.min(40, median(latestHighPriceExcludingBest)) || 40;
 
   var latestLowPricExcludingBest = latestLowPrice.slice(0, latestLowPrice.length - 1);
-  var downside = Math.min(20, median(latestLowPricExcludingBest));
+  var downside = Math.min(20, median(latestLowPricExcludingBest)) || 20;
 
   var latestHighPricExcludingWorst = latestHighPrice.slice(1, latestHighPrice.length);
-  var upside = Math.min(60, median(latestHighPricExcludingWorst));
+  var upside = Math.min(60, median(latestHighPricExcludingWorst)) || 60;
 
   return [ downside, base, upside ];
 };
