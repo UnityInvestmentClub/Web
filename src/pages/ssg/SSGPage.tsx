@@ -3,7 +3,7 @@ import { KeyboardEvent, useEffect, useState } from 'react';
 import { ValidationError, object, string, number, date, boolean, array } from 'yup';
 import { useLocation, useParams } from 'wouter';
 import { useProfile, useSSG, useAppState } from '@hooks/';
-import { Input, MultiSelect, Checkbox, HistoricalSheet, ForecastSheet, LoadingSpinner } from '@components/';
+import { Input, MultiSelect, Checkbox, HistoricalSheet, ForecastSheet, LoadingSpinner, PriceZones } from '@components/';
 import { calculateSSG } from '@utils/';
 import { SSG, Profile, Preparer, SSGDataField, SSGFormField } from '@_types/';
 
@@ -314,11 +314,9 @@ export const SSGPage = () => {
         </div>
       </div>
 
-      <HistoricalSheet ssg={ssg} onChange={onSheetChange} />
-      <ForecastSheet ssg={ssg} onChange={onSheetChange} />
+      <HistoricalSheet className='ssg-sheet' ssg={ssg} onChange={onSheetChange} />
+      <ForecastSheet className='ssg-sheet' ssg={ssg} onChange={onSheetChange} />
 
-      <div className='ssg-buy-hold-sell'>
-        
-      </div>
+      <PriceZones className='ssg-price-zones' ssg={ssg} />
     </div>);
 };

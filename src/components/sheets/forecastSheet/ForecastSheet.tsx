@@ -17,7 +17,7 @@ const numberCell = (value: number, format: Intl.NumberFormat, className?: string
 
 const entryCell = (value: number, format: Intl.NumberFormat, onChange: OnChangeFunction, className?: string) => ({ Template: NumberCell, props: { value, format, className, onChange }} as Cell);
 
-export const ForecastSheet = ({ ssg, onChange }: Props) => {
+export const ForecastSheet = ({ ssg, onChange, className = '' }: Props) => {
   const rows: Row[] = [
     { rowIndex: 0, height: 30 },
     { rowIndex: 1, height: 30 },
@@ -243,7 +243,7 @@ export const ForecastSheet = ({ ssg, onChange }: Props) => {
   ];
 
   return (
-    <div className='forecast-sheet'>
+    <div className={`forecast-sheet ${className}`}>
       <BaseSheet id='forecast' rows={rows} columns={forecastColumns} cells={forecastCells} stickyLeftColumns={1} />
       <div className='forecast-sheet-default'>
         <BaseSheet id='default' rows={rows} columns={defaultColumns} cells={defaultCells} />

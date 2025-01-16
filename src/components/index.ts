@@ -13,3 +13,5 @@ export { ForecastSheet } from '@components/sheets/forecastSheet/ForecastSheet';
 
 export { NumberCell } from '@components/cells/numberCell/NumberCell';
 export { FixedCell } from '@components/cells/fixedCell/FixedCell';
+
+export { PriceZones } from '@components/priceZones/PriceZones';

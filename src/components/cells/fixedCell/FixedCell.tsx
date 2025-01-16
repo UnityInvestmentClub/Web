@@ -1,13 +1,13 @@
 import './FixedCell.css'
 import { CellWrapper } from '@silevis/reactgrid';
+import { PropsBase } from '@_types/';
 
-interface FixedCellProps {
+interface Props extends PropsBase {
   value: string;
   format?: Intl.NumberFormat;
-  className?: string;
 }
 
-export const FixedCell = ({ value, format, className = '' }: FixedCellProps) => {
+export const FixedCell = ({ value, format, className = '' }: Props) => {
   const getDisplayedValue = () => {
     if (format && Number(value))
       return format.format(Number(value));
