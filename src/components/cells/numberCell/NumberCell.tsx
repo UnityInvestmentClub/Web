@@ -2,12 +2,12 @@ import './NumberCell.css'
 import { ChangeEvent, KeyboardEvent, ClipboardEvent, PointerEvent, useEffect, useRef, useState } from 'react';
 import { CellWrapper, useCellContext } from '@silevis/reactgrid';
 import { NumericKeys, ControlKeys, PercentFormat } from '@constants/';
+import { PropsBase } from '@_types/';
 
-interface NumberCellProps {
+interface Props extends PropsBase {
   value: number;
   onChange?: (newValue: number, colIndex: number) => void;
   format?: Intl.NumberFormat;
-  className?: string;
 }
 
 const getValueString = (value: number, format?: Intl.NumberFormat) => {
@@ -20,7 +20,7 @@ const getValueString = (value: number, format?: Intl.NumberFormat) => {
   return value.toString();
 };
 
-export const NumberCell = ({ value: initialValue, onChange, format, className = '' }: NumberCellProps) => {
+export const NumberCell = ({ value: initialValue, onChange, format, className = '' }: Props) => {
   const valueString = getValueString(initialValue, format);
   const [value, setValue] = useState(valueString);
   const [isEditMode, setEditMode] = useState(false);

@@ -17,7 +17,7 @@ const numberCell = (value: number, format: Intl.NumberFormat, className?: string
 
 const entryCell = (value: number, format: Intl.NumberFormat, onChange: OnChangeFunction, className?: string) => ({ Template: NumberCell, props: { value, format, className, onChange }} as Cell);
 
-export const HistoricalSheet = ({ ssg, onChange }: Props) => {
+export const HistoricalSheet = ({ ssg, onChange, className = '' }: Props) => {
   const rows: Row[] = [
     { rowIndex: 0, height: 35 },
     { rowIndex: 1, height: 35 },
@@ -318,7 +318,7 @@ export const HistoricalSheet = ({ ssg, onChange }: Props) => {
   ];
 
   return (
-    <div className='historical-sheet'>
+    <div className={`historical-sheet ${className}`}>
       <BaseSheet id='historical' rows={rows} columns={columns} cells={cells} stickyLeftColumns={1} />
     </div>
   );

@@ -1,0 +1,50 @@
+.price-zones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 100px;
+
+  .zones {
+    display: flex;
+  
+    .zone {
+      text-align: center;
+      font-weight: 600;
+      width: 150px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      color: gray;
+      transition: all .5s ease;
+    }
+  
+    .buy {
+      background-color: var(--green);
+    }
+  
+    .buy-active {
+      width: 200px;
+      color: black;
+      background-color: var(--dark-green);
+    }
+  
+    .hold {
+      background-color: var(--blue);
+    }
+  
+    .hold-active {
+      width: 200px;
+      color: black;
+      background-color: var(--dark-blue);
+    }
+  
+    .sell {
+      background-color: var(--pink);
+    }
+  
+    .sell-active {
+      width: 200px;
+      color: black;
+      background-color: var(--dark-pink);
+    }
+  }
+}
