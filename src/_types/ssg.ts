@@ -132,7 +132,7 @@ export type SSG = {
   highEndHoldPrice: number,
   lowEndHoldPrice: number,
   
-  currentPriceZone: string
+  currentPriceZone: 'BUY' | 'HOLD' | 'SELL'
 };
 
 export type SSGDTO = {
@@ -504,8 +504,8 @@ export type SSGDTO = {
   high_end_hold_price: number,
   low_end_hold_price: number,
 
-  current_price_zone: string
+  current_price_zone: 'BUY' | 'HOLD' | 'SELL'
 };
 
 export type SSGDataField = 'startingYear' | 'revenue' | 'netProfit' | 'incomeTaxRate' | 'eps' | 'highStockPrice' | 'lowStockPrice' | 'dividendPerShare' | 'outstandingShares' | 'fcRevenueGrowth' | 'fcPreTaxProfitMargin' | 'fcIncomeTaxRate' | 'fcOutstandingShareGrowth' | 'fcPERatio';
-export type SSGFormField = 'name' | 'isPresentedVersion' | 'stockTicker' | 'preparedDate' | 'sourceData' | 'sourceDate' | 'yearsOfData' | 'currentStockPrice' | 'currentStockPriceDate' | 'currentDividend';
+export type SSGFormField = 'name' | 'isPresentedVersion' | 'stockTicker' | 'preparedDate' | 'sourceData' | 'sourceDate' | 'yearsOfData' | 'currentStockPrice' | 'currentStockPriceDate' | 'currentDividend' | 'lowEndHoldThreshold' | 'highEndHoldThreshold';

@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 100px;
 
   .zones {
     display: flex;
@@ -19,9 +18,11 @@
   
     .buy {
       background-color: var(--green);
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
     }
   
-    .buy-active {
+    .buy.active {
       width: 200px;
       color: black;
       background-color: var(--dark-green);
@@ -31,7 +32,7 @@
       background-color: var(--blue);
     }
   
-    .hold-active {
+    .hold.active {
       width: 200px;
       color: black;
       background-color: var(--dark-blue);
@@ -39,9 +40,11 @@
   
     .sell {
       background-color: var(--pink);
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
     }
   
-    .sell-active {
+    .sell.active {
       width: 200px;
       color: black;
       background-color: var(--dark-pink);

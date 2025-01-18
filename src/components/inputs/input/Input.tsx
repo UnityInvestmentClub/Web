@@ -5,7 +5,7 @@ import { PropsBase } from '@_types/';
 interface Props extends PropsBase {
   type: 'text' | 'number' | 'date' | 'password' | 'tel',
   name: string,
-  label: string,
+  label?: string,
   value: string | number,
   error?: boolean,
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -16,8 +16,8 @@ export const Input = ({ className = '', type, name, label, value, error, onChang
   const onChange = ({ target }: ChangeEvent) => {
     const { name, value } = target as HTMLInputElement;
 
-    if (type === 'number' && value != '')
-      onChangeProp?.(name, Number(value.replace(/[^0-9.-]/g, '')));
+    if (type === 'number' && value !== '')
+      onChangeProp?.(name, Number(value));
     else
       onChangeProp?.(name, value);
   };
@@ -26,10 +26,10 @@ export const Input = ({ className = '', type, name, label, value, error, onChang
     if (event.key === 'ArrowUp' || event.key === 'ArrowDown')
       event.preventDefault();
   }
-
+  
   return (
     <div className={`input ${className}`}>
-      <p className='input-label'>{label}</p>
+      {label && <p className='input-label'>{label}</p>}
       <input
         className={`input-element ${error ? 'error' : ''}`}
         type={type}

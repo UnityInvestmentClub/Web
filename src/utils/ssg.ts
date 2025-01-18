@@ -82,6 +82,21 @@ export const calculateSSG = (ssg: SSG) => {
   updatedSSG.fcTotalAnnualReturnDefault = getAddition(updatedSSG.fcAnnualStockPriceGrowthDefault, updatedSSG.currentDividendYield);
   updatedSSG.fcTotalAnnualReturn = getAddition(updatedSSG.fcAnnualStockPriceGrowth, updatedSSG.currentDividendYield);
 
+  updatedSSG.lowEndHoldPrice = calculateThresholdPrice(updatedSSG.fcStockPrice[1], updatedSSG.currentDividendYield[0], updatedSSG.lowEndHoldThreshold);
+  updatedSSG.highEndHoldPrice = calculateThresholdPrice(updatedSSG.fcStockPrice[1], updatedSSG.currentDividendYield[0], updatedSSG.highEndHoldThreshold);
+
+  updatedSSG.currentPriceZone = null;
+  if (updatedSSG.lowEndHoldThreshold >= updatedSSG.highEndHoldThreshold) {
+    if (updatedSSG.fcTotalAnnualReturn[1] >= updatedSSG.lowEndHoldThreshold)
+      updatedSSG.currentPriceZone = 'BUY';
+
+    if (updatedSSG.fcTotalAnnualReturn[1] > updatedSSG.highEndHoldThreshold && updatedSSG.fcTotalAnnualReturn[1] < updatedSSG.lowEndHoldThreshold)
+      updatedSSG.currentPriceZone = 'HOLD';
+
+    if (updatedSSG.fcTotalAnnualReturn[1] <= updatedSSG.highEndHoldThreshold)
+      updatedSSG.currentPriceZone = 'SELL';
+  }
+
   return updatedSSG;
 };
 
@@ -192,6 +207,10 @@ const forecastPERatio = (yearsOfData: number, highStockPrice: number[], lowStock
   var upside = Math.min(60, median(latestHighPricExcludingWorst)) ?? 60;
 
   return [ downside, base, upside ];
+};
+
+const calculateThresholdPrice = (fcStockPrice: number, dividendYield: number, thresholdPercent: number) => {
+  return fcStockPrice / (1 + ((thresholdPercent) - dividendYield)) ** 5;
 };
 
 const sort = (dataRow: number[]) => dataRow.toSorted((a, b) => a - b);
