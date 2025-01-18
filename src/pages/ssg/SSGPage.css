@@ -50,5 +50,18 @@
 
   .ssg-price-zones {
     padding-bottom: 75px;
+    
+    .ssg-row {
+      display: flex;
+      gap: 50px;
+      margin: auto;
+      justify-content: center;
+      padding-top: 15px;
+      width: 450px;
+    }
+
+    .ssg-threshold-input {
+      width: 150px;
+    }
   }
 }

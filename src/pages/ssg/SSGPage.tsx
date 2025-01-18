@@ -110,6 +110,8 @@ const initialSSGError = {
   currentStockPrice: false,
   currentStockPriceDate: false,
   currentDividend: false,
+  lowEndHoldThreshold: false,
+  highEndHoldThreshold: false
 }
 
 const ssgSchema = object({
@@ -124,6 +126,8 @@ const ssgSchema = object({
   currentStockPrice: number().required().min(.01),
   currentStockPriceDate: date().required(),
   currentDividend: number().required().min(0),
+  lowEndHoldThreshold: number().required(),
+  highEndHoldThreshold: number().required()
 });
 
 export const SSGPage = () => {
@@ -165,23 +169,30 @@ export const SSGPage = () => {
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const onFormChange = (name: string, value: any) => {
+    var newValue = value;
+
     switch(name as SSGFormField) {
       case 'currentDividend':
       case 'currentStockPrice':
       case 'yearsOfData':
-        setSSG(ssg => calculateSSG({ ...ssg, [name]: value }));
+        setSSG(ssg => calculateSSG({ ...ssg, [name]: newValue }));
+        break;
+      case 'lowEndHoldThreshold':
+      case 'highEndHoldThreshold':
+        newValue = (value !== '') ? value / 100 : '';
+        setSSG(ssg => calculateSSG({ ...ssg, [name]: newValue }));
         break;
       default:
-        setSSG(ssg => ({ ...ssg, [name]: value }));
+        setSSG(ssg => ({ ...ssg, [name]: newValue }));
         break;
     }
 
     setSSGError(ssgError => ({
       ...ssgError,
-      [name]: !ssgSchema.pick([name as SSGFormField]).isValidSync({ [name]: value })
+      [name]: !ssgSchema.pick([name as SSGFormField]).isValidSync({ [name]: newValue })
     }));
 
-    if (ssgSchema.isValidSync({ ...ssg, [name]: value }))
+    if (ssgSchema.isValidSync({ ...ssg, [name]: newValue }))
       setSSGFormError(null);
   };
 
@@ -296,13 +307,13 @@ export const SSGPage = () => {
           <Input className='ssg-form-input small-cell' type='date' name='preparedDate' label='Prepared Date' value={ssg.preparedDate} error={ssgError.preparedDate} onChange={onFormChange} />
         </div>
         <div className='ssg-row'>
-          <Input className='ssg-form-input small-cell' type='number' name='yearsOfData' label='Years of Available Data' value={ssg.yearsOfData ?? ''} error={ssgError.yearsOfData} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='number' name='yearsOfData' label='Years of Available Data' value={ssg.yearsOfData} error={ssgError.yearsOfData} onChange={onFormChange} />
           <Input className='ssg-form-input small-cell' type='text' name='sourceData' label='Source of Data' value={ssg.sourceData} error={ssgError.sourceData} onChange={onFormChange} />
           <Input className='ssg-form-input small-cell' type='date' name='sourceDate' label='Source Date' value={ssg.sourceDate} error={ssgError.sourceDate} onChange={onFormChange} />
         </div>
         <div className='ssg-row'>
-          <Input className='ssg-form-input small-cell' type='number' name='currentDividend' label='Current Dividend' value={ssg.currentDividend ?? ''} error={ssgError.currentDividend} onChange={onFormChange} />
-          <Input className='ssg-form-input small-cell' type='number' name='currentStockPrice' label='Current Stock Price' value={ssg.currentStockPrice ?? ''} error={ssgError.currentStockPrice} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='number' name='currentDividend' label='Current Dividend' value={ssg.currentDividend} error={ssgError.currentDividend} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='number' name='currentStockPrice' label='Current Stock Price' value={ssg.currentStockPrice} error={ssgError.currentStockPrice} onChange={onFormChange} />
           <Input className='ssg-form-input small-cell' type='date' name='currentStockPriceDate' label='Current Price Date' value={ssg.currentStockPriceDate} error={ssgError.currentStockPriceDate} onChange={onFormChange} />
         </div>
         <div className='ssg-row'>
@@ -317,6 +328,13 @@ export const SSGPage = () => {
       <HistoricalSheet className='ssg-sheet' ssg={ssg} onChange={onSheetChange} />
       <ForecastSheet className='ssg-sheet' ssg={ssg} onChange={onSheetChange} />
 
-      <PriceZones className='ssg-price-zones' ssg={ssg} />
+      <div className='ssg-price-zones'>
+        <PriceZones ssg={ssg} />
+
+        <div className='ssg-row'>
+          <Input className='ssg-threshold-input' type='number' name='lowEndHoldThreshold' label='Low End HoldThreshold %' value={ssg.lowEndHoldThreshold.toString() !== '' ? (ssg.lowEndHoldThreshold * 100).toFixed() : ''} error={ssgError.lowEndHoldThreshold} onChange={onFormChange} />
+          <Input className='ssg-threshold-input right-cell' type='number' name='highEndHoldThreshold' label='High End Hold Threshold %' value={ssg.highEndHoldThreshold.toString() !== '' ? (ssg.highEndHoldThreshold * 100).toFixed() : ''} error={ssgError.highEndHoldThreshold} onChange={onFormChange} />
+        </div>
+      </div>
     </div>);
 };

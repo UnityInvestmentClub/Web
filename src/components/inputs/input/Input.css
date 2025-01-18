@@ -1,4 +1,6 @@
 .input {
+  width: 100%;
+  
   .input-label {
     padding-bottom: 5px;
     font-size: 12px;
