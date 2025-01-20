@@ -27,7 +27,7 @@ export const DashboardPage = () => {
     }
     
     loadData();
-  }, [getSSGs]);
+  }, []);
 
   const onSSGRowClicked = ({ data: ssg }: RowClickedEvent) => {
     navigate(`/ssg/${ssg.id}`)

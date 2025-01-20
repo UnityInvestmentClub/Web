@@ -81,7 +81,7 @@ export const ProfilePage = () => {
     };
 
     loadData();
-  }, [getOwnProfile]);
+  }, []);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const onFormChange = (name: string, value: any) => {

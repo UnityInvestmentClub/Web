@@ -819,7 +819,7 @@ export const useSSG = () => {
   }, [client]);
 
   const getSSGs = useCallback(async () => {
-    var { data, error } = await client.from(SSGTable).select('*, prepared_by: profiles ( id, first_name, last_name )').order('created_date', { ascending: false });
+    var { data, error } = await client.from(SSGTable).select('*, prepared_by: profiles ( id, first_name, last_name )').order('created_date', { ascending: false }).order('stock_ticker');
 
     if (error)
       throw error;
@@ -834,6 +834,7 @@ export const useSSG = () => {
       created_by: authId
     };
 
+    // create ssg
     var { data: ssgData, error: ssgError } = await client.from(SSGTable).insert(ssgDTO).select('*').single();
 
     if (ssgError)
@@ -844,6 +845,7 @@ export const useSSG = () => {
       profile_id: preparer.id
     }));
 
+    // create ssg -> profile relationships
     var { error: ssgProfileError } = await client.from(SSGProfileTable).insert(ssgProfileDTOs);
 
     if (ssgProfileError)
@@ -857,26 +859,42 @@ export const useSSG = () => {
       modified_by: authId
     };
 
+    // update ssg
     var { error: ssgError } = await client.from(SSGTable).update(ssgDTO).eq('id', ssg.id);
 
     if (ssgError)
       throw ssgError;
 
-    var { error: ssgProfileDeletError } = await client.from(SSGProfileTable).delete().eq('ssg_id', ssg.id);
+    // get current ssg -> profile relationships
+    var { data: ssgProfilesData, error: ssgProfileSelectError } = await client.from(SSGProfileTable).select('*').eq('ssg_id', ssg.id);
 
-    if (ssgProfileDeletError)
-      throw ssgProfileDeletError;
+    if (ssgProfileSelectError)
+      throw ssgProfileSelectError;
 
-    const ssgProfileDTOs = ssg.preparedBy.map((preparer: Preparer) => ({
+    const currentSSGProfileIds = ssgProfilesData.map((ssgProfile: { ssg_id: string, profile_id: string }) => ssgProfile.profile_id);
+    const newSSGProfileIds = ssg.preparedBy.map((preparer: Preparer) => preparer.id);
+
+    // find all new ssg -> profile relationships that need to be created
+    const ssgProfilesToCreate = newSSGProfileIds.filter(id => !currentSSGProfileIds.includes(id));
+
+    const ssgProfileDTOs = ssgProfilesToCreate.map(id => ({
       ssg_id: ssg.id,
-      profile_id: preparer.id
+      profile_id: id
     }));
 
     var { error: ssgProfileInsertError } = await client.from(SSGProfileTable).insert(ssgProfileDTOs);
 
     if (ssgProfileInsertError)
       throw ssgProfileInsertError;
-  };
+
+    // find all ssg -> profile relationships that need to be deleted
+    const ssgProfilesToDelete = currentSSGProfileIds.filter(id => !newSSGProfileIds.includes(id));
+
+    var { error: ssgProfileDeletError } = await client.from(SSGProfileTable).delete().eq('ssg_id', ssg.id).in('profile_id', ssgProfilesToDelete);
+
+    if (ssgProfileDeletError)
+      throw ssgProfileDeletError;
+};
 
   return {
     getSSGs,

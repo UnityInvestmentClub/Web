@@ -165,7 +165,7 @@ export const SSGPage = () => {
     };
     
     loadData();
-  }, [routeParams, getSSG, getProfiles]);
+  }, [routeParams]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const onFormChange = (name: string, value: any) => {
@@ -332,8 +332,8 @@ export const SSGPage = () => {
         <PriceZones ssg={ssg} />
 
         <div className='ssg-row'>
-          <Input className='ssg-threshold-input' type='number' name='lowEndHoldThreshold' label='Low End HoldThreshold %' value={ssg.lowEndHoldThreshold.toString() !== '' ? (ssg.lowEndHoldThreshold * 100).toFixed() : ''} error={ssgError.lowEndHoldThreshold} onChange={onFormChange} />
-          <Input className='ssg-threshold-input right-cell' type='number' name='highEndHoldThreshold' label='High End Hold Threshold %' value={ssg.highEndHoldThreshold.toString() !== '' ? (ssg.highEndHoldThreshold * 100).toFixed() : ''} error={ssgError.highEndHoldThreshold} onChange={onFormChange} />
+          <Input className='ssg-threshold-input' type='number' name='lowEndHoldThreshold' label='Low HoldThreshold %' value={ssg.lowEndHoldThreshold.toString() !== '' ? (ssg.lowEndHoldThreshold * 100).toFixed() : ''} error={ssgError.lowEndHoldThreshold} onChange={onFormChange} />
+          <Input className='ssg-threshold-input right-cell' type='number' name='highEndHoldThreshold' label='High Hold Threshold %' value={ssg.highEndHoldThreshold.toString() !== '' ? (ssg.highEndHoldThreshold * 100).toFixed() : ''} error={ssgError.highEndHoldThreshold} onChange={onFormChange} />
         </div>
       </div>
     </div>);
