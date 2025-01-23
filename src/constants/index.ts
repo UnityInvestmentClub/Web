@@ -4,6 +4,7 @@ export const DBKey = import.meta.env.VITE_DB_KEY;
 export const SSGTable = 'ssgs';
 export const ProfileTable = 'profiles';
 export const SSGProfileTable = 'rel_ssg_profile';
+export const MeetingDateTable = 'meeting_dates';
 
 export const YearFormat = new Intl.NumberFormat('en-US', { useGrouping: false });
 export const OneDecimalFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 });

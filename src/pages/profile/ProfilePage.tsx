@@ -1,9 +1,9 @@
 import './ProfilePage.css';
 import { FormEvent, useEffect, useState} from 'react';
-import { ValidationError, object, string, date, ref as yupRef } from 'yup';
+import { ValidationError, object, string, date, ref as yupRef, InferType } from 'yup';
 import { Input, Select, LoadingSpinner } from '@components/';
 import { useProfile, useAuth } from '@hooks/';
-import { Profile, ProfileFormField } from '@_types/';
+import { Profile } from '@_types/';
 
 const initialProfile: Profile = {
   firstName: '',
@@ -17,7 +17,7 @@ const initialProfile: Profile = {
   zipcode: ''
 };
 
-const initialProfileError = {
+const initialProfileFormError = {
   firstName: false,
   lastName: false,
   email: false,
@@ -57,12 +57,14 @@ export const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [profile, setProfile] = useState(initialProfile);
-  const [profileError, setProfileError] = useState(initialProfileError);
-  const [profileFormError, setProfileFormError] = useState(null);
-  const [profileFormSuccess, setProfileFormSuccess] = useState(null);
+
+  const [profileFormError, setProfileFormError] = useState(initialProfileFormError);
+  const [profileSaveError, setProfileSaveError] = useState(null);
+  const [profileSaveSuccess, setProfileSaveSuccess] = useState(null);
 
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  
   const [passwordFormError, setPasswordFormError] = useState(null);
   const [passwordFormSuccess, setPasswordFormSuccess] = useState(null);
 
@@ -81,41 +83,19 @@ export const ProfilePage = () => {
     };
 
     loadData();
-  }, []);
+  }, [getOwnProfile]);
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const onFormChange = (name: string, value: any) => {
+  const onProfileFormChange = (name: string, value: unknown) => {
     setProfile(profile => ({ ...profile, [name]: value }));
 
-    setProfileError(profileError => ({
-      ...profileError,
-      [name]: !profileSchema.pick([name as ProfileFormField]).isValidSync({ [name]: value })
-    }));
+    const inputSchema = profileSchema.pick([name as keyof InferType<typeof profileSchema>]);
+    const isInputValid = inputSchema.isValidSync({ [name]: value });
+    setProfileFormError(profileFormError => ({ ...profileFormError, [name]: !isInputValid }));
 
-    if (profileSchema.isValidSync({ ...profile, [name]: value }))
-      setProfileFormError(null);
+    if (profileSaveError && profileSchema.isValidSync({ ...profile, [name]: value }))
+      setProfileSaveError(null);
 
-    setProfileFormSuccess(null);
-  };
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const onPasswordChange = (_: string, value: any) => {
-    setPassword(value);
-
-    if (passwordSchema.isValidSync({ password: value, passwordConfirmation }))
-      setPasswordFormError(null);
-    
-    setPasswordFormSuccess(null);
-  };
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const onPasswordConfirmationChange = (_: string, value: any) => {
-    setPasswordConfirmation(value);
-
-    if (passwordSchema.isValidSync({ passwordConfirmation: value, password }))
-      setPasswordFormError(null);
-    
-    setPasswordFormSuccess(null);
+    setProfileSaveSuccess(null);
   };
 
   const handleProfileSubmit = async (event: FormEvent) => {
@@ -126,7 +106,7 @@ export const ProfilePage = () => {
       
       await updateProfile(profile);
 
-      setProfileFormSuccess('Profile updated!');
+      setProfileSaveSuccess('Profile updated!');
     } catch (error) {
       if (error instanceof ValidationError) {
         var errors = { };
@@ -135,11 +115,29 @@ export const ProfilePage = () => {
           errors = { ...errors, [innerError.path]: true };
         }
         
-        setProfileError(profileError => ({ ...profileError, ...errors }));
+        setProfileFormError(profileFormError => ({ ...profileFormError, ...errors }));
       }
 
-      setProfileFormError('Something went wrong! Check everything is entered correctly');
+      setProfileSaveError('Something went wrong! Check everything is entered correctly');
     }
+  };
+
+  const onPasswordChange = (_: string, value: unknown) => {
+    setPassword(value as string);
+
+    if (passwordSchema.isValidSync({ password: value, passwordConfirmation }))
+      setPasswordFormError(null);
+    
+    setPasswordFormSuccess(null);
+  };
+
+  const onPasswordConfirmationChange = (_: string, value: unknown) => {
+    setPasswordConfirmation(value as string);
+
+    if (passwordSchema.isValidSync({ passwordConfirmation: value, password }))
+      setPasswordFormError(null);
+    
+    setPasswordFormSuccess(null);
   };
 
   const handlePasswordUpdate = async (event: FormEvent) => {
@@ -165,15 +163,15 @@ export const ProfilePage = () => {
     : (<div className='profile'>
       <form className='profile-form' onSubmit={handleProfileSubmit}>
         <div className='profile-row'>
-          <Input className='profile-form-input' type='text' name='firstName' label='First Name' value={profile.firstName} error={profileError.firstName} onChange={onFormChange}/>
-          <Input className='profile-form-input' type='text' name='lastName' label='Last Name' value={profile.lastName} error={profileError.lastName} onChange={onFormChange}/>
-          <Input className='profile-form-input' type='text' name='phoneNumber' label='Phone Number' value={profile.phoneNumber} error={profileError.phoneNumber} onChange={onFormChange}/>
-          <Input className='profile-form-input' type='date' name='joinDate' label='Join Date' value={profile.joinDate} error={profileError.joinDate} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='text' name='firstName' label='First Name' value={profile.firstName} error={profileFormError.firstName} onChange={onProfileFormChange}/>
+          <Input className='profile-form-input' type='text' name='lastName' label='Last Name' value={profile.lastName} error={profileFormError.lastName} onChange={onProfileFormChange}/>
+          <Input className='profile-form-input' type='text' name='phoneNumber' label='Phone Number' value={profile.phoneNumber} error={profileFormError.phoneNumber} onChange={onProfileFormChange}/>
+          <Input className='profile-form-input' type='date' name='joinDate' label='Join Date' value={profile.joinDate} error={profileFormError.joinDate} onChange={onProfileFormChange}/>
         </div>
         <div className='profile-row'>
-          <Input className='profile-form-input' type='text' name='address' label='Address' value={profile.address} error={profileError.address} onChange={onFormChange}/>
-          <Input className='profile-form-input' type='text' name='city' label='City' value={profile.city} error={profileError.city} onChange={onFormChange}/>
-          <Select className='profile-form-input' name='state' label='State' value={profile.state} error={profileError.state} onChange={onFormChange}>
+          <Input className='profile-form-input' type='text' name='address' label='Address' value={profile.address} error={profileFormError.address} onChange={onProfileFormChange}/>
+          <Input className='profile-form-input' type='text' name='city' label='City' value={profile.city} error={profileFormError.city} onChange={onProfileFormChange}/>
+          <Select className='profile-form-input' name='state' label='State' value={profile.state} error={profileFormError.state} onChange={onProfileFormChange}>
             <option value='AL'>AL</option>
             <option value='AK'>AK</option>
             <option value='AZ'>AZ</option>
@@ -226,12 +224,12 @@ export const ProfilePage = () => {
             <option value='WI'>WI</option>
             <option value='WY'>WY</option>
           </Select>
-          <Input className='profile-form-input' type='text' name='zipcode' label='Zipcode' value={profile.zipcode} error={profileError.zipcode} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='text' name='zipcode' label='Zipcode' value={profile.zipcode} error={profileFormError.zipcode} onChange={onProfileFormChange}/>
         </div>
         
         <button className='profile-save-button' type='submit'>Save</button>
-        {profileFormSuccess && <p className='profile-success'>{profileFormSuccess}</p>}
-        {profileFormError && <p className='profile-error'>{profileFormError}</p>}
+        {profileSaveSuccess && <p className='profile-success'>{profileSaveSuccess}</p>}
+        {profileSaveError && <p className='profile-error'>{profileSaveError}</p>}
       </form>
 
       <form className='profile-password-form' onSubmit={handlePasswordUpdate}>

@@ -2,6 +2,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: padding-top .5s ease;
+
+  .pointer-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all .5s ease;
+
+    .pointer {
+      height: 20px;
+    }
+  }
 
   .zones {
     display: flex;

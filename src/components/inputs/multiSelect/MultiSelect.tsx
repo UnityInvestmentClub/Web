@@ -10,8 +10,7 @@ interface Props<OptionType> extends PropsBase {
   getOptionsValue: (option: OptionType) => string,
   getOptionsLabel: (option: OptionType) => string
   error?: boolean,
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  onChange?: (name: string, value: any) => void
+  onChange?: (name: string, value: unknown) => void
 }
 
 export const MultiSelect = <OptionType,>({ className = '', name, label, value, options, getOptionsValue, getOptionsLabel, error, onChange: onChangeProp }: Props<OptionType>) => {

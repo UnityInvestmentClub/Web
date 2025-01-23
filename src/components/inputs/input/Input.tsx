@@ -8,8 +8,7 @@ interface Props extends PropsBase {
   label?: string,
   value: string | number,
   error?: boolean,
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  onChange?: (name: string, value: any) => void
+  onChange?: (name: string, value: unknown) => void
 }
 
 export const Input = ({ className = '', type, name, label, value, error, onChange: onChangeProp }: Props) => {

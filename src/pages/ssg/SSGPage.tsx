@@ -1,11 +1,11 @@
 import './SSGPage.css';
 import { KeyboardEvent, useEffect, useState } from 'react';
-import { ValidationError, object, string, number, date, boolean, array } from 'yup';
+import { ValidationError, InferType, object, string, number, date, boolean, array } from 'yup';
 import { useLocation, useParams } from 'wouter';
-import { useProfile, useSSG, useAppState } from '@hooks/';
-import { Input, MultiSelect, Checkbox, HistoricalSheet, ForecastSheet, LoadingSpinner, PriceZones } from '@components/';
-import { calculateSSG } from '@utils/';
-import { SSG, Profile, Preparer, SSGDataField, SSGFormField } from '@_types/';
+import { useProfile, useSSG, useMeetingDate, useAppState } from '@hooks/';
+import { Input, MultiSelect, Checkbox, HistoricalSheet, ForecastSheet, LoadingSpinner, PriceZones, Select } from '@components/';
+import { processSSG } from '@utils/';
+import { SSG, Profile, Preparer, MeetingDate } from '@_types/';
 
 const initialSSG = {
   name: '',
@@ -98,9 +98,10 @@ const initialSSG = {
   currentPriceZone: null
 } as SSG;
 
-const initialSSGError = {
+const initialSSGFormError = {
   name: false,
   isPresentedVersion: false,
+  meetingDateId: false,
   stockTicker: false,
   preparedBy: false,
   preparedDate: false,
@@ -109,14 +110,18 @@ const initialSSGError = {
   yearsOfData: false,
   currentStockPrice: false,
   currentStockPriceDate: false,
-  currentDividend: false,
-  lowEndHoldThreshold: false,
-  highEndHoldThreshold: false
+  currentDividend: false
 }
 
 const ssgSchema = object({
   name: string().required(),
   isPresentedVersion: boolean(),
+  meetingDateId: string()
+    .when('isPresentedVersion', {
+      is: true,
+      then: (schema) => schema.required(),
+      otherwise: (schema) => schema.notRequired(),
+    }),
   stockTicker: string().required(),
   preparedBy: array().min(1),
   preparedDate: date().required(),
@@ -125,23 +130,26 @@ const ssgSchema = object({
   yearsOfData: number().required().integer().min(1),
   currentStockPrice: number().required().min(.01),
   currentStockPriceDate: date().required(),
-  currentDividend: number().required().min(0),
-  lowEndHoldThreshold: number().required(),
-  highEndHoldThreshold: number().required()
+  currentDividend: number().required().min(0)
 });
 
 export const SSGPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [ssg, setSSG] = useState(initialSSG);
+
   const [undoStack, setUndoStack] = useState([] as SSG[]);
   const [redoStack, setRedoStack] = useState([] as SSG[]);
-  const [ssgError, setSSGError] = useState(initialSSGError);
-  const [ssgFormError, setSSGFormError] = useState(null);
+
+  const [ssgFormError, setSSGFormError] = useState(initialSSGFormError);
+  const [ssgSaveError, setSSGSaveError] = useState(null);
+
   const [profiles, setProfiles] = useState([] as Profile[]);
+  const [meetingDates, setMeetingDates] = useState([] as MeetingDate[]);
   
   const { getSSG, createSSG, updateSSG } = useSSG();
   const { getProfiles } = useProfile();
+  const { getMeetingDates } = useMeetingDate();
   const { isMacOS } = useAppState();
 
   const [_, navigate] = useLocation();
@@ -151,12 +159,13 @@ export const SSGPage = () => {
     const loadData = async () => {
       try {
         setIsLoading(true);
-        setSSGFormError(null);
-        setSSGError(initialSSGError);
+        setSSGSaveError(null);
+        setSSGFormError(initialSSGFormError);
 
         setSSG(routeParams[0] ? await getSSG(routeParams[0]) : initialSSG);
 
         setProfiles(await getProfiles());
+        setMeetingDates(await getMeetingDates());
         
         setIsLoading(false);
       } catch (e) {
@@ -165,69 +174,50 @@ export const SSGPage = () => {
     };
     
     loadData();
-  }, [routeParams]);
+  }, [routeParams, getSSG, getProfiles, getMeetingDates]);
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const onFormChange = (name: string, value: any) => {
-    var newValue = value;
-
-    switch(name as SSGFormField) {
-      case 'currentDividend':
-      case 'currentStockPrice':
-      case 'yearsOfData':
-        setSSG(ssg => calculateSSG({ ...ssg, [name]: newValue }));
-        break;
-      case 'lowEndHoldThreshold':
-      case 'highEndHoldThreshold':
-        newValue = (value !== '') ? value / 100 : '';
-        setSSG(ssg => calculateSSG({ ...ssg, [name]: newValue }));
-        break;
-      default:
-        setSSG(ssg => ({ ...ssg, [name]: newValue }));
-        break;
+  const onFormChange = (name: string, value: unknown) => {
+    if (name === 'currentDividend' || name === 'currentStockPrice' || name === 'yearsOfData') {
+      setSSG(ssg => processSSG({ ...ssg, [name]: value }));
+    } else {
+      setSSG(ssg => ({ ...ssg, [name]: value }));
     }
 
-    setSSGError(ssgError => ({
-      ...ssgError,
-      [name]: !ssgSchema.pick([name as SSGFormField]).isValidSync({ [name]: newValue })
-    }));
+    const inputSchema = ssgSchema.pick([name as keyof InferType<typeof ssgSchema>]);
+    const isInputValid = inputSchema.isValidSync({ [name]: value, isPresentedVersion: ssg.isPresentedVersion }); // including isPresentedVersion for the meetingDateId field schema
+    setSSGFormError(ssgFormError => ({ ...ssgFormError, [name]: !isInputValid }));
 
-    if (ssgSchema.isValidSync({ ...ssg, [name]: newValue }))
-      setSSGFormError(null);
+    if (ssgSaveError && ssgSchema.isValidSync({ ...ssg, [name]: value }))
+      setSSGSaveError(null);
   };
 
-  const onSheetChange = (field: SSGDataField) => (value: number, colIndex: number) => {
-    setSSG(ssg => {
-      // setUndoStack(stack => { console.log('test2'); return [...stack, ssg] });
-      // setRedoStack([]);
+  const onSheetChange = (field: keyof SSG) => (value: number, colIndex: number) => {
+    if (field === 'startingYear') {
+      setSSG(ssg => ({ ...ssg, [field]: value }));
+    } else {
+      setSSG(ssg => {
+        var newSSG = structuredClone(ssg);
+        (newSSG[field] as number[])[colIndex - 1] = value;
+
+        return processSSG(newSSG);
+      });
+    }
+
+    // NOTE: Old change handler, might need again for undo/redo
+    // setSSG(ssg => {
+    //   // setUndoStack(stack => { console.log('test2'); return [...stack, ssg] });
+    //   // setRedoStack([]);
       
-      var updatedSSG = structuredClone(ssg);
+    //   var newSSG = structuredClone(ssg);
 
-      switch (field) {
-        case 'startingYear':
-          updatedSSG.startingYear = value;
-          break;
-        case 'incomeTaxRate':
-        case 'fcRevenueGrowth':
-        case 'fcPreTaxProfitMargin':
-        case 'fcIncomeTaxRate':
-        case 'fcOutstandingShareGrowth':
-          updatedSSG[field][colIndex - 1] = value / 100;
-          break;
-        case 'dividendPerShare':
-        case 'eps':
-        case 'highStockPrice':
-        case 'lowStockPrice':
-        case 'netProfit':
-        case 'outstandingShares':
-        case 'revenue':
-        case 'fcPERatio':
-          updatedSSG[field][colIndex - 1] = value;
-          break;
-      }
+    //   if (field === 'startingYear') {
+    //     newSSG.startingYear = value;
+    //   } else {
+    //     (newSSG[field] as number[])[colIndex - 1] = value;
+    //   }
 
-      return calculateSSG(updatedSSG);
-    });
+    //   return processSSG(newSSG);
+    // });
   };
 
   const onKeyDown = ({ ctrlKey, metaKey, key }: KeyboardEvent) => {
@@ -257,7 +247,7 @@ export const SSGPage = () => {
       setRedoStack(prev => prev.slice(1));
       setUndoStack(prev => [...prev, ssg]);
       setSSG(nextState);
-  }
+    }
   };
 
   const handleSubmit = async() => {
@@ -277,10 +267,10 @@ export const SSGPage = () => {
           errors = { ...errors, [innerError.path]: true };
         }
 
-        setSSGError(ssgError => ({ ...ssgError, ...errors }));
+        setSSGFormError(ssgFormError => ({ ...ssgFormError, ...errors }));
       }
 
-      setSSGFormError('Something went wrong! Check everything is entered correctly!');
+      setSSGSaveError('Something went wrong! Check everything is entered correctly!');
     }
   };
 
@@ -289,8 +279,8 @@ export const SSGPage = () => {
     : (<div className='ssg' onKeyDown={onKeyDown}>
       <div className='ssg-form'>
         <div className='ssg-row'>
-          <Input className='ssg-form-input big-cell' type='text' name='name' label='Name' value={ssg.name} error={ssgError.name} onChange={onFormChange} />
-          <Input className='ssg-form-input small-cell' type='text' name='stockTicker' label='Ticker' value={ssg.stockTicker} error={ssgError.stockTicker} onChange={onFormChange} />
+          <Input className='ssg-form-input big-cell' type='text' name='name' label='Name' value={ssg.name} error={ssgFormError.name} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='text' name='stockTicker' label='Ticker' value={ssg.stockTicker} error={ssgFormError.stockTicker} onChange={onFormChange} />
         </div>
         <div className='ssg-row'>
           <MultiSelect<Preparer>
@@ -301,26 +291,30 @@ export const SSGPage = () => {
             options={profiles.map((profile: Profile) => ({ id: profile.id, firstName: profile.firstName, lastName: profile.lastName}))}
             getOptionsValue={(option: Preparer) => option.id}
             getOptionsLabel={(option: Preparer) => `${option.firstName} ${option.lastName}`}
-            error={ssgError.preparedBy}
+            error={ssgFormError.preparedBy}
             onChange={onFormChange}
           />
-          <Input className='ssg-form-input small-cell' type='date' name='preparedDate' label='Prepared Date' value={ssg.preparedDate} error={ssgError.preparedDate} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='date' name='preparedDate' label='Prepared Date' value={ssg.preparedDate} error={ssgFormError.preparedDate} onChange={onFormChange} />
         </div>
         <div className='ssg-row'>
-          <Input className='ssg-form-input small-cell' type='number' name='yearsOfData' label='Years of Available Data' value={ssg.yearsOfData} error={ssgError.yearsOfData} onChange={onFormChange} />
-          <Input className='ssg-form-input small-cell' type='text' name='sourceData' label='Source of Data' value={ssg.sourceData} error={ssgError.sourceData} onChange={onFormChange} />
-          <Input className='ssg-form-input small-cell' type='date' name='sourceDate' label='Source Date' value={ssg.sourceDate} error={ssgError.sourceDate} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='number' name='yearsOfData' label='Years of Available Data' value={ssg.yearsOfData} error={ssgFormError.yearsOfData} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='text' name='sourceData' label='Source of Data' value={ssg.sourceData} error={ssgFormError.sourceData} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='date' name='sourceDate' label='Source Date' value={ssg.sourceDate} error={ssgFormError.sourceDate} onChange={onFormChange} />
         </div>
         <div className='ssg-row'>
-          <Input className='ssg-form-input small-cell' type='number' name='currentDividend' label='Current Dividend' value={ssg.currentDividend} error={ssgError.currentDividend} onChange={onFormChange} />
-          <Input className='ssg-form-input small-cell' type='number' name='currentStockPrice' label='Current Stock Price' value={ssg.currentStockPrice} error={ssgError.currentStockPrice} onChange={onFormChange} />
-          <Input className='ssg-form-input small-cell' type='date' name='currentStockPriceDate' label='Current Price Date' value={ssg.currentStockPriceDate} error={ssgError.currentStockPriceDate} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='number' name='currentDividend' label='Current Dividend' value={ssg.currentDividend} error={ssgFormError.currentDividend} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='number' name='currentStockPrice' label='Current Stock Price' value={ssg.currentStockPrice} error={ssgFormError.currentStockPrice} onChange={onFormChange} />
+          <Input className='ssg-form-input small-cell' type='date' name='currentStockPriceDate' label='Current Price Date' value={ssg.currentStockPriceDate} error={ssgFormError.currentStockPriceDate} onChange={onFormChange} />
         </div>
         <div className='ssg-row'>
           <Checkbox className='ssg-form-input small-cell' name='isPresentedVersion' label='Presented Version' checked={ssg.isPresentedVersion} onChange={onFormChange} />
+          {ssg.isPresentedVersion && <Select className='ssg-form-input small-cell' name='meetingDateId' label='Meeting Date' value={ssg.meetingDateId ?? ''} error={ssgFormError.meetingDateId} onChange={onFormChange}>
+            <option key='' value=''>Select a Meeting Date</option>
+            {meetingDates.map(meetingDate => (<option key={meetingDate.id} value={meetingDate.id}>{meetingDate.formattedDate}</option>))}
+          </Select>}
           <div className='ssg-form-input small-cell button-cell'>
             <button className='ssg-save-button' onClick={handleSubmit}>Save</button>
-            {ssgFormError && <p className='ssg-error'>{ssgFormError}</p>}
+            {ssgSaveError && <p className='ssg-error'>{ssgSaveError}</p>}
           </div>
         </div>
       </div>
@@ -331,9 +325,16 @@ export const SSGPage = () => {
       <div className='ssg-price-zones'>
         <PriceZones ssg={ssg} />
 
+        <p className='price-zone-text'>Yearly Return & Price Hold Threshold</p>
         <div className='ssg-row'>
-          <Input className='ssg-threshold-input' type='number' name='lowEndHoldThreshold' label='Low HoldThreshold %' value={ssg.lowEndHoldThreshold.toString() !== '' ? (ssg.lowEndHoldThreshold * 100).toFixed() : ''} error={ssgError.lowEndHoldThreshold} onChange={onFormChange} />
-          <Input className='ssg-threshold-input right-cell' type='number' name='highEndHoldThreshold' label='High Hold Threshold %' value={ssg.highEndHoldThreshold.toString() !== '' ? (ssg.highEndHoldThreshold * 100).toFixed() : ''} error={ssgError.highEndHoldThreshold} onChange={onFormChange} />
+          <div className='low-threshold'>
+            <p>{ssg.lowEndHoldThreshold * 100}%</p>
+            {!!ssg.lowEndHoldPrice && <div className='threshold-price'>${ssg.lowEndHoldPrice.toFixed(2)}</div>}
+          </div>
+          <div className='high-threshold'>
+            <p>{ssg.highEndHoldThreshold * 100}%</p>
+            {!!ssg.highEndHoldPrice && <div className='threshold-price'>${ssg.highEndHoldPrice.toFixed(2)}</div>}
+          </div>
         </div>
       </div>
     </div>);

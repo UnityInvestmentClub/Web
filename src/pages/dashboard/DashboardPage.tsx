@@ -11,9 +11,10 @@ export const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [ssgs, setSSGs] = useState([] as SSG[]);
+
+  const { getSSGs } = useSSG();
   
   const [_, navigate] = useLocation();
-  const { getSSGs } = useSSG();
 
   useEffect(() => {
     const loadData = async () => {
@@ -27,11 +28,7 @@ export const DashboardPage = () => {
     }
     
     loadData();
-  }, []);
-
-  const onSSGRowClicked = ({ data: ssg }: RowClickedEvent) => {
-    navigate(`/ssg/${ssg.id}`)
-  };
+  }, [getSSGs]);
 
   const columns: ColDef[] = [
     { headerName: 'Name', field: 'name', width: 250, filter: true, resizable: false, suppressMovable: true },
@@ -62,9 +59,9 @@ export const DashboardPage = () => {
             modules={[ClientSideRowModelModule, PaginationModule, TextFilterModule, DateFilterModule]}
             domLayout='autoHeight'
             pagination
-            paginationPageSize={10}
-            paginationPageSizeSelector={[10, 25, 50]}
-            onRowClicked={onSSGRowClicked}
+            paginationPageSize={100}
+            paginationPageSizeSelector={[100, 250, 500]}
+            onRowClicked={({ data: ssg }: RowClickedEvent) => navigate(`/ssg/${ssg.id}`)}
           />
         </div>
       </div>

@@ -7,32 +7,35 @@ interface PriceZoneProps extends PropsBase {
   ssg: SSG
 }
 
-export const PriceZones = ({ ssg, className }: PriceZoneProps) => {
+export const PriceZones = ({ ssg, className = '' }: PriceZoneProps) => {
   const { fcTotalAnnualReturn, lowEndHoldThreshold, highEndHoldThreshold } = ssg;
   
-  const isValidThreshold = (lowEndHoldThreshold >= highEndHoldThreshold)
+  const isValidSSG = !!ssg.fcTotalAnnualReturn[1];
 
-  const isBuy = isValidThreshold ? fcTotalAnnualReturn[1] >= lowEndHoldThreshold : false;
-  const isHold = isValidThreshold ? fcTotalAnnualReturn[1] > highEndHoldThreshold && fcTotalAnnualReturn[1] < lowEndHoldThreshold : false;
-  const isSell = isValidThreshold ? fcTotalAnnualReturn[1] <= highEndHoldThreshold : false;
+  const isBuy = isValidSSG ? fcTotalAnnualReturn[1] >= lowEndHoldThreshold : false;
+  const isHold = isValidSSG ? fcTotalAnnualReturn[1] > highEndHoldThreshold && fcTotalAnnualReturn[1] < lowEndHoldThreshold : false;
+  const isSell = isValidSSG ? fcTotalAnnualReturn[1] <= highEndHoldThreshold : false;
 
   return (
     <div
       className={`price-zones ${className}`}
       style={{
-        paddingTop: (!ssg.fcTotalAnnualReturn[1] || !isValidThreshold) ? '20px' : '0px',
-          transition: 'padding-top .5s ease'
+        paddingTop: !isValidSSG ? '36px' : '0px'
       }}
     >
-      <FaCaretDown
-        className='pointer'
+      <div
+        className='pointer-col'
         style={{
-          height: (!ssg.fcTotalAnnualReturn[1] || !isValidThreshold) ? '0px' : '20px',
+          height: !isValidSSG ? '0px' : '36px',
           marginLeft: isSell ? '300px' : '',
-          marginRight: isBuy ? '300px' : '',
-          transition: 'all .5s ease'
+          marginRight: isBuy ? '300px' : ''
         }}
-      />
+      >
+        {!!ssg.currentStockPrice && <p>${ssg.currentStockPrice}</p>}
+        <FaCaretDown
+          className='pointer'
+        />
+      </div>
       <div className='zones'>
         <div className={`zone buy ${isBuy ? 'active' : ''}`}>BUY</div>
         <div className={`zone hold ${isHold ? 'active' : ''}`}>HOLD</div>

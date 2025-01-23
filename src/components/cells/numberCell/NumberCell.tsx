@@ -35,6 +35,9 @@ export const NumberCell = ({ value: initialValue, onChange, format, className = 
     if (!value)
       return NaN;
 
+    if (format === PercentFormat)
+      return Number(value) / 100;
+
     return Number(value);
   };
 

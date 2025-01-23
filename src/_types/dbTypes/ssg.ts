@@ -25,6 +25,7 @@ export type SSG = {
   currentDividend: number,
   startingYear: number,
   preparedBy: Preparer[],
+  meetingDateId: string,
   
   revenue: number[],
 
@@ -141,15 +142,16 @@ export type SSGDTO = {
   version: string,
   is_presented_version: boolean,
   stock_ticker: string,
-  prepared_date: Date,
+  prepared_date: string,
   source_data: string,
-  source_date: Date,
+  source_date: string,
   years_of_data: number,
   current_stock_price: number,
-  current_stock_price_date: Date,
+  current_stock_price_date: string,
   current_dividend: number,
   starting_year: number,
-  prepared_by?: PreparerDTO[]
+  prepared_by?: PreparerDTO[],
+  meeting_date_id: string,
   
   revenue_year_1: number,
   revenue_year_2: number,
@@ -506,6 +508,3 @@ export type SSGDTO = {
 
   current_price_zone: 'BUY' | 'HOLD' | 'SELL'
 };
-
-export type SSGDataField = 'startingYear' | 'revenue' | 'netProfit' | 'incomeTaxRate' | 'eps' | 'highStockPrice' | 'lowStockPrice' | 'dividendPerShare' | 'outstandingShares' | 'fcRevenueGrowth' | 'fcPreTaxProfitMargin' | 'fcIncomeTaxRate' | 'fcOutstandingShareGrowth' | 'fcPERatio';
-export type SSGFormField = 'name' | 'isPresentedVersion' | 'stockTicker' | 'preparedDate' | 'sourceData' | 'sourceDate' | 'yearsOfData' | 'currentStockPrice' | 'currentStockPriceDate' | 'currentDividend' | 'lowEndHoldThreshold' | 'highEndHoldThreshold';

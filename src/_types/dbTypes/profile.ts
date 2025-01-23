@@ -17,11 +17,9 @@ export type ProfileDTO = {
   last_name: string,
   email: string,
   phone_number: string,
-  join_date: Date,
+  join_date: string,
   address: string,
   city: string,
   state: string,
   zipcode: string
 };
-
-export type ProfileFormField = 'firstName' | 'lastName' | 'email' | 'phoneNumber' | 'joinDate' | 'address' | 'city' | 'state' | 'zipcode';

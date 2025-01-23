@@ -6,8 +6,7 @@ interface Props extends PropsBase {
   name: string,
   label: string,
   checked: boolean,
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  onChange?: (name: string, value: any) => void
+  onChange?: (name: string, value: unknown) => void
 }
  
 export const Checkbox = ({ className = '', name, label, checked, onChange }: Props) => {

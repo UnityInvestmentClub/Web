@@ -2,13 +2,13 @@ import './ForecastSheet.css';
 import { Row, Column, Cell } from '@silevis/reactgrid';
 import { BaseSheet, NumberCell, FixedCell } from '@components/';
 import { OneDecimalFormat, TwoDecimalFormat, PercentFormat } from '@constants/';
-import { SSG, PropsBase, SSGDataField } from '@_types/';
+import { SSG, PropsBase } from '@_types/';
 
 type OnChangeFunction = (value: number, colIndex: number) => void;
 
 interface Props extends PropsBase {
   ssg: SSG,
-  onChange: (field: SSGDataField) => OnChangeFunction
+  onChange: (field: keyof SSG) => OnChangeFunction
 }
 
 const fixedCell = (value?: string, className?: string) => ({ Template: FixedCell, props: { value, className } } as Cell);
