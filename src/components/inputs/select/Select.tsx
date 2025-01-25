@@ -7,11 +7,11 @@ interface Props extends PropsBase {
   label: string,
   value: string | number,
   error?: boolean,
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  onChange?: (name: string, value: any) => void
+  disabled?: boolean,
+  onChange?: (name: string, value: unknown) => void
 }
  
-export const Select = ({ className = '', name, label, value, error, onChange: onChangeProp, children }: Props) => {
+export const Select = ({ className = '', name, label, value, error, disabled, onChange: onChangeProp, children }: Props) => {
   const onChange = ({ target }: ChangeEvent) => {
     const { name, value } = target as HTMLInputElement;
 
@@ -26,6 +26,7 @@ export const Select = ({ className = '', name, label, value, error, onChange: on
         name={name}
         value={value}
         onChange={onChange}
+        disabled={disabled}
       >
         {children}
       </select>

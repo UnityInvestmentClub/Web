@@ -9,5 +9,6 @@ export type ActionBase = {
   type: string;
 };
 
-export { type SSG, type SSGDTO, type Preparer, type PreparerDTO, type SSGDataField, type SSGFormField } from '@_types/ssg';
-export { type Profile, type ProfileDTO, type ProfileFormField } from '@_types/profile';
+export { type SSG, type SSGDTO, type Preparer, type PreparerDTO } from '@_types/dbTypes/ssg';
+export { type Profile, type ProfileDTO } from '@_types/dbTypes/profile';
+export { type MeetingDate, type MeetingDateDTO } from '@_types/dbTypes/meetingDate';

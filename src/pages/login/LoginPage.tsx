@@ -12,14 +12,12 @@ export const LoginPage = () => {
   const [_, navigate] = useLocation();
   const { login } = useAuth();
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const onEmailChange = (_: string, value: any) => {
-    setEmail(value);
+  const onEmailChange = (_: string, value: unknown) => {
+    setEmail(value as string);
   };
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const onPasswordChange = (_: string, value: any) => {
-    setPassword(value);
+  const onPasswordChange = (_: string, value: unknown) => {
+    setPassword(value as string);
   };
 
   const handleLogin = async (event: FormEvent) => {

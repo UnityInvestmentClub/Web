@@ -31,6 +31,12 @@
       align-items: center;
       padding: 10px;
 
+      .button-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
       .ssg-save-button {
         padding: 10px;
       }
@@ -49,19 +55,42 @@
   }
 
   .ssg-price-zones {
-    padding-bottom: 75px;
+    margin-bottom: 75px;
+
+    .price-zone-text {
+      display: flex;
+      justify-content: center;
+      color: gray;
+      text-decoration: underline;
+      padding-top: 10px;
+    }
     
     .ssg-row {
       display: flex;
-      gap: 50px;
+      gap: 130px;
       margin: auto;
       justify-content: center;
-      padding-top: 15px;
+      padding-top: 5px;
       width: 450px;
-    }
 
-    .ssg-threshold-input {
-      width: 150px;
+      .low-threshold {
+        display: flex;
+        flex-direction: column;
+        color: gray;
+        align-items: end;
+      }
+
+      .high-threshold {
+        display: flex;
+        flex-direction: column;
+        color: gray;
+        align-items: start;
+      }
+
+      .threshold-price {
+        color:gray;
+        padding-top: 5px;
+      }
     }
   }
 }

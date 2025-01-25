@@ -1,26 +1,24 @@
 import './ProfilePage.css';
 import { FormEvent, useEffect, useState} from 'react';
-import { ValidationError, object, string, date, ref as yupRef } from 'yup';
+import { ValidationError, object, string, date, ref as yupRef, InferType } from 'yup';
 import { Input, Select, LoadingSpinner } from '@components/';
 import { useProfile, useAuth } from '@hooks/';
-import { Profile, ProfileFormField } from '@_types/';
+import { Profile } from '@_types/';
 
-const initialProfile: Profile = {
+const initialProfile = {
   firstName: '',
   lastName: '',
-  email: '',
   phoneNumber: '',
   joinDate: '',
   address: '',
   city: '',
   state: '',
   zipcode: ''
-};
+} as Profile;
 
-const initialProfileError = {
+const initialProfileFormError = {
   firstName: false,
   lastName: false,
-  email: false,
   phoneNumber: false,
   joinDate: false,
   address: false,
@@ -32,7 +30,6 @@ const initialProfileError = {
 const profileSchema = object({
   firstName: string().required(),
   lastName: string().required(),
-  email: string().email().required(),
   phoneNumber: string().required(),
   joinDate: date().required(),
   address: string().required(),
@@ -57,12 +54,14 @@ export const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [profile, setProfile] = useState(initialProfile);
-  const [profileError, setProfileError] = useState(initialProfileError);
-  const [profileFormError, setProfileFormError] = useState(null);
-  const [profileFormSuccess, setProfileFormSuccess] = useState(null);
+
+  const [profileFormError, setProfileFormError] = useState(initialProfileFormError);
+  const [profileSaveError, setProfileSaveError] = useState(null);
+  const [profileSaveSuccess, setProfileSaveSuccess] = useState(null);
 
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  
   const [passwordFormError, setPasswordFormError] = useState(null);
   const [passwordFormSuccess, setPasswordFormSuccess] = useState(null);
 
@@ -83,39 +82,17 @@ export const ProfilePage = () => {
     loadData();
   }, [getOwnProfile]);
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const onFormChange = (name: string, value: any) => {
+  const onProfileFormChange = (name: string, value: unknown) => {
     setProfile(profile => ({ ...profile, [name]: value }));
 
-    setProfileError(profileError => ({
-      ...profileError,
-      [name]: !profileSchema.pick([name as ProfileFormField]).isValidSync({ [name]: value })
-    }));
+    const inputSchema = profileSchema.pick([name as keyof InferType<typeof profileSchema>]);
+    const isInputValid = inputSchema.isValidSync({ [name]: value });
+    setProfileFormError(profileFormError => ({ ...profileFormError, [name]: !isInputValid }));
 
-    if (profileSchema.isValidSync({ ...profile, [name]: value }))
-      setProfileFormError(null);
+    if (profileSaveError && profileSchema.isValidSync({ ...profile, [name]: value }))
+      setProfileSaveError(null);
 
-    setProfileFormSuccess(null);
-  };
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const onPasswordChange = (_: string, value: any) => {
-    setPassword(value);
-
-    if (passwordSchema.isValidSync({ password: value, passwordConfirmation }))
-      setPasswordFormError(null);
-    
-    setPasswordFormSuccess(null);
-  };
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const onPasswordConfirmationChange = (_: string, value: any) => {
-    setPasswordConfirmation(value);
-
-    if (passwordSchema.isValidSync({ passwordConfirmation: value, password }))
-      setPasswordFormError(null);
-    
-    setPasswordFormSuccess(null);
+    setProfileSaveSuccess(null);
   };
 
   const handleProfileSubmit = async (event: FormEvent) => {
@@ -126,7 +103,7 @@ export const ProfilePage = () => {
       
       await updateProfile(profile);
 
-      setProfileFormSuccess('Profile updated!');
+      setProfileSaveSuccess('Profile updated!');
     } catch (error) {
       if (error instanceof ValidationError) {
         var errors = { };
@@ -135,11 +112,29 @@ export const ProfilePage = () => {
           errors = { ...errors, [innerError.path]: true };
         }
         
-        setProfileError(profileError => ({ ...profileError, ...errors }));
+        setProfileFormError(profileFormError => ({ ...profileFormError, ...errors }));
       }
 
-      setProfileFormError('Something went wrong! Check everything is entered correctly');
+      setProfileSaveError('Something went wrong! Check everything is entered correctly');
     }
+  };
+
+  const onPasswordChange = (_: string, value: unknown) => {
+    setPassword(value as string);
+
+    if (passwordSchema.isValidSync({ password: value, passwordConfirmation }))
+      setPasswordFormError(null);
+    
+    setPasswordFormSuccess(null);
+  };
+
+  const onPasswordConfirmationChange = (_: string, value: unknown) => {
+    setPasswordConfirmation(value as string);
+
+    if (passwordSchema.isValidSync({ passwordConfirmation: value, password }))
+      setPasswordFormError(null);
+    
+    setPasswordFormSuccess(null);
   };
 
   const handlePasswordUpdate = async (event: FormEvent) => {
@@ -165,73 +160,74 @@ export const ProfilePage = () => {
     : (<div className='profile'>
       <form className='profile-form' onSubmit={handleProfileSubmit}>
         <div className='profile-row'>
-          <Input className='profile-form-input' type='text' name='firstName' label='First Name' value={profile.firstName} error={profileError.firstName} onChange={onFormChange}/>
-          <Input className='profile-form-input' type='text' name='lastName' label='Last Name' value={profile.lastName} error={profileError.lastName} onChange={onFormChange}/>
-          <Input className='profile-form-input' type='text' name='phoneNumber' label='Phone Number' value={profile.phoneNumber} error={profileError.phoneNumber} onChange={onFormChange}/>
-          <Input className='profile-form-input' type='date' name='joinDate' label='Join Date' value={profile.joinDate} error={profileError.joinDate} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='text' name='firstName' label='First Name' value={profile.firstName} error={profileFormError.firstName} onChange={onProfileFormChange}/>
+          <Input className='profile-form-input' type='text' name='lastName' label='Last Name' value={profile.lastName} error={profileFormError.lastName} onChange={onProfileFormChange}/>
+          <Input className='profile-form-input' type='text' name='phoneNumber' label='Phone Number' value={profile.phoneNumber} error={profileFormError.phoneNumber} onChange={onProfileFormChange}/>
+          <Input className='profile-form-input' type='date' name='joinDate' label='Join Date' value={profile.joinDate} error={profileFormError.joinDate} onChange={onProfileFormChange}/>
         </div>
         <div className='profile-row'>
-          <Input className='profile-form-input' type='text' name='address' label='Address' value={profile.address} error={profileError.address} onChange={onFormChange}/>
-          <Input className='profile-form-input' type='text' name='city' label='City' value={profile.city} error={profileError.city} onChange={onFormChange}/>
-          <Select className='profile-form-input' name='state' label='State' value={profile.state} error={profileError.state} onChange={onFormChange}>
-            <option value='AL'>AL</option>
-            <option value='AK'>AK</option>
-            <option value='AZ'>AZ</option>
-            <option value='AR'>AR</option>
-            <option value='CA'>CA</option>
-            <option value='CO'>CO</option>
-            <option value='CT'>CT</option>
-            <option value='DE'>DE</option>
-            <option value='DC'>DC</option>
-            <option value='FL'>FL</option>
-            <option value='GA'>GA</option>
-            <option value='HI'>HI</option>
-            <option value='ID'>ID</option>
-            <option value='IL'>IL</option>
-            <option value='IN'>IN</option>
-            <option value='IA'>IA</option>
-            <option value='KS'>KS</option>
-            <option value='KY'>KY</option>
-            <option value='LA'>LA</option>
-            <option value='MA'>MA</option>
-            <option value='ME'>ME</option>
-            <option value='MD'>MD</option>
-            <option value='MI'>MI</option>
-            <option value='MN'>MN</option>
-            <option value='MS'>MS</option>
-            <option value='MO'>MO</option>
-            <option value='MT'>MT</option>
-            <option value='NE'>NE</option>
-            <option value='NV'>NV</option>
-            <option value='NH'>NH</option>
-            <option value='NJ'>NJ</option>
-            <option value='NM'>NM</option>
-            <option value='NY'>NY</option>
-            <option value='NC'>NC</option>
-            <option value='ND'>ND</option>
-            <option value='OH'>OH</option>
-            <option value='OK'>OK</option>
-            <option value='OR'>OR</option>
-            <option value='PA'>PA</option>
-            <option value='RI'>RI</option>
-            <option value='SC'>SC</option>
-            <option value='SD'>SD</option>
-            <option value='TN'>TN</option>
-            <option value='TX'>TX</option>
-            <option value='UT'>UT</option>
-            <option value='VT'>VT</option>
-            <option value='VA'>VA</option>
-            <option value='WA'>WA</option>
-            <option value='WV'>WV</option>
-            <option value='WI'>WI</option>
-            <option value='WY'>WY</option>
+          <Input className='profile-form-input' type='text' name='address' label='Address' value={profile.address} error={profileFormError.address} onChange={onProfileFormChange}/>
+          <Input className='profile-form-input' type='text' name='city' label='City' value={profile.city} error={profileFormError.city} onChange={onProfileFormChange}/>
+          <Select className='profile-form-input' name='state' label='State' value={profile.state} error={profileFormError.state} onChange={onProfileFormChange}>
+            <option key='' value=''>Select a State</option>
+            <option key='AL' value='AL'>AL</option>
+            <option key='AK' value='AK'>AK</option>
+            <option key='AZ' value='AZ'>AZ</option>
+            <option key='AR' value='AR'>AR</option>
+            <option key='CA' value='CA'>CA</option>
+            <option key='CO' value='CO'>CO</option>
+            <option key='CT' value='CT'>CT</option>
+            <option key='DE' value='DE'>DE</option>
+            <option key='DC' value='DC'>DC</option>
+            <option key='FL' value='FL'>FL</option>
+            <option key='GA' value='GA'>GA</option>
+            <option key='HI' value='HI'>HI</option>
+            <option key='ID' value='ID'>ID</option>
+            <option key='IL' value='IL'>IL</option>
+            <option key='IN' value='IN'>IN</option>
+            <option key='IA' value='IA'>IA</option>
+            <option key='KS' value='KS'>KS</option>
+            <option key='KY' value='KY'>KY</option>
+            <option key='LA' value='LA'>LA</option>
+            <option key='MA' value='MA'>MA</option>
+            <option key='ME' value='ME'>ME</option>
+            <option key='MD' value='MD'>MD</option>
+            <option key='MI' value='MI'>MI</option>
+            <option key='MN' value='MN'>MN</option>
+            <option key='MS' value='MS'>MS</option>
+            <option key='MO' value='MO'>MO</option>
+            <option key='MT' value='MT'>MT</option>
+            <option key='NE' value='NE'>NE</option>
+            <option key='NV' value='NV'>NV</option>
+            <option key='NH' value='NH'>NH</option>
+            <option key='NJ' value='NJ'>NJ</option>
+            <option key='NM' value='NM'>NM</option>
+            <option key='NY' value='NY'>NY</option>
+            <option key='NC' value='NC'>NC</option>
+            <option key='ND' value='ND'>ND</option>
+            <option key='OH' value='OH'>OH</option>
+            <option key='OK' value='OK'>OK</option>
+            <option key='OR' value='OR'>OR</option>
+            <option key='PA' value='PA'>PA</option>
+            <option key='RI' value='RI'>RI</option>
+            <option key='SC' value='SC'>SC</option>
+            <option key='SD' value='SD'>SD</option>
+            <option key='TN' value='TN'>TN</option>
+            <option key='TX' value='TX'>TX</option>
+            <option key='UT' value='UT'>UT</option>
+            <option key='VT' value='VT'>VT</option>
+            <option key='VA' value='VA'>VA</option>
+            <option key='WA' value='WA'>WA</option>
+            <option key='WV' value='WV'>WV</option>
+            <option key='WI' value='WI'>WI</option>
+            <option key='WY' value='WY'>WY</option>
           </Select>
-          <Input className='profile-form-input' type='text' name='zipcode' label='Zipcode' value={profile.zipcode} error={profileError.zipcode} onChange={onFormChange}/>
+          <Input className='profile-form-input' type='text' name='zipcode' label='Zipcode' value={profile.zipcode} error={profileFormError.zipcode} onChange={onProfileFormChange}/>
         </div>
         
         <button className='profile-save-button' type='submit'>Save</button>
-        {profileFormSuccess && <p className='profile-success'>{profileFormSuccess}</p>}
-        {profileFormError && <p className='profile-error'>{profileFormError}</p>}
+        {profileSaveSuccess && <p className='profile-success'>{profileSaveSuccess}</p>}
+        {profileSaveError && <p className='profile-error'>{profileSaveError}</p>}
       </form>
 
       <form className='profile-password-form' onSubmit={handlePasswordUpdate}>

@@ -1,6 +1,6 @@
 import { SSG } from '@_types/';
 
-export const calculateSSG = (ssg: SSG) => {
+export const processSSG = (ssg: SSG) => {
   var updatedSSG = { ...ssg };
 
   var yearsOfData = Math.max(updatedSSG.yearsOfData, 1);
