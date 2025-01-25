@@ -137,6 +137,7 @@ export const SSGPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [ssg, setSSG] = useState(initialSSG);
+  const [canUserSave, setCanUserSave] = useState(true);
 
   const [undoStack, setUndoStack] = useState([] as SSG[]);
   const [redoStack, setRedoStack] = useState([] as SSG[]);
@@ -150,7 +151,7 @@ export const SSGPage = () => {
   const { getSSG, createSSG, updateSSG } = useSSG();
   const { getProfiles } = useProfile();
   const { getMeetingDates } = useMeetingDate();
-  const { isMacOS } = useAppState();
+  const { isMacOS, authId, isAdmin } = useAppState();
 
   const [_, navigate] = useLocation();
   const routeParams = useParams();
@@ -158,15 +159,33 @@ export const SSGPage = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
+        // Reset states
         setIsLoading(true);
         setSSGSaveError(null);
         setSSGFormError(initialSSGFormError);
-
-        setSSG(routeParams[0] ? await getSSG(routeParams[0]) : initialSSG);
-
-        setProfiles(await getProfiles());
-        setMeetingDates(await getMeetingDates());
         
+        // Fetch profile and meeting dates data
+        setProfiles(await getProfiles());
+        const meetingDates = await getMeetingDates();
+        setMeetingDates(meetingDates);
+
+        // Fetch SSG and evaluate whether user can save
+        if (!routeParams[0]) {
+          // New SSG
+          setCanUserSave(true);
+          setSSG(initialSSG);
+        } else {
+          // Existing SSG
+          const ssg = await getSSG(routeParams[0]);
+          const ssgMeetingDate = meetingDates.find((meetingDate: MeetingDate) => ssg.meetingDateId === meetingDate.id);
+
+          const isAuthorOrPreparer = (authId === ssg.createdBy || ssg.preparedBy.some((preparer: Preparer) => authId === preparer.id));
+          const hasMeetingDatePassed = (new Date() > new Date(ssgMeetingDate?.meetingDate));
+
+          setCanUserSave((isAuthorOrPreparer && !hasMeetingDatePassed) || isAdmin);
+          setSSG(ssg);
+        }
+
         setIsLoading(false);
       } catch (e) {
         console.error(e);
@@ -174,7 +193,7 @@ export const SSGPage = () => {
     };
     
     loadData();
-  }, [routeParams, getSSG, getProfiles, getMeetingDates]);
+  }, [routeParams, authId, isAdmin, getSSG, getProfiles, getMeetingDates]);
 
   const onFormChange = (name: string, value: unknown) => {
     if (name === 'currentDividend' || name === 'currentStockPrice' || name === 'yearsOfData') {
@@ -184,7 +203,7 @@ export const SSGPage = () => {
     }
 
     const inputSchema = ssgSchema.pick([name as keyof InferType<typeof ssgSchema>]);
-    const isInputValid = inputSchema.isValidSync({ [name]: value, isPresentedVersion: ssg.isPresentedVersion }); // including isPresentedVersion for the meetingDateId field schema
+    const isInputValid = inputSchema.isValidSync({ [name]: value, isPresentedVersion: ssg.isPresentedVersion }); // Including isPresentedVersion for the meetingDateId field schema
     setSSGFormError(ssgFormError => ({ ...ssgFormError, [name]: !isInputValid }));
 
     if (ssgSaveError && ssgSchema.isValidSync({ ...ssg, [name]: value }))
@@ -220,6 +239,7 @@ export const SSGPage = () => {
     // });
   };
 
+  // TODO: Finish undo/redo feature
   const onKeyDown = ({ ctrlKey, metaKey, key }: KeyboardEvent) => {
     return;
     if ((!isMacOS && ctrlKey) || metaKey) {
@@ -229,7 +249,6 @@ export const SSGPage = () => {
       if (key === 'y')
         handleSheetRedo();
     }
-
   };
 
   const handleSheetUndo = () => {
@@ -252,6 +271,9 @@ export const SSGPage = () => {
 
   const handleSubmit = async() => {
     try {
+      if (!canUserSave)
+        return;
+
       ssgSchema.validateSync(ssg, { abortEarly: false });
 
       routeParams[0]
@@ -292,6 +314,7 @@ export const SSGPage = () => {
             getOptionsValue={(option: Preparer) => option.id}
             getOptionsLabel={(option: Preparer) => `${option.firstName} ${option.lastName}`}
             error={ssgFormError.preparedBy}
+            disabled={!canUserSave}
             onChange={onFormChange}
           />
           <Input className='ssg-form-input small-cell' type='date' name='preparedDate' label='Prepared Date' value={ssg.preparedDate} error={ssgFormError.preparedDate} onChange={onFormChange} />
@@ -307,13 +330,16 @@ export const SSGPage = () => {
           <Input className='ssg-form-input small-cell' type='date' name='currentStockPriceDate' label='Current Price Date' value={ssg.currentStockPriceDate} error={ssgFormError.currentStockPriceDate} onChange={onFormChange} />
         </div>
         <div className='ssg-row'>
-          <Checkbox className='ssg-form-input small-cell' name='isPresentedVersion' label='Presented Version' checked={ssg.isPresentedVersion} onChange={onFormChange} />
-          {ssg.isPresentedVersion && <Select className='ssg-form-input small-cell' name='meetingDateId' label='Meeting Date' value={ssg.meetingDateId ?? ''} error={ssgFormError.meetingDateId} onChange={onFormChange}>
+          <Checkbox className='small-cell' name='isPresentedVersion' label='Presented Version' checked={ssg.isPresentedVersion} onChange={onFormChange} />
+          {ssg.isPresentedVersion && <Select className='ssg-form-input small-cell' name='meetingDateId' label='Meeting Date' value={ssg.meetingDateId ?? ''} error={ssgFormError.meetingDateId} disabled={!canUserSave} onChange={onFormChange}>
             <option key='' value=''>Select a Meeting Date</option>
             {meetingDates.map(meetingDate => (<option key={meetingDate.id} value={meetingDate.id}>{meetingDate.formattedDate}</option>))}
           </Select>}
-          <div className='ssg-form-input small-cell button-cell'>
-            <button className='ssg-save-button' onClick={handleSubmit}>Save</button>
+          <div className='small-cell button-cell'>
+            <div className='button-row'>
+              <button className='ssg-save-button' disabled={!canUserSave} onClick={handleSubmit}>Save</button>
+              <button className='ssg-save-button' disabled>Save As</button>
+            </div>
             {ssgSaveError && <p className='ssg-error'>{ssgSaveError}</p>}
           </div>
         </div>

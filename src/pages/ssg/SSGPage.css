@@ -31,6 +31,12 @@
       align-items: center;
       padding: 10px;
 
+      .button-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
       .ssg-save-button {
         padding: 10px;
       }
@@ -49,14 +55,7 @@
   }
 
   .ssg-price-zones {
-    /* width: 600px;
-    border: solid 1px gray;
-    border-radius: 8px;
-    margin: auto; */
     margin-bottom: 75px;
-    /* padding-top: 30px;
-    padding-bottom: 30px;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, .12); */
 
     .price-zone-text {
       display: flex;

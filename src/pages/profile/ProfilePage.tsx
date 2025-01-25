@@ -5,22 +5,20 @@ import { Input, Select, LoadingSpinner } from '@components/';
 import { useProfile, useAuth } from '@hooks/';
 import { Profile } from '@_types/';
 
-const initialProfile: Profile = {
+const initialProfile = {
   firstName: '',
   lastName: '',
-  email: '',
   phoneNumber: '',
   joinDate: '',
   address: '',
   city: '',
   state: '',
   zipcode: ''
-};
+} as Profile;
 
 const initialProfileFormError = {
   firstName: false,
   lastName: false,
-  email: false,
   phoneNumber: false,
   joinDate: false,
   address: false,
@@ -32,7 +30,6 @@ const initialProfileFormError = {
 const profileSchema = object({
   firstName: string().required(),
   lastName: string().required(),
-  email: string().email().required(),
   phoneNumber: string().required(),
   joinDate: date().required(),
   address: string().required(),
@@ -172,57 +169,58 @@ export const ProfilePage = () => {
           <Input className='profile-form-input' type='text' name='address' label='Address' value={profile.address} error={profileFormError.address} onChange={onProfileFormChange}/>
           <Input className='profile-form-input' type='text' name='city' label='City' value={profile.city} error={profileFormError.city} onChange={onProfileFormChange}/>
           <Select className='profile-form-input' name='state' label='State' value={profile.state} error={profileFormError.state} onChange={onProfileFormChange}>
-            <option value='AL'>AL</option>
-            <option value='AK'>AK</option>
-            <option value='AZ'>AZ</option>
-            <option value='AR'>AR</option>
-            <option value='CA'>CA</option>
-            <option value='CO'>CO</option>
-            <option value='CT'>CT</option>
-            <option value='DE'>DE</option>
-            <option value='DC'>DC</option>
-            <option value='FL'>FL</option>
-            <option value='GA'>GA</option>
-            <option value='HI'>HI</option>
-            <option value='ID'>ID</option>
-            <option value='IL'>IL</option>
-            <option value='IN'>IN</option>
-            <option value='IA'>IA</option>
-            <option value='KS'>KS</option>
-            <option value='KY'>KY</option>
-            <option value='LA'>LA</option>
-            <option value='MA'>MA</option>
-            <option value='ME'>ME</option>
-            <option value='MD'>MD</option>
-            <option value='MI'>MI</option>
-            <option value='MN'>MN</option>
-            <option value='MS'>MS</option>
-            <option value='MO'>MO</option>
-            <option value='MT'>MT</option>
-            <option value='NE'>NE</option>
-            <option value='NV'>NV</option>
-            <option value='NH'>NH</option>
-            <option value='NJ'>NJ</option>
-            <option value='NM'>NM</option>
-            <option value='NY'>NY</option>
-            <option value='NC'>NC</option>
-            <option value='ND'>ND</option>
-            <option value='OH'>OH</option>
-            <option value='OK'>OK</option>
-            <option value='OR'>OR</option>
-            <option value='PA'>PA</option>
-            <option value='RI'>RI</option>
-            <option value='SC'>SC</option>
-            <option value='SD'>SD</option>
-            <option value='TN'>TN</option>
-            <option value='TX'>TX</option>
-            <option value='UT'>UT</option>
-            <option value='VT'>VT</option>
-            <option value='VA'>VA</option>
-            <option value='WA'>WA</option>
-            <option value='WV'>WV</option>
-            <option value='WI'>WI</option>
-            <option value='WY'>WY</option>
+            <option key='' value=''>Select a State</option>
+            <option key='AL' value='AL'>AL</option>
+            <option key='AK' value='AK'>AK</option>
+            <option key='AZ' value='AZ'>AZ</option>
+            <option key='AR' value='AR'>AR</option>
+            <option key='CA' value='CA'>CA</option>
+            <option key='CO' value='CO'>CO</option>
+            <option key='CT' value='CT'>CT</option>
+            <option key='DE' value='DE'>DE</option>
+            <option key='DC' value='DC'>DC</option>
+            <option key='FL' value='FL'>FL</option>
+            <option key='GA' value='GA'>GA</option>
+            <option key='HI' value='HI'>HI</option>
+            <option key='ID' value='ID'>ID</option>
+            <option key='IL' value='IL'>IL</option>
+            <option key='IN' value='IN'>IN</option>
+            <option key='IA' value='IA'>IA</option>
+            <option key='KS' value='KS'>KS</option>
+            <option key='KY' value='KY'>KY</option>
+            <option key='LA' value='LA'>LA</option>
+            <option key='MA' value='MA'>MA</option>
+            <option key='ME' value='ME'>ME</option>
+            <option key='MD' value='MD'>MD</option>
+            <option key='MI' value='MI'>MI</option>
+            <option key='MN' value='MN'>MN</option>
+            <option key='MS' value='MS'>MS</option>
+            <option key='MO' value='MO'>MO</option>
+            <option key='MT' value='MT'>MT</option>
+            <option key='NE' value='NE'>NE</option>
+            <option key='NV' value='NV'>NV</option>
+            <option key='NH' value='NH'>NH</option>
+            <option key='NJ' value='NJ'>NJ</option>
+            <option key='NM' value='NM'>NM</option>
+            <option key='NY' value='NY'>NY</option>
+            <option key='NC' value='NC'>NC</option>
+            <option key='ND' value='ND'>ND</option>
+            <option key='OH' value='OH'>OH</option>
+            <option key='OK' value='OK'>OK</option>
+            <option key='OR' value='OR'>OR</option>
+            <option key='PA' value='PA'>PA</option>
+            <option key='RI' value='RI'>RI</option>
+            <option key='SC' value='SC'>SC</option>
+            <option key='SD' value='SD'>SD</option>
+            <option key='TN' value='TN'>TN</option>
+            <option key='TX' value='TX'>TX</option>
+            <option key='UT' value='UT'>UT</option>
+            <option key='VT' value='VT'>VT</option>
+            <option key='VA' value='VA'>VA</option>
+            <option key='WA' value='WA'>WA</option>
+            <option key='WV' value='WV'>WV</option>
+            <option key='WI' value='WI'>WI</option>
+            <option key='WY' value='WY'>WY</option>
           </Select>
           <Input className='profile-form-input' type='text' name='zipcode' label='Zipcode' value={profile.zipcode} error={profileFormError.zipcode} onChange={onProfileFormChange}/>
         </div>

@@ -10,10 +10,11 @@ interface Props<OptionType> extends PropsBase {
   getOptionsValue: (option: OptionType) => string,
   getOptionsLabel: (option: OptionType) => string
   error?: boolean,
+  disabled?: boolean,
   onChange?: (name: string, value: unknown) => void
 }
 
-export const MultiSelect = <OptionType,>({ className = '', name, label, value, options, getOptionsValue, getOptionsLabel, error, onChange: onChangeProp }: Props<OptionType>) => {
+export const MultiSelect = <OptionType,>({ className = '', name, label, value, options, getOptionsValue, getOptionsLabel, error, disabled, onChange: onChangeProp }: Props<OptionType>) => {
   const onChange = (selected: MultiValue<OptionType>) => {
     onChangeProp?.(name, selected as OptionType[]);
   };
@@ -26,6 +27,7 @@ export const MultiSelect = <OptionType,>({ className = '', name, label, value, o
         placeholder=''
         onChange={onChange}
         value={value}
+        isDisabled={disabled}
         options={options}
         getOptionValue={getOptionsValue}
         getOptionLabel={getOptionsLabel}

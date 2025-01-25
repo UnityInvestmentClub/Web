@@ -5,6 +5,7 @@ import { ActionBase, PropsBase } from '@_types/';
 type AppStateState = {
   loggedIn: boolean,
   authId: string,
+  isAdmin: boolean,
   isMacOS: boolean,
   setLoggedInState: () => void,
   setLoggedOutState: () => void
@@ -13,6 +14,7 @@ type AppStateState = {
 const initial: AppStateState = {
   loggedIn: !!localStorage.getItem(`sb-${DBId}-auth-token`),
   authId: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.id,
+  isAdmin: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.user_metadata.isAdmin,
   isMacOS: navigator.platform.indexOf('Max') !== -1,
   setLoggedInState: () => undefined,
   setLoggedOutState: () => undefined
@@ -26,13 +28,15 @@ const reducer = (state: AppStateState, { type }: ActionBase) => {
       return {
         ...state,
         loggedIn: true,
-        authId: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.id
+        authId: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.id,
+        isAdmin: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.user_metadata.isAdmin,
       };
     case 'logout':
       return {
         ...state,
         loggedIn: false,
-        authId: null
+        authId: null,
+        isAdmin: null
       };
   }
 };

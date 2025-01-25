@@ -1,5 +1,5 @@
 export type Preparer = {
-  id?: string,
+  id: string,
   firstName: string,
   lastName: string
 };
@@ -11,7 +11,8 @@ export type PreparerDTO = {
 };
 
 export type SSG = {
-  id?: string,
+  id: string,
+  createdBy: string,
   name: string,
   version: string,
   isPresentedVersion: boolean,
@@ -137,7 +138,8 @@ export type SSG = {
 };
 
 export type SSGDTO = {
-  id: string
+  id: string,
+  created_by: string,
   name: string,
   version: string,
   is_presented_version: boolean,

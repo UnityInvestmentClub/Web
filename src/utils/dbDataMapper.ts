@@ -3,6 +3,7 @@ import { SSG, SSGDTO, PreparerDTO, Profile, ProfileDTO, MeetingDate, MeetingDate
 export const mapDTOToSSG = (data: SSGDTO) => {
   return {
     id: data.id,
+    createdBy: data.created_by,
     name: data.name,
     version: data.version,
     isPresentedVersion: data.is_presented_version,
