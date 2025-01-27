@@ -314,7 +314,6 @@ export const SSGPage = () => {
             getOptionsValue={(option: Preparer) => option.id}
             getOptionsLabel={(option: Preparer) => `${option.firstName} ${option.lastName}`}
             error={ssgFormError.preparedBy}
-            disabled={!canUserSave}
             onChange={onFormChange}
           />
           <Input className='ssg-form-input small-cell' type='date' name='preparedDate' label='Prepared Date' value={ssg.preparedDate} error={ssgFormError.preparedDate} onChange={onFormChange} />
@@ -331,7 +330,7 @@ export const SSGPage = () => {
         </div>
         <div className='ssg-row'>
           <Checkbox className='small-cell' name='isPresentedVersion' label='Presented Version' checked={ssg.isPresentedVersion} onChange={onFormChange} />
-          {ssg.isPresentedVersion && <Select className='ssg-form-input small-cell' name='meetingDateId' label='Meeting Date' value={ssg.meetingDateId ?? ''} error={ssgFormError.meetingDateId} disabled={!canUserSave} onChange={onFormChange}>
+          {ssg.isPresentedVersion && <Select className='ssg-form-input small-cell' name='meetingDateId' label='Meeting Date' value={ssg.meetingDateId ?? ''} error={ssgFormError.meetingDateId} onChange={onFormChange}>
             <option key='' value=''>Select a Meeting Date</option>
             {meetingDates.map(meetingDate => (<option key={meetingDate.id} value={meetingDate.id}>{meetingDate.formattedDate}</option>))}
           </Select>}

@@ -8,10 +8,11 @@ interface Props extends PropsBase {
   label?: string,
   value: string | number,
   error?: boolean,
+  disabled?: boolean,
   onChange?: (name: string, value: unknown) => void
 }
 
-export const Input = ({ className = '', type, name, label, value, error, onChange: onChangeProp }: Props) => {
+export const Input = ({ className = '', type, name, label, value, error, disabled, onChange: onChangeProp }: Props) => {
   const onChange = ({ target }: ChangeEvent) => {
     const { name, value } = target as HTMLInputElement;
 
@@ -34,6 +35,7 @@ export const Input = ({ className = '', type, name, label, value, error, onChang
         type={type}
         name={name}
         value={value}
+        disabled={disabled}
         onChange={onChange}
         onKeyDown={onKeyDown}
       />
