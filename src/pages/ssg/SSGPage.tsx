@@ -3,7 +3,7 @@ import { KeyboardEvent, useEffect, useState } from 'react';
 import { ValidationError, InferType, object, string, number, date, boolean, array } from 'yup';
 import { useLocation, useParams } from 'wouter';
 import { useProfile, useSSG, useMeetingDate, useAppState } from '@hooks/';
-import { Input, MultiSelect, Checkbox, HistoricalSheet, ForecastSheet, LoadingSpinner, PriceZones, Select } from '@components/';
+import { Input, MultiSelect, Checkbox, Button, HistoricalSheet, ForecastSheet, LoadingSpinner, PriceZones, Select } from '@components/';
 import { processSSG } from '@utils/';
 import { SSG, Profile, Preparer, MeetingDate } from '@_types/';
 
@@ -292,7 +292,7 @@ export const SSGPage = () => {
         setSSGFormError(ssgFormError => ({ ...ssgFormError, ...errors }));
       }
 
-      setSSGSaveError('Something went wrong! Check everything is entered correctly!');
+      setSSGSaveError('Something went wrong! Check everything is entered correctly');
     }
   };
 
@@ -336,8 +336,8 @@ export const SSGPage = () => {
           </Select>}
           <div className='small-cell button-cell'>
             <div className='button-row'>
-              <button className='ssg-save-button' disabled={!canUserSave} onClick={handleSubmit}>Save</button>
-              <button className='ssg-save-button' disabled>Save As</button>
+              <Button className='ssg-save-button' disabled={!canUserSave} onClick={handleSubmit}>Save</Button>
+              <Button className='ssg-save-button' disabled>Save As</Button>
             </div>
             {ssgSaveError && <p className='ssg-error'>{ssgSaveError}</p>}
           </div>

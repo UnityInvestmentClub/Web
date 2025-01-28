@@ -27,30 +27,18 @@
   }
 
   .top-shadow {
-    box-shadow: inset 0px 8px 8px -5px rgba(0, 0, 0, .1) !important;
+    box-shadow: inset 0px 8px 8px -5px rgba(0, 0, 0, .1);
   }
   
   .forecast-sheet-default {
     padding-left: 150px;
     
-    .header-cell {
-      color: gray !important;
-    }
-
-    .number-cell {
-      color: gray !important;
-    }
-
-    .downside-cell {
-      color: gray !important;
-    }
-
-    .base-cell {
-      color: gray !important;
-    }
-
+    .header-cell,
+    .number-cell,
+    .downside-cell,
+    .base-cell,
     .upside-cell {
-      color: gray !important;
+      color: gray;
     }
   }
 }

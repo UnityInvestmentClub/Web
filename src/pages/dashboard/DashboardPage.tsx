@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, ClientSideRowModelModule, PaginationModule, TextFilterModule, DateFilterModule, RowClickedEvent } from 'ag-grid-community';
-import { LoadingSpinner } from '@components/';
+import { LoadingSpinner, Button } from '@components/';
 import { useSSG } from '@hooks/';
 import { Preparer, SSG } from '@_types/';
 
@@ -50,7 +50,7 @@ export const DashboardPage = () => {
     : (<div className='dashboard'>
       <div className='ssg-table'>
         <div className='ssg-create'>
-          <button className='ssg-create-button' onClick={() => navigate(`/ssg`)}>Create SSG</button>
+          <Button className='ssg-create-button' onClick={() => navigate('/ssg')}>Create SSG</Button>
         </div>
         <div className='ssg-list'>
           <AgGridReact
