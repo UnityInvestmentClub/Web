@@ -1,8 +1,9 @@
 import './Layout.css';
-import { Redirect, Route, Switch } from 'wouter';
+import { useEffect } from 'react';
+import { Redirect, Route, Switch, useLocation } from 'wouter';
 import { LoginPage, DashboardPage, SSGPage, ProfilePage } from '@pages/';
 import { Nav } from '@components/';
-import { useAppState } from '@hooks/';
+import { useAppState, useSupabase } from '@hooks/';
 import { PropsBase } from '@_types/';
 
 interface Props extends PropsBase {
@@ -10,7 +11,23 @@ interface Props extends PropsBase {
 }
 
 export const Layout = () => {
-  const { loggedIn } = useAppState();
+  const client = useSupabase();
+  const { loggedIn, setLoggedInState } = useAppState();
+
+  const [_, navigate] = useLocation();
+
+  useEffect(() => {
+    /*const { data } =*/ client.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY' && !loggedIn) {
+        // If user entering site from password recovery email,
+        // reset app state and redirect to profiles page
+        setLoggedInState();
+        navigate('/profile');
+      }
+    });
+
+    // return () => { console.log('unmounting layout'); data.subscription.unsubscribe(); };
+  }, [client]);
 
   const ProtectedRoute = ({ children, path }: Props) => {
     return (

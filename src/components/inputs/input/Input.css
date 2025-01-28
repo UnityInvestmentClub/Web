@@ -4,12 +4,13 @@
   .input-label {
     padding-bottom: 5px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .input-element {
     width: 100%;
     height: 30px;
+    font-size: 14px;
     padding-left: 10px;
     padding-right: 10px;
     border: solid 1px #c4c4c4;
