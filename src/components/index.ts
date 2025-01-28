@@ -2,6 +2,7 @@ export { Nav } from '@components/nav/Nav';
 
 export { LoadingSpinner } from '@components/loadingSpinner/LoadingSpinner';
 
+export { Button } from '@components/inputs/button/Button';
 export { Input } from '@components/inputs/input/Input';
 export { Checkbox } from '@components/inputs/checkbox/Checkbox';
 export { Select } from '@components/inputs/select/Select';

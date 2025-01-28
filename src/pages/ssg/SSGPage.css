@@ -34,11 +34,11 @@
       .button-row {
         display: flex;
         align-items: center;
-        gap: 15px;
-      }
+        gap: 20px;
 
-      .ssg-save-button {
-        padding: 10px;
+        .ssg-save-button {
+          width: 150px;
+        }
       }
 
       .ssg-error {

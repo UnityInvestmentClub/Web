@@ -13,10 +13,10 @@
 
   .entry-cell {
     background-color: rgb(240, 240, 240) !important;
-    font-weight: 600 !important;
+    font-weight: 600;
   }
 
   .top-shadow {
-    box-shadow: inset 0px 8px 8px -5px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: inset 0px 8px 8px -5px rgba(0, 0, 0, 0.1);
   }
 }
