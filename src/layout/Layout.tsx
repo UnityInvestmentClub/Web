@@ -1,8 +1,9 @@
 import './Layout.css';
+import { useEffect } from 'react';
 import { Redirect, Route, Switch } from 'wouter';
-import { LoginPage, DashboardPage, SSGPage, ProfilePage } from '@pages/';
+import { LoginPage, RecoverPage, DashboardPage, SSGPage, ProfilePage } from '@pages/';
 import { Nav } from '@components/';
-import { useAppState } from '@hooks/';
+import { useAppState, useSupabase } from '@hooks/';
 import { PropsBase } from '@_types/';
 
 interface Props extends PropsBase {
@@ -10,7 +11,19 @@ interface Props extends PropsBase {
 }
 
 export const Layout = () => {
-  const { loggedIn } = useAppState();
+  const client = useSupabase();
+  const { loggedIn, setLoggedInState } = useAppState();
+
+  useEffect(() => {
+    const { data } = client.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY' && !loggedIn) {
+        // If user enters site from password recovery email, reset app state
+        setLoggedInState();
+      }
+    });
+
+    return () => data.subscription.unsubscribe();
+  }, [client, loggedIn, setLoggedInState]);
 
   const ProtectedRoute = ({ children, path }: Props) => {
     return (
@@ -27,6 +40,9 @@ export const Layout = () => {
         <Switch>
           <Route path='/login'>
             { loggedIn ? <Redirect to='/' /> : <LoginPage /> }
+          </Route>
+          <Route path='/recover'>
+            { loggedIn ? <Redirect to='/' /> : <RecoverPage />}
           </Route>
           <ProtectedRoute path='/'><DashboardPage /></ProtectedRoute>
           <ProtectedRoute path='/ssg'><SSGPage /></ProtectedRoute>

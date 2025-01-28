@@ -1,5 +1,5 @@
 import './PriceZones.css';
-import { FaCaretDown } from "react-icons/fa";
+import { BsFillCaretDownFill } from "react-icons/bs";
 import { SSG, PropsBase } from '@_types/';
 
 
@@ -32,7 +32,7 @@ export const PriceZones = ({ ssg, className = '' }: PriceZoneProps) => {
         }}
       >
         {!!ssg.currentStockPrice && <p>${ssg.currentStockPrice}</p>}
-        <FaCaretDown
+        <BsFillCaretDownFill
           className='pointer'
         />
       </div>

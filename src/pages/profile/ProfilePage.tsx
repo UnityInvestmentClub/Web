@@ -1,7 +1,7 @@
 import './ProfilePage.css';
 import { FormEvent, useEffect, useState} from 'react';
 import { ValidationError, object, string, date, ref as yupRef, InferType } from 'yup';
-import { Input, Select, LoadingSpinner } from '@components/';
+import { Input, Select, LoadingSpinner, Button } from '@components/';
 import { useProfile, useAuth } from '@hooks/';
 import { Profile } from '@_types/';
 
@@ -225,7 +225,7 @@ export const ProfilePage = () => {
           <Input className='profile-form-input' type='text' name='zipcode' label='Zipcode' value={profile.zipcode} error={profileFormError.zipcode} onChange={onProfileFormChange}/>
         </div>
         
-        <button className='profile-save-button' type='submit'>Save</button>
+        <Button className='profile-save-button' type='submit'>Save</Button>
         {profileSaveSuccess && <p className='profile-success'>{profileSaveSuccess}</p>}
         {profileSaveError && <p className='profile-error'>{profileSaveError}</p>}
       </form>
@@ -234,7 +234,7 @@ export const ProfilePage = () => {
         <Input className='profile-password-input' type='password' name='password' label='New Password' value={password} onChange={onPasswordChange}/>
         <Input className='profile-password-input' type='password' name='passwordConfirmation' label='Confirm New Password' value={passwordConfirmation} onChange={onPasswordConfirmationChange}/>
         
-        <button className='profile-save-button' type='submit'>Update Password</button>
+        <Button className='profile-save-button' type='submit'>Update Password</Button>
         {passwordFormSuccess && <p className='profile-success'>{passwordFormSuccess}</p>}
         {passwordFormError && <p className='profile-error'>{passwordFormError}</p>}
       </form>

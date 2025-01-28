@@ -29,6 +29,13 @@ export const useAuth = () => {
       throw error;
   };
 
+  const resetPassword = async (email: string) => {
+    var { error } = await client.auth.resetPasswordForEmail(email);
+
+    if (error)
+      throw error;
+  };
+
   const updatePassword = async (password: string) => {
     var { error } = await client.auth.updateUser({ password });
 
@@ -36,5 +43,5 @@ export const useAuth = () => {
       throw error;
   };
 
-  return { login, logout, updatePassword, updateEmail };
+  return { login, logout, resetPassword, updatePassword, updateEmail };
 };

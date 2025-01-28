@@ -1,5 +1,5 @@
-.login {
-  .login-form {
+.recover {
+  .recover-form {
     display: flex;
     flex-direction: column;
     width: 400px;
@@ -10,17 +10,17 @@
     border-radius: 8px;
     box-shadow: 0px 6px 15px -2px rgb(0, 0, 0, .15);
 
-    .login-header {
+    .recover-header {
       margin: auto;
       padding-bottom: 40px;
       font-weight: 600;
     }
 
-    .login-input {
+    .recover-input {
       padding-bottom: 30px;
     }
     
-    .forgot-password-link {
+    .login-link {
       margin: auto;
       margin-top: 25px;
       padding: 5px;
@@ -31,14 +31,21 @@
       transition: color .3s ease;
     }
 
-    .forgot-password-link:hover {
+    .login-link:hover {
       color: rgb(58, 58, 58);
     }
 
-    .login-error {
+    .recover-error {
       font-size: 12px;
       padding-top: 8px;
       color: red;
+      margin: auto;
+    }
+    
+    .recover-success {
+      font-size: 12px;
+      padding-top: 8px;
+      color: green;
       margin: auto;
     }
   }

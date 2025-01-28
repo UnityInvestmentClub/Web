@@ -19,8 +19,8 @@
   }
   
   .profile-save-button {
-    padding: 10px;
     margin: auto;
+    width: 160px;
   }
 
   .profile-error {
