@@ -20,6 +20,10 @@
     outline: solid 1px black;
   }
 
+  .select-element:hover {
+    cursor: pointer;
+  }
+
   .error {
     border: solid 1px #ff9898;
     background-color: rgb(253, 235, 235);

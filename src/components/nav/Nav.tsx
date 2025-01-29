@@ -4,7 +4,7 @@ import { useAuth, useAppState } from '@hooks/';
 
 export const Nav = () => {
   const { logout } = useAuth();
-  const { loggedIn } = useAppState();
+  const { isLoggedIn } = useAppState();
 
   const handleLogout = async () => {
     try {
@@ -14,7 +14,7 @@ export const Nav = () => {
     }
   };
 
-  return !loggedIn
+  return !isLoggedIn
     ? (<div></div>)
     : (<div className='nav'>
       <Link className='navtab' href='/'>

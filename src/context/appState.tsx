@@ -3,7 +3,7 @@ import { DBId } from '@constants/';
 import { ActionBase, PropsBase } from '@_types/';
 
 type AppStateState = {
-  loggedIn: boolean,
+  isLoggedIn: boolean,
   authId: string,
   isAdmin: boolean,
   isMacOS: boolean,
@@ -12,7 +12,7 @@ type AppStateState = {
 }
 
 const initial: AppStateState = {
-  loggedIn: !!localStorage.getItem(`sb-${DBId}-auth-token`),
+  isLoggedIn: !!localStorage.getItem(`sb-${DBId}-auth-token`),
   authId: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.id,
   isAdmin: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.user_metadata.isAdmin,
   isMacOS: navigator.platform.indexOf('Max') !== -1,
@@ -27,14 +27,14 @@ const reducer = (state: AppStateState, { type }: ActionBase) => {
     case 'login':
       return {
         ...state,
-        loggedIn: true,
+        isLoggedIn: true,
         authId: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.id,
         isAdmin: JSON.parse(localStorage.getItem(`sb-${DBId}-auth-token`))?.user.user_metadata.isAdmin,
       };
     case 'logout':
       return {
         ...state,
-        loggedIn: false,
+        isLoggedIn: false,
         authId: null,
         isAdmin: null
       };

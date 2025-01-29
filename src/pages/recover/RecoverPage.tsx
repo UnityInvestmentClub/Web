@@ -24,8 +24,10 @@ export const RecoverPage = () => {
     try {
       await resetPassword(email);
       
+      setRecoverError(null);
       setRecoverSuccess('Recovery email sent!');
     } catch (e) {
+      setRecoverSuccess(null);
       setRecoverError('Something went wrong! Check your email or try again later');
     }
   };
