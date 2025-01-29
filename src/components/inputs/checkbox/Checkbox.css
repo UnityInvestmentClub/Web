@@ -10,8 +10,13 @@
   }
 
   .checkbox-element {
-    border-color: gray;
+    accent-color: black;
     height: 30px;
     margin: 0;
+  }
+
+  .checkbox-element:hover {
+    cursor: pointer;
+    accent-color: rgb(61, 61, 61);
   }
 }

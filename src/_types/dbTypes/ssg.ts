@@ -27,6 +27,7 @@ export type SSG = {
   startingYear: number,
   preparedBy: Preparer[],
   meetingDateId: string,
+  meetingDate: string,
   
   revenue: number[],
 
@@ -154,6 +155,7 @@ export type SSGDTO = {
   starting_year: number,
   prepared_by?: PreparerDTO[],
   meeting_date_id: string,
+  meeting_date?: { meeting_date: string },
   
   revenue_year_1: number,
   revenue_year_2: number,

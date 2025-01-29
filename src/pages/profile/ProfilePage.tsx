@@ -103,6 +103,7 @@ export const ProfilePage = () => {
       
       await updateProfile(profile);
 
+      setProfileSaveError(null);
       setProfileSaveSuccess('Profile updated!');
     } catch (error) {
       if (error instanceof ValidationError) {
@@ -115,6 +116,7 @@ export const ProfilePage = () => {
         setProfileFormError(profileFormError => ({ ...profileFormError, ...errors }));
       }
 
+      setProfileSaveSuccess(null);
       setProfileSaveError('Something went wrong! Check everything is entered correctly');
     }
   };
@@ -145,8 +147,11 @@ export const ProfilePage = () => {
 
       await updatePassword(password);
 
+      setPasswordFormError(null);
       setPasswordFormSuccess('Password updated!');
     } catch (error) {
+      setPasswordFormSuccess(null);
+      
       if (error instanceof ValidationError) {
         setPasswordFormError(error.message);
       } else {

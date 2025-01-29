@@ -177,12 +177,11 @@ export const SSGPage = () => {
         } else {
           // Existing SSG
           const ssg = await getSSG(routeParams[0]);
-          const ssgMeetingDate = meetingDates.find((meetingDate: MeetingDate) => ssg.meetingDateId === meetingDate.id);
 
           const isAuthorOrPreparer = (authId === ssg.createdBy || ssg.preparedBy.some((preparer: Preparer) => authId === preparer.id));
-          const hasMeetingDatePassed = (new Date() > new Date(ssgMeetingDate?.meetingDate));
+          const isAfterMeetingDate = (new Date() > new Date(ssg?.meetingDate + 'T00:00:00')); // Create date object with local time zone
 
-          setCanUserSave((isAuthorOrPreparer && !hasMeetingDatePassed) || isAdmin);
+          setCanUserSave((isAuthorOrPreparer && !isAfterMeetingDate) || isAdmin);
           setSSG(ssg);
         }
 

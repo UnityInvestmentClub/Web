@@ -12,23 +12,31 @@ interface Props extends PropsBase {
 
 export const Layout = () => {
   const client = useSupabase();
-  const { loggedIn, setLoggedInState } = useAppState();
+  const { isLoggedIn, setLoggedInState } = useAppState();
 
   useEffect(() => {
     const { data } = client.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY' && !loggedIn) {
+      if (event === 'PASSWORD_RECOVERY' && !isLoggedIn) {
         // If user enters site from password recovery email, reset app state
         setLoggedInState();
       }
     });
 
     return () => data.subscription.unsubscribe();
-  }, [client, loggedIn, setLoggedInState]);
+  }, [client, isLoggedIn, setLoggedInState]);
+
+  const AuthPath = ({ children, path }: Props) => {
+    return (
+      <Route path={path}>
+        { isLoggedIn ? <Redirect to='/' /> : <>{children}</>}
+      </Route>
+    )
+  };
 
   const ProtectedRoute = ({ children, path }: Props) => {
     return (
       <Route path={path}>
-        { loggedIn ? <>{children}</> : <Redirect to='/login' /> }
+        { isLoggedIn ? <>{children}</> : <Redirect to='/login' /> }
       </Route>
     );
   };
@@ -38,16 +46,14 @@ export const Layout = () => {
       <Nav />
       <div className='main'>
         <Switch>
-          <Route path='/login'>
-            { loggedIn ? <Redirect to='/' /> : <LoginPage /> }
-          </Route>
-          <Route path='/recover'>
-            { loggedIn ? <Redirect to='/' /> : <RecoverPage />}
-          </Route>
+          <AuthPath path='/login'><LoginPage /></AuthPath>
+          <AuthPath path='/recover'><RecoverPage /></AuthPath>
+          
           <ProtectedRoute path='/'><DashboardPage /></ProtectedRoute>
           <ProtectedRoute path='/ssg'><SSGPage /></ProtectedRoute>
           <ProtectedRoute path='/ssg/:id'><SSGPage /></ProtectedRoute>
           <ProtectedRoute path='/profile'><ProfilePage /></ProtectedRoute>
+          
           <Route path='*'><Redirect to='/' /></Route>
         </Switch>
       </div>

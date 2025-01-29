@@ -18,6 +18,7 @@ export const mapDTOToSSG = (data: SSGDTO) => {
     currentDividend: data.current_dividend,
     startingYear: data.starting_year,
     meetingDateId: data.meeting_date_id,
+    meetingDate: data.meeting_date?.meeting_date,
  
     revenue: [
       data.revenue_year_1,
@@ -838,7 +839,7 @@ export const mapDTOToMeetingDate = (data: MeetingDateDTO) => {
   return {
     id: data.id,
     meetingDate: data.meeting_date,
-    formattedDate: new Date(data.meeting_date).toDateString()
+    formattedDate: new Date(data.meeting_date + 'T00:00:00').toDateString() // Create date object with local time zone
   } as MeetingDate;
 };
 

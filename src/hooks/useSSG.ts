@@ -9,8 +9,8 @@ export const useSSG = () => {
   const client = useSupabase();
 
   const getSSG = useCallback(async (id: string) => {
-    var { data, error } = await client.from(SSGTable).select('*, prepared_by: profiles ( id, first_name, last_name )').eq('id', id).single();
-
+    var { data, error } = await client.from(SSGTable).select('*, prepared_by: profiles ( id, first_name, last_name ), meeting_date: meeting_dates (meeting_date)').eq('id', id).single();
+    
     if (error)
       throw error;
 
@@ -18,7 +18,7 @@ export const useSSG = () => {
   }, [client]);
 
   const getSSGs = useCallback(async () => {
-    var { data, error } = await client.from(SSGTable).select('*, prepared_by: profiles ( id, first_name, last_name )').order('created_date', { ascending: false }).order('stock_ticker');
+    var { data, error } = await client.from(SSGTable).select('*, prepared_by: profiles ( id, first_name, last_name ), meeting_date: meeting_dates (meeting_date)').order('created_date', { ascending: false }).order('stock_ticker');
 
     if (error)
       throw error;
