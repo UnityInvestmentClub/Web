@@ -16,10 +16,11 @@ export const useAuth = () => {
   const logout = async () => {
     var { error } = await client.auth.signOut();
 
+    // Logs user out even if error occurs
+    setLoggedOutState();
+
     if (error)
       throw error;
-
-    setLoggedOutState();
   };
 
   const updateEmail = async (email: string) => {
