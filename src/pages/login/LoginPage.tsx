@@ -1,6 +1,6 @@
 import './LoginPage.css';
 import { FormEvent, useState} from 'react';
-import { Link, useLocation } from 'wouter';
+import { Link } from 'wouter';
 import { Input, Button } from '@components/';
 import { useAuth } from '@hooks/';
 
@@ -9,7 +9,6 @@ export const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(null);
 
-  const [_, navigate] = useLocation();
   const { login } = useAuth();
 
   const onEmailChange = (_: string, value: unknown) => {
@@ -29,8 +28,6 @@ export const LoginPage = () => {
 
     try {
       await login(email, password);
-
-      navigate('/');
     } catch (e) {
       setLoginError('Something went wrong! Check your credentials');
     }

@@ -30,12 +30,21 @@ export const useAuth = () => {
       throw error;
   };
 
-  const resetPassword = async (email: string) => {
-    var { error } = await client.auth.resetPasswordForEmail(email);
+  const sendOTP = async (email: string) => {
+    var { error } = await client.auth.signInWithOtp({ email, options: { shouldCreateUser: false }});
 
     if (error)
       throw error;
   };
+
+  const verifyOTP = async (email: string, otp: string) => {
+    var { error } = await client.auth.verifyOtp({ email, token: otp, type: 'email'});
+
+    if (error)
+      throw error;
+
+    setLoggedInState();
+  }
 
   const updatePassword = async (password: string) => {
     var { error } = await client.auth.updateUser({ password });
@@ -44,5 +53,5 @@ export const useAuth = () => {
       throw error;
   };
 
-  return { login, logout, resetPassword, updatePassword, updateEmail };
+  return { login, logout, sendOTP, verifyOTP, updatePassword, updateEmail };
 };
