@@ -135,7 +135,15 @@ export type SSG = {
   highEndHoldPrice: number,
   lowEndHoldPrice: number,
   
-  currentPriceZone: 'BUY' | 'HOLD' | 'SELL'
+  currentPriceZone: 'BUY' | 'HOLD' | 'SELL',
+
+  fcRevenueProjection: number[],
+
+  fcEPSProjection: number[],
+
+  fcStockPriceDownsideProjection: number[],
+  fcStockPriceBaseProjection: number[],
+  fcStockPriceUpsideProjection: number[]
 };
 
 export type SSGDTO = {

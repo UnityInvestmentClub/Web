@@ -47,7 +47,6 @@ export const processSSG = (ssg: SSG) => {
 
   // Forecast Calculations (Default and User-Entered Values)
 
-  // TODO: Make base case project for each year
   updatedSSG.fcRevenueDefault = getFiveYearAfterGrowth(updatedSSG.revenue[9], updatedSSG.fcRevenueGrowthDefault);
   updatedSSG.fcRevenue = getFiveYearAfterGrowth(updatedSSG.revenue[9], updatedSSG.fcRevenueGrowth);
 
@@ -60,14 +59,12 @@ export const processSSG = (ssg: SSG) => {
   updatedSSG.fcOutstandingSharesDefault = getFiveYearAfterGrowth(updatedSSG.outstandingShares[9], updatedSSG.fcOutstandingShareGrowthDefault);
   updatedSSG.fcOutstandingShares = getFiveYearAfterGrowth(updatedSSG.outstandingShares[9], updatedSSG.fcOutstandingShareGrowth);
 
-  // TODO: Make base case project for each year
   updatedSSG.fcEPSDefault = getDivision(updatedSSG.fcNetProfitDefault, updatedSSG.fcOutstandingSharesDefault);
   updatedSSG.fcEPS = getDivision(updatedSSG.fcNetProfit, updatedSSG.fcOutstandingShares);
   
   updatedSSG.fcEPSGrowthDefault = getFiveYearGrowth(updatedSSG.eps[9], updatedSSG.fcEPSDefault);
   updatedSSG.fcEPSGrowth = getFiveYearGrowth(updatedSSG.eps[9], updatedSSG.fcEPS);
 
-  // TODO: Make downside, base, and upside project for each year
   updatedSSG.fcStockPriceDefault = getMultiplication(updatedSSG.fcEPSDefault, updatedSSG.fcPERatioDefault);
   updatedSSG.fcStockPrice = getMultiplication(updatedSSG.fcEPS, updatedSSG.fcPERatio);
 
@@ -97,6 +94,48 @@ export const processSSG = (ssg: SSG) => {
       updatedSSG.currentPriceZone = 'SELL';
   }
 
+  // Projection Calculations (For chart use only)
+
+  updatedSSG.fcRevenueProjection = [
+    (updatedSSG.revenue[9] * (1 + updatedSSG.fcRevenueGrowth[1])),
+    (updatedSSG.revenue[9] * ((1 + updatedSSG.fcRevenueGrowth[1]) ** 2)),
+    (updatedSSG.revenue[9] * ((1 + updatedSSG.fcRevenueGrowth[1]) ** 3)),
+    (updatedSSG.revenue[9] * ((1 + updatedSSG.fcRevenueGrowth[1]) ** 4)),
+    ssg.fcRevenue[1]
+  ];
+  
+  updatedSSG.fcEPSProjection = [
+    (updatedSSG.eps[9] + (0.2 * (updatedSSG.fcEPS[1] - updatedSSG.eps[9]))),
+    (updatedSSG.eps[9] + (0.4 * (updatedSSG.fcEPS[1] - updatedSSG.eps[9]))),
+    (updatedSSG.eps[9] + (0.6 * (updatedSSG.fcEPS[1] - updatedSSG.eps[9]))),
+    (updatedSSG.eps[9] + (0.8 * (updatedSSG.fcEPS[1] - updatedSSG.eps[9]))),
+    updatedSSG.fcEPS[1]
+  ];
+  
+  updatedSSG.fcStockPriceDownsideProjection = [
+    (updatedSSG.lowStockPrice[9] + (0.2 * (updatedSSG.fcStockPrice[0] - updatedSSG.lowStockPrice[9]))),
+    (updatedSSG.lowStockPrice[9] + (0.4 * (updatedSSG.fcStockPrice[0] - updatedSSG.lowStockPrice[9]))),
+    (updatedSSG.lowStockPrice[9] + (0.6 * (updatedSSG.fcStockPrice[0] - updatedSSG.lowStockPrice[9]))),
+    (updatedSSG.lowStockPrice[9] + (0.8 * (updatedSSG.fcStockPrice[0] - updatedSSG.lowStockPrice[9]))),
+    updatedSSG.fcStockPrice[0]
+  ];
+
+  updatedSSG.fcStockPriceBaseProjection = [
+    (updatedSSG.currentStockPrice + (0.2 * (updatedSSG.fcStockPrice[1] - updatedSSG.currentStockPrice))),
+    (updatedSSG.currentStockPrice + (0.4 * (updatedSSG.fcStockPrice[1] - updatedSSG.currentStockPrice))),
+    (updatedSSG.currentStockPrice + (0.6 * (updatedSSG.fcStockPrice[1] - updatedSSG.currentStockPrice))),
+    (updatedSSG.currentStockPrice + (0.8 * (updatedSSG.fcStockPrice[1] - updatedSSG.currentStockPrice))),
+    updatedSSG.fcStockPrice[1]
+  ];
+
+  updatedSSG.fcStockPriceUpsideProjection = [
+    (updatedSSG.highStockPrice[9] + (0.2 * (updatedSSG.fcStockPrice[2] - updatedSSG.highStockPrice[9]))),
+    (updatedSSG.highStockPrice[9] + (0.4 * (updatedSSG.fcStockPrice[2] - updatedSSG.highStockPrice[9]))),
+    (updatedSSG.highStockPrice[9] + (0.6 * (updatedSSG.fcStockPrice[2] - updatedSSG.highStockPrice[9]))),
+    (updatedSSG.highStockPrice[9] + (0.8 * (updatedSSG.fcStockPrice[2] - updatedSSG.highStockPrice[9]))),
+    updatedSSG.fcStockPrice[2]
+  ];
+
   return updatedSSG;
 };
 
@@ -123,7 +162,7 @@ const getMultiplication = (dataRow1: number[], dataRow2: number[]) => {
 };
 
 const getFiveYearAfterGrowth = (latest: number, fcGrowthRow: number[]) => {
-  return Array(3).fill(NaN).map((_, idx: number) => latest * ((1 + fcGrowthRow[idx]) ** 5));
+  return Array(3).fill(NaN).map((_, idx: number) => (latest * ((1 + fcGrowthRow[idx]) ** 5)));
 };
 
 const getFiveYearGrowth = (latest: number, fcDataRow: number[]) => {

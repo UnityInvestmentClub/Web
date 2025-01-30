@@ -95,7 +95,15 @@ const initialSSG = {
   highEndHoldPrice: null,
   lowEndHoldPrice: null,
 
-  currentPriceZone: null
+  currentPriceZone: null,
+
+  fcRevenueProjection: Array(5).fill(NaN),
+  
+  fcEPSProjection: Array(5).fill(NaN),
+  
+  fcStockPriceDownsideProjection: Array(5).fill(NaN),
+  fcStockPriceBaseProjection: Array(5).fill(NaN),
+  fcStockPriceUpsideProjection: Array(5).fill(NaN)
 } as SSG;
 
 const initialSSGFormError = {
@@ -166,8 +174,7 @@ export const SSGPage = () => {
         
         // Fetch profile and meeting dates data
         setProfiles(await getProfiles());
-        const meetingDates = await getMeetingDates();
-        setMeetingDates(meetingDates);
+        setMeetingDates(await getMeetingDates());
 
         // Fetch SSG and evaluate whether user can save
         if (!routeParams[0]) {

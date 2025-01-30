@@ -450,7 +450,47 @@ export const mapDTOToSSG = (data: SSGDTO) => {
     highEndHoldPrice: data.high_end_hold_price,
     lowEndHoldPrice: data.low_end_hold_price,
 
-    currentPriceZone: data.current_price_zone
+    currentPriceZone: data.current_price_zone,
+
+    fcRevenueProjection: [
+      data.fc_revenue_year_1_base,
+      data.fc_revenue_year_2_base,
+      data.fc_revenue_year_3_base,
+      data.fc_revenue_year_4_base,
+      data.fc_revenue_year_5_base
+    ].map((number: number) => number?? NaN),
+
+    fcEPSProjection: [
+      data.fc_eps_year_1_base,
+      data.fc_eps_year_2_base,
+      data.fc_eps_year_3_base,
+      data.fc_eps_year_4_base,
+      data.fc_eps_year_5_base
+    ].map((number: number) => number?? NaN),
+
+    fcStockPriceDownsideProjection: [
+      data.fc_stock_price_year_1_downside,
+      data.fc_stock_price_year_2_downside,
+      data.fc_stock_price_year_3_downside,
+      data.fc_stock_price_year_4_downside,
+      data.fc_stock_price_year_5_downside
+    ].map((number: number) => number?? NaN),
+
+    fcStockPriceBaseProjection: [
+      data.fc_stock_price_year_1_base,
+      data.fc_stock_price_year_2_base,
+      data.fc_stock_price_year_3_base,
+      data.fc_stock_price_year_4_base,
+      data.fc_stock_price_year_5_base
+    ].map((number: number) => number?? NaN),
+
+    fcStockPriceUpsideProjection: [
+      data.fc_stock_price_year_1_upside,
+      data.fc_stock_price_year_2_upside,
+      data.fc_stock_price_year_3_upside,
+      data.fc_stock_price_year_4_upside,
+      data.fc_stock_price_year_5_upside
+    ].map((number: number) => number?? NaN)
   } as SSG;
 };
 
@@ -802,7 +842,32 @@ export const mapSSGToDTO = (ssg: SSG) => {
     high_end_hold_price: ssg.highEndHoldPrice,
     low_end_hold_price: ssg.lowEndHoldPrice,
 
-    current_price_zone: ssg.currentPriceZone
+    current_price_zone: ssg.currentPriceZone,
+
+    fc_revenue_year_1_base: ssg.fcRevenueProjection[0],
+    fc_revenue_year_2_base: ssg.fcRevenueProjection[1],
+    fc_revenue_year_3_base: ssg.fcRevenueProjection[2],
+    fc_revenue_year_4_base: ssg.fcRevenueProjection[3],
+
+    fc_eps_year_1_base: ssg.fcEPSProjection[0],
+    fc_eps_year_2_base: ssg.fcEPSProjection[1],
+    fc_eps_year_3_base: ssg.fcEPSProjection[2],
+    fc_eps_year_4_base: ssg.fcEPSProjection[3],
+
+    fc_stock_price_year_1_downside: ssg.fcStockPriceDownsideProjection[0],
+    fc_stock_price_year_2_downside: ssg.fcStockPriceDownsideProjection[1],
+    fc_stock_price_year_3_downside: ssg.fcStockPriceDownsideProjection[2],
+    fc_stock_price_year_4_downside: ssg.fcStockPriceDownsideProjection[3],
+
+    fc_stock_price_year_1_base: ssg.fcStockPriceBaseProjection[0],
+    fc_stock_price_year_2_base: ssg.fcStockPriceBaseProjection[1],
+    fc_stock_price_year_3_base: ssg.fcStockPriceBaseProjection[2],
+    fc_stock_price_year_4_base: ssg.fcStockPriceBaseProjection[3],
+
+    fc_stock_price_year_1_upside: ssg.fcStockPriceUpsideProjection[0],
+    fc_stock_price_year_2_upside: ssg.fcStockPriceUpsideProjection[1],
+    fc_stock_price_year_3_upside: ssg.fcStockPriceUpsideProjection[2],
+    fc_stock_price_year_4_upside: ssg.fcStockPriceUpsideProjection[3]
   } as SSGDTO;
 };
 
