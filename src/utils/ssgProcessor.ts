@@ -43,7 +43,7 @@ export const processSSG = (ssg: SSG) => {
   
   updatedSSG.fcOutstandingShareGrowthDefault = forecastOutstandingSharesGrowth(yearsOfData, updatedSSG.outstandingShareGrowth);
   
-  updatedSSG.fcPERatioDefault = forecastPERatio(updatedSSG.startingYear, updatedSSG.highPERatio, updatedSSG.lowPERatio);
+  updatedSSG.fcPERatioDefault = forecastPERatio(updatedSSG.yearsOfData, updatedSSG.highPERatio, updatedSSG.lowPERatio);
 
   // Forecast Calculations (Default and User-Entered Values)
 
@@ -79,8 +79,8 @@ export const processSSG = (ssg: SSG) => {
   updatedSSG.fcTotalAnnualReturnDefault = getAddition(updatedSSG.fcAnnualStockPriceGrowthDefault, updatedSSG.currentDividendYield);
   updatedSSG.fcTotalAnnualReturn = getAddition(updatedSSG.fcAnnualStockPriceGrowth, updatedSSG.currentDividendYield);
 
-  updatedSSG.lowEndHoldPrice = calculateThresholdPrice(updatedSSG.fcStockPrice[1], updatedSSG.currentDividendYield[0], updatedSSG.lowEndHoldThreshold);
-  updatedSSG.highEndHoldPrice = calculateThresholdPrice(updatedSSG.fcStockPrice[1], updatedSSG.currentDividendYield[0], updatedSSG.highEndHoldThreshold);
+  updatedSSG.lowEndHoldPrice = getThresholdPrice(updatedSSG.fcStockPrice[1], updatedSSG.currentDividendYield[0], updatedSSG.lowEndHoldThreshold);
+  updatedSSG.highEndHoldPrice = getThresholdPrice(updatedSSG.fcStockPrice[1], updatedSSG.currentDividendYield[0], updatedSSG.highEndHoldThreshold);
 
   updatedSSG.currentPriceZone = null;
   if (updatedSSG.lowEndHoldThreshold >= updatedSSG.highEndHoldThreshold) {
@@ -248,7 +248,7 @@ const forecastPERatio = (yearsOfData: number, highStockPrice: number[], lowStock
   return [ downside, base, upside ];
 };
 
-const calculateThresholdPrice = (fcStockPrice: number, dividendYield: number, thresholdPercent: number) => {
+const getThresholdPrice = (fcStockPrice: number, dividendYield: number, thresholdPercent: number) => {
   return fcStockPrice / (1 + ((thresholdPercent) - dividendYield)) ** 5;
 };
 

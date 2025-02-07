@@ -1,3 +1,4 @@
+import { getDateWithLocalTimeZone } from '@utils/';
 import { SSG, SSGDTO, PreparerDTO, Profile, ProfileDTO, MeetingDate, MeetingDateDTO } from '@_types/';
 
 export const mapDTOToSSG = (data: SSGDTO) => {
@@ -904,7 +905,7 @@ export const mapDTOToMeetingDate = (data: MeetingDateDTO) => {
   return {
     id: data.id,
     meetingDate: data.meeting_date,
-    formattedDate: new Date(data.meeting_date + 'T00:00:00').toDateString() // Create date object with local time zone
+    formattedDate: getDateWithLocalTimeZone(data.meeting_date).toDateString()
   } as MeetingDate;
 };
 

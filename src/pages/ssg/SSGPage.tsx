@@ -3,8 +3,9 @@ import { KeyboardEvent, useEffect, useState } from 'react';
 import { ValidationError, InferType, object, string, number, date, boolean, array } from 'yup';
 import { useLocation, useParams } from 'wouter';
 import { useProfile, useSSG, useMeetingDate, useAppState } from '@hooks/';
-import { Input, MultiSelect, Checkbox, Button, HistoricalSheet, ForecastSheet, LoadingSpinner, PriceZones, Select } from '@components/';
-import { processSSG } from '@utils/';
+import { Input, MultiSelect, Checkbox, Button, LoadingSpinner, Select } from '@components/';
+import { HistoricalSheet, ForecastSheet, PriceZones } from '@features/';
+import { getDateWithLocalTimeZone, processSSG } from '@utils/';
 import { SSG, Profile, Preparer, MeetingDate } from '@_types/';
 
 const initialSSG = {
@@ -186,7 +187,7 @@ export const SSGPage = () => {
           const ssg = await getSSG(routeParams[0]);
 
           const isAuthorOrPreparer = (authId === ssg.createdBy || ssg.preparedBy.some((preparer: Preparer) => authId === preparer.id));
-          const isAfterMeetingDate = (new Date() > new Date(ssg?.meetingDate + 'T00:00:00')); // Create date object with local time zone
+          const isAfterMeetingDate = (new Date() > getDateWithLocalTimeZone(ssg?.meetingDate));
 
           setCanUserSave((isAuthorOrPreparer && !isAfterMeetingDate) || isAdmin);
           setSSG(ssg);

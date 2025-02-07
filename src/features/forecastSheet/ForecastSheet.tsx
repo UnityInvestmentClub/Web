@@ -1,6 +1,7 @@
 import './ForecastSheet.css';
 import { Row, Column, Cell } from '@silevis/reactgrid';
-import { BaseSheet, NumberCell, FixedCell } from '@components/';
+import { Sheet } from '@components/';
+import { NumberCell, FixedCell } from '@features/';
 import { OneDecimalFormat, TwoDecimalFormat, PercentFormat } from '@constants/';
 import { SSG, PropsBase } from '@_types/';
 
@@ -244,9 +245,9 @@ export const ForecastSheet = ({ ssg, onChange, className = '' }: Props) => {
 
   return (
     <div className={`forecast-sheet ${className}`}>
-      <BaseSheet id='forecast' rows={rows} columns={forecastColumns} cells={forecastCells} stickyLeftColumns={1} />
+      <Sheet id='forecast' rows={rows} columns={forecastColumns} cells={forecastCells} stickyLeftColumns={1} />
       <div className='forecast-sheet-default'>
-        <BaseSheet id='default' rows={rows} columns={defaultColumns} cells={defaultCells} />
+        <Sheet id='default' rows={rows} columns={defaultColumns} cells={defaultCells} />
       </div>
     </div>
   );
