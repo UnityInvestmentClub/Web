@@ -1,4 +1,4 @@
-import './BaseSheet.css';
+import './Sheet.css';
 import { ReactGrid, Row, Column, Cell, NumericalRange, CellsLookup, useReactGridAPI, RGThemeType } from '@silevis/reactgrid';
 import { PropsBase } from '@_types/';
 import { PercentFormat } from '@constants/';
@@ -11,7 +11,7 @@ interface Props extends PropsBase {
   stickyLeftColumns?: number
 }
 
-export const BaseSheet = ({ id, rows, columns, cells, stickyLeftColumns }: Props) => {
+export const Sheet = ({ id, rows, columns, cells, stickyLeftColumns }: Props) => {
   var gridAPI = useReactGridAPI(id);
 
   const indexedCells = cells.map((cell: Cell, idx: number) => ({

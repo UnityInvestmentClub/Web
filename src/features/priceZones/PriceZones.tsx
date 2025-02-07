@@ -3,11 +3,11 @@ import { BsFillCaretDownFill } from "react-icons/bs";
 import { SSG, PropsBase } from '@_types/';
 
 
-interface PriceZoneProps extends PropsBase {
+interface Props extends PropsBase {
   ssg: SSG
 }
 
-export const PriceZones = ({ ssg, className = '' }: PriceZoneProps) => {
+export const PriceZones = ({ ssg, className = '' }: Props) => {
   const { fcTotalAnnualReturn, lowEndHoldThreshold, highEndHoldThreshold } = ssg;
   
   const isValidSSG = !!ssg.fcTotalAnnualReturn[1];

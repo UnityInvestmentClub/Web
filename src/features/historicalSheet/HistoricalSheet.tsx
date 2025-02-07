@@ -1,6 +1,7 @@
 import './HistoricalSheet.css';
 import { Row, Column, Cell } from '@silevis/reactgrid';
-import { BaseSheet, NumberCell, FixedCell } from '@components/';
+import { Sheet } from '@components/';
+import { NumberCell, FixedCell } from '@features/';
 import { YearFormat, OneDecimalFormat, TwoDecimalFormat, PercentFormat } from '@constants/';
 import { SSG, PropsBase } from '@_types/';
 
@@ -319,7 +320,7 @@ export const HistoricalSheet = ({ ssg, onChange, className = '' }: Props) => {
 
   return (
     <div className={`historical-sheet ${className}`}>
-      <BaseSheet id='historical' rows={rows} columns={columns} cells={cells} stickyLeftColumns={1} />
+      <Sheet id='historical' rows={rows} columns={columns} cells={cells} stickyLeftColumns={1} />
     </div>
   );
 };
