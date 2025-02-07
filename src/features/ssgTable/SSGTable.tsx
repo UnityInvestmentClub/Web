@@ -2,7 +2,6 @@ import './SSGTable.css';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, AllCommunityModule, RowClickedEvent, StateUpdatedEvent, GridState } from 'ag-grid-community';
 import { FaStar } from 'react-icons/fa';
-import { useLocation } from 'wouter';
 import { getDateWithLocalTimeZone } from '@utils/';
 import { Preparer, SSG, PropsBase } from '@_types/';
 
@@ -11,8 +10,6 @@ interface Props extends PropsBase {
 }
 
 export const SSGTable = ({ ssgs, className = '' }: Props) => {
-  const [_, navigate] = useLocation();
-
   const getTableState = () => {
     return JSON.parse(localStorage.getItem('table-state')) ?? {};
   }
@@ -143,7 +140,7 @@ export const SSGTable = ({ ssgs, className = '' }: Props) => {
         paginationPageSizeSelector={[20, 100, 250]}
         suppressCellFocus={true}
         suppressColumnVirtualisation={true}
-        onRowClicked={({ data: ssg }: RowClickedEvent) => navigate(`/ssg/${ssg.id}`)}
+        onRowClicked={({ data: ssg }: RowClickedEvent) => window.open(`/ssg/${ssg.id}`, '_blank')} // Open ssg in new tab
         onStateUpdated={({ state }: StateUpdatedEvent) => storeTableState(state)}
       />
     </div>
